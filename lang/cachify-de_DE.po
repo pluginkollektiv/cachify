@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Cachify\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sergej Müller\n"
+"Language-Team: Sergej Müller\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Flush the cachify cache"
+msgstr "Cachify-Cache leeren"
+
+msgid "Caching method"
+msgstr "Caching-Methode"
+
+msgid "Empty"
+msgstr "Leerer"
+
+msgid "Remove"
+msgstr "Löschen"
+
+msgid "Total cache"
+msgstr "Gesamtcache"
+
+msgid "Page cache"
+msgstr "Seitencache"
+
+msgid "Cachify cache is flushed."
+msgstr "Cachify-Cache ist geleert."
+
+msgid "The server configuration file (e.g. .htaccess) needs to be adjusted"
+msgstr "Die Serverkonfigurationsdatei (z.B. .htaccess) muss jetzt erweitert werden"
+
+msgid "No minify"
+msgstr "Keine Minimierung"
+
+msgid "Database"
+msgstr "Datenbank"
+
+msgid "Hard disk"
+msgstr "Festplatte"
+
+msgid "Cache method"
+msgstr "Cache-Aufbewahrungsort"
+
+msgid "Cache expiration"
+msgstr "Cache-Gültigkeit"
+
+msgid "Hours"
+msgstr "Stunden"
+
+msgid "Cache generation"
+msgstr "Cache-Generierung"
+
+msgid "No cache generation by logged in users"
+msgstr "Kein Cache-Aufbau durch eingeloggte Nutzer"
+
+msgid "Flush the cache at new comments"
+msgstr "Neue Kommentare leeren den Cache"
+
+msgid "Cache exceptions"
+msgstr "Cache-Ausnahmen"
+
+msgid "Cache minify"
+msgstr "Cache-Minimierung"
+
+msgid "Manual"
+msgstr "Dokumentation"
+
+msgid "Books"
+msgstr "Handbücher"
+
+msgid "Easy to use WordPress caching plugin. Serving static blog pages from Database, Hard Disc, Memcached or APC."
+msgstr "Smarter Cache für WordPress. Zwischenspeicherung der Inhalte als statische Dateien wahlweise in der Datenbank, Festplatte, Memcached oder APC."
+
