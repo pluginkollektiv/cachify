@@ -38,10 +38,6 @@ Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached 
 * Zahlreiche Hooks/Filter als Schnittstelle
 
 
-> #### Cachify-Handbuch
-> Als Begleithandbuch und Installationshilfe für *Cachify* wurden ein Kindle-eBook und ein gedrucktes Taschenbuch mit dem Titel „[WordPress Performance](http://www.amazon.de/dp/B0091LDUVA "WordPress Performance"): Beschleunigung der Blogseiten durch Caching“ veröffentlicht. Beide Handbücher beleuchten verfügbare Caching-Methoden, empfehlen Plugin-Einstellungen und liefern wertvolle Tipps & Tricks zur Geschwindigkeitsoptimierung unter WordPress.
-
-
 = Support =
 Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Guidelines](https://plus.google.com/+SergejMüller/posts/Ex2vYGN8G2L).
 
