@@ -1,5 +1,5 @@
 === Cachify ===
-Contributors: sergej.mueller
+Contributors: pluginkollektiv
 Tags: apc, cache, caching, performance
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN
 Requires at least: 3.8
@@ -9,66 +9,66 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-
-Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
-
+Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
 
 
 == Description ==
 
-*Note: The plugin is available in English and German.*
-
-= Unkompliziert und ausbaufähig =
-*Cachify* optimiert Ladezeit der Blogseiten, indem Seiteninhalte in statischer Form wahlweise in der Datenbank, auf der Festplatte (HDD) oder dank APC (Alternative PHP Cache) im Speicher des Webservers abgelegt und beim Seitenaufruf ohne Umwege ausgegeben werden. Die Anzahl der DB-Anfragen und PHP-Anweisungen reduziert sich je nach gewählter Methode gegen Null.
+= Simple and extendable =
+*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), or—thanks to APC (Alternative PHP Cache)—directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
 
 
-= Pluspunkte =
-* Zusammenarbeit mit Custom Post Types
-* Speicherungsmethoden: DB, HDD, APC und Memcached
-* "Cache leeren" als Schaltfläche in der Admin Bar
-* Handbuch als Online-, Kindle- oder Print-Version
-* Einsatzbereit für WordPress-Multisite
-* Optionale Komprimierung der HTML-Ausgabe
-* Ausnahmelisten für Beiträge und User Agents
-* Manueller und automatischer Cache-Reset
-* Deutschsprachige Oberfläche zum Sofortstart
-* Automatisches Management des Cache-Bestandes
-* Anzeige der Cache-Belegung auf dem Dashboard
-* Konfigurationseinstellungen für Apache- und Nginx-Server
-* Zahlreiche Hooks/Filter als Schnittstelle
+= Features =
+* Works with custom post types.
+* Caching methods: DB, HDD, APC and Memcached.
+* “Flush Cache” button in the WordPress toolbar.
+* Ready for WordPress Multisite.
+* Optional compression of HTML markup.
+* White lists for posts and user agents.
+* Manual and automatic cache reset.
+* Automatic cache management.
+* Dashboard widget for cached objects.
+* Settings for Apache and Nginx servers.
+* Extendability via hooks/filters.
+* Languages: English, German.
+
+
+= System Requirements =
+* WordPress 3.8 or greater
+* PHP 5.2.4 or greater
+* APC 3.1.4 or greater (optional)
+* Memcached on Nginx (optional)
 
 
 = Support =
-Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Guidelines](https://plus.google.com/+SergejMüller/posts/Ex2vYGN8G2L).
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify)
+* We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
 
-= Systemvoraussetzungen =
-* WordPress ab 3.8
-* PHP ab 5.2.4
-* APC ab 3.1.4 (optional)
-* Memcached unter Nginx (optional)
+= Contribute =
+* Active development of this plugin is handled on GitHub.
+* Pull requests for documented bugs are highly appreciated.
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
 
 
-= Unterstützung =
+= Authors =
+* Created by [Sergej Müller](http://wpcoder.de)
+* Adopted and maintained by [pluginkollektiv](http://pluginkollektiv.org)
+
+
+= Donations =
 * [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
 * [Flattr](https://flattr.com/t/1327625)
 * [Wishlist](https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/)
 
+------
 
-= Handbuch =
-* [Cachify: Caching für WordPress](http://playground.ebiene.de/cachify-wordpress-cache/)
+= Auf Deutsch =
+* __Dokumentation:__ [Cachify-Wiki](https://github.com/pluginkollektiv/cachify/wiki)
+* __Website:__ [cachify.de](http://cachify.de "Cachify WordPress Cache")
 
-
-= Website =
-* [cachify.de](http://cachify.de "Cachify WordPress Cache")
-
-
-= Autor =
-* [Twitter](https://twitter.com/wpSEO)
-* [Google+](https://plus.google.com/110569673423509816572 "Google+")
-* [Plugins](http://wpcoder.de "Plugins")
-
-
+> #### Cachify-Handbuch
+> Als Begleithandbuch und Installationshilfe für *Cachify* wurden ein Kindle-eBook und ein gedrucktes Taschenbuch mit dem Titel „[WordPress Performance](http://www.amazon.de/dp/B0091LDUVA "WordPress Performance"): Beschleunigung der Blogseiten durch Caching“ veröffentlicht. Beide Handbücher beleuchten verfügbare Caching-Methoden, empfehlen Plugin-Einstellungen und liefern wertvolle Tipps & Tricks zur Geschwindigkeitsoptimierung unter WordPress.
 
 
 == Changelog ==
@@ -239,8 +239,6 @@ Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Gu
 * Live auf wordpress.org
 
 
-
-
 == Screenshots ==
 
-1. Cachify auf dem Dashboard
+1. Cachify Dashboard Widget
