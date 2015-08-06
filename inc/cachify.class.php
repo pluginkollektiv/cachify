@@ -149,6 +149,17 @@ final class Cachify {
 			)
 		);
 
+		/* Flush (post) cache if comment is made from frontend or backend */
+		add_action(
+			'pre_comment_approved',
+			array(
+				__CLASS__,
+				'pre_comment'
+			),
+			99,
+			2
+		);
+
 		/* Backend */
 		if ( is_admin() ) {
 			add_action(
@@ -247,15 +258,6 @@ final class Cachify {
 
 		/* Frontend */
 		} else {
-			add_action(
-				'pre_comment_approved',
-				array(
-					__CLASS__,
-					'pre_comment'
-				),
-				99,
-				2
-			);
 			add_action(
 				'template_redirect',
 				array(
