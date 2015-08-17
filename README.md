@@ -1,23 +1,15 @@
 # Cachify #
-Contributors: sergej.mueller
-  
-Tags: apc, cache, caching, performance
-  
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN
-  
-Requires at least: 3.8
-  
-Tested up to: 4.2.2
-  
-Stable tag: trunk
-  
-License: GPLv2 or later
-  
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-  
+* Contributors:      pluginkollektiv
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
+* Tags:              apc, cache, caching, performance
+* Requires at least: 3.8
+* Tested up to:      4.3
+* Stable tag:        trunk
+* License:           GPLv2 or later
+* License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+
 
 Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
-
 
 
 ## Description ##
@@ -55,26 +47,31 @@ Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Gu
 * Memcached unter Nginx (optional)
 
 
+### Documentation ###
+* [Cachify: Caching für WordPress](https://github.com/pluginkollektiv/cachify/wiki)
+eb
+
+### Languages ###
+* English
+* German
+* German formal
+
+### Website ###
+* [cachify.de](http://cachify.de "Cachify WordPress Cache")
+
+### Credits ###
+* Author: [Sergej Müller](https://sergejmueller.github.io/)
+* Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
+
+
 ### Unterstützung ###
 * [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
 * [Flattr](https://flattr.com/t/1327625)
 * [Wishlist](https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/)
 
 
-### Handbuch ###
-* [Cachify: Caching für WordPress](http://playground.ebiene.de/cachify-wordpress-cache/)
-
-
-### Website ###
-* [cachify.de](http://cachify.de "Cachify WordPress Cache")
-
-
-### Autor ###
-* [Twitter](https://twitter.com/wpSEO)
-* [Google+](https://plus.google.com/110569673423509816572 "Google+")
-* [Plugins](http://wpcoder.de "Plugins")
-
-
+## Installation ##
+* If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 
 ## Changelog ##
