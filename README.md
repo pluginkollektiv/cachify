@@ -50,23 +50,16 @@ Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Gu
 ### Documentation ###
 * [Cachify: Caching für WordPress](https://github.com/pluginkollektiv/cachify/wiki)
 
+
 ### Languages ###
 * English
 * German
 * German formal
 
-### Website ###
-* [cachify.de](http://cachify.de "Cachify WordPress Cache")
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
-
-
-### Unterstützung ###
-* [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
-* [Flattr](https://flattr.com/t/1327625)
-* [Wishlist](https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/)
 
 
 ## Installation ##
