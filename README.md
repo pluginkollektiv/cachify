@@ -49,7 +49,6 @@ Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Gu
 
 ### Documentation ###
 * [Cachify: Caching für WordPress](https://github.com/pluginkollektiv/cachify/wiki)
-eb
 
 ### Languages ###
 * English
