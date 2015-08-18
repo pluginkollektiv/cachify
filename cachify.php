@@ -1,14 +1,15 @@
 <?php
 /*
 Plugin Name: Cachify
+Description: Easy to use WordPress caching plugin. Serving static blog pages from Database, Hard Disc, Memcached or APC.
+Author:      pluginkollektiv
+Author URI:  http://pluginkollektiv.org
+Plugin URI:  https://wordpress.org/plugins/cachify
+License:     GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Version:     2.2.2
 Text Domain: cachify
 Domain Path: /lang
-Description: Easy to use WordPress caching plugin. Serving static blog pages from Database, Hard Disc, Memcached or APC.
-Author: Sergej M&uuml;ller
-Author URI: http://wpcoder.de
-Plugin URI: http://cachify.de
-License: GPLv2 or later
-Version: 2.2.2
 */
 
 /*
