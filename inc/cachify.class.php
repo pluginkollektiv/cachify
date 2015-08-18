@@ -149,6 +149,17 @@ final class Cachify {
 			)
 		);
 
+		/* Flush (post) cache if comment is made from frontend or backend */
+		add_action(
+			'pre_comment_approved',
+			array(
+				__CLASS__,
+				'pre_comment'
+			),
+			99,
+			2
+		);
+
 		/* Backend */
 		if ( is_admin() ) {
 			add_action(
@@ -247,15 +258,6 @@ final class Cachify {
 
 		/* Frontend */
 		} else {
-			add_action(
-				'pre_comment_approved',
-				array(
-					__CLASS__,
-					'pre_comment'
-				),
-				99,
-				2
-			);
 			add_action(
 				'template_redirect',
 				array(
@@ -1663,7 +1665,7 @@ final class Cachify {
 				'cachify_method_tip',
 				'cachify_method_tip',
 				sprintf(
-					'%s [<a href="http://playground.ebiene.de/cachify-wordpress-cache/" target="_blank">?</a>]',
+					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank">?</a>]',
 					esc_html__('The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify')
 				),
 				'updated'
@@ -1801,7 +1803,7 @@ final class Cachify {
 							<?php submit_button() ?>
 						</th>
 						<td>
-							<a href="http://playground.ebiene.de/cachify-wordpress-cache/" target="_blank"><?php esc_html_e('Manual', 'cachify') ?></a> &bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a> &bull; <a href="https://flattr.com/t/1327625" target="_blank">Flattr</a> &bull; <a href="https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/" target="_blank">Wishlist</a>
+							<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank"><?php esc_html_e('Manual', 'cachify') ?></a> &bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a> &bull; <a href="https://flattr.com/t/1327625" target="_blank">Flattr</a> &bull; <a href="https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/" target="_blank">Wishlist</a>
 						</td>
 					</tr>
 				</table>
