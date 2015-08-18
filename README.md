@@ -36,37 +36,41 @@ Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached 
 * Zahlreiche Hooks/Filter als Schnittstelle
 
 
-### Support ###
-Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Guidelines](https://plus.google.com/+SergejMüller/posts/Ex2vYGN8G2L).
-
-
-### Systemvoraussetzungen ###
-* WordPress ab 3.8
-* PHP ab 5.2.4
-* APC ab 3.1.4 (optional)
-* Memcached unter Nginx (optional)
-
-
-### Documentation ###
-* [Cachify: Caching für WordPress](https://github.com/pluginkollektiv/cachify/wiki)
-
-
 ### Languages ###
 * English
 * German
 * German formal
 
 
+> #### Auf Deutsch? ####
+> Für eine ausführliche Dokumentationbesuche bitte das [Wiki](https://github.com/pluginkollektiv/cachify/wiki).
+>
+> **Community-Support auf Deutsch** erhältst du in einem der [deutschsprachigen Foren](https://de.forums.wordpress.org/forum/plugins); im [Plugin-Forum für Cachify](https://wordpress.org/support/plugin/cachify) wird, wie in allen Plugin-Foren auf wordpress.org, ausschließlich **Englisch** gesprochen.
+
+
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
-* Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
+* Maintainers: [pluginkollektiv](http://pluginkollektiv.org)
 
 
 ## Installation ##
 * If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 
+### Requirements ###
+* PHP 5.2.4 or greater
+* WordPress 3.8 or greater
+* APC 3.1.4 or greater (optional)
+* Memcached in Nginx (optional)
+
+
 ## Changelog ##
+### 2.2.3 ###
+* generated a POT file
+* added German formal translation
+* updated, translated + formatted README.md
+* updated expired link URLs in plugin and languages files
+* updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
 ### 2.2.2 ###
 * Fix: Parameter-Rückgabe beim Filter `dashboard_glance_items`
