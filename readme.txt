@@ -56,7 +56,7 @@ Fragen rund ums Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Gu
 
 
 = Handbuch =
-* [Cachify: Caching für WordPress](http://playground.ebiene.de/cachify-wordpress-cache/)
+* [Cachify: Caching für WordPress](https://github.com/pluginkollektiv/cachify/wiki)
 
 
 = Website =
