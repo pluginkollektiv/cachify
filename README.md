@@ -8,32 +8,31 @@
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
-
-Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
-
+Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
 
 ## Description ##
-
-*Note: The plugin is available in English and German.*
-
-### Unkompliziert und ausbaufähig ###
-*Cachify* optimiert Ladezeit der Blogseiten, indem Seiteninhalte in statischer Form wahlweise in der Datenbank, auf der Festplatte (HDD) oder dank APC (Alternative PHP Cache) im Speicher des Webservers abgelegt und beim Seitenaufruf ohne Umwege ausgegeben werden. Die Anzahl der DB-Anfragen und PHP-Anweisungen reduziert sich je nach gewählter Methode gegen Null.
+*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), or—thanks to APC (Alternative PHP Cache)—directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
 
 
-### Pluspunkte ###
-* Zusammenarbeit mit Custom Post Types
-* Speicherungsmethoden: DB, HDD, APC und Memcached
-* "Cache leeren" als Schaltfläche in der Admin Bar
-* Handbuch als Online-, Kindle- oder Print-Version
-* Einsatzbereit für WordPress-Multisite
-* Optionale Komprimierung der HTML-Ausgabe
-* Ausnahmelisten für Beiträge und User Agents
-* Manueller und automatischer Cache-Reset
-* Deutschsprachige Oberfläche zum Sofortstart
-* Automatisches Management des Cache-Bestandes
-* Anzeige der Cache-Belegung auf dem Dashboard
-* Konfigurationseinstellungen für Apache- und Nginx-Server
-* Zahlreiche Hooks/Filter als Schnittstelle
+### Features ###
+* Works with custom post types.
+* Caching methods: DB, HDD, APC and Memcached.
+* “Flush Cache” button in the WordPress toolbar.
+* Ready for WordPress Multisite.
+* Optional compression of HTML markup.
+* White lists for posts and user agents.
+* Manual and automatic cache reset.
+* Automatic cache management.
+* Dashboard widget for cached objects.
+* Settings for Apache and Nginx servers.
+* Extendability via hooks/filters.
+* Languages: English, German.
+
+
+> #### Auf Deutsch? ####
+> Für eine ausführliche Dokumentation besuche bitte das [Cachify-Wiki](https://github.com/pluginkollektiv/antivirus/wiki).
+>
+> **Community-Support auf Deutsch** erhältst du in einem der [deutschsprachigen Foren](https://de.forums.wordpress.org/forum/plugins); im [Plugin-Forum für AntiVirus](https://wordpress.org/support/plugin/antivirus) wird, wie in allen Plugin-Foren auf wordpress.org, ausschließlich **Englisch** gesprochen.
 
 
 ### Languages ###
@@ -42,10 +41,15 @@ Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached 
 * German formal
 
 
-> #### Auf Deutsch? ####
-> Für eine ausführliche Dokumentationbesuche bitte das [Wiki](https://github.com/pluginkollektiv/cachify/wiki).
->
-> **Community-Support auf Deutsch** erhältst du in einem der [deutschsprachigen Foren](https://de.forums.wordpress.org/forum/plugins); im [Plugin-Forum für Cachify](https://wordpress.org/support/plugin/cachify) wird, wie in allen Plugin-Foren auf wordpress.org, ausschließlich **Englisch** gesprochen.
+### Support ###
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify)
+* We don’t handle support via e-mail, Twitter, GitHub issues etc.
+
+
+### Contribute ###
+* Active development of this plugin is handled on GitHub.
+* Pull requests for documented bugs are highly appreciated.
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
 
 
 ### Credits ###
@@ -239,5 +243,4 @@ Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached 
 
 
 ## Screenshots ##
-
-1. Cachify auf dem Dashboard
+1. Cachify Dashboard Widget
