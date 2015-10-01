@@ -125,7 +125,7 @@ msgid "Manual"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/cachify"
+msgid "https://wordpress.org/plugins/cachify/"
 msgstr ""
 
 #. Description of the plugin/theme
