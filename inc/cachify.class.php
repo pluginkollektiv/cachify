@@ -573,7 +573,7 @@ final class Cachify {
 						),
 						admin_url('options-general.php')
 					),
-					__('Settings')
+					__( 'Settings', 'cachify' )
 				)
 			)
 		);
@@ -1511,12 +1511,12 @@ final class Cachify {
 	 				<a href="#" class="cancel-cachify-status hide-if-no-js button-cancel">%6$s</a>
 	 			</div>
 			</div>',
-			esc_html__('Remove', 'cachify'),
+			esc_html__( 'Remove', 'cachify' ),
 			$available_options[$current_action],
-			esc_html__('Edit'),
+			esc_html__( 'Edit', 'cachify' ),
 			$dropdown_options,
-			esc_html__('OK'),
-			esc_html__('Cancel')
+			esc_html__( 'OK', 'cachify' ),
+			esc_html__( 'Cancel', 'cachify' )
 		);
 	}
 
@@ -1531,8 +1531,8 @@ final class Cachify {
 	public static function add_page()
 	{
 		add_options_page(
-			'Cachify',
-			'Cachify',
+			__( 'Cachify', 'cachify' ),
+			__( 'Cachify', 'cachify' ),
 			'manage_options',
 			'cachify',
 			array(

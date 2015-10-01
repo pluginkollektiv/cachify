@@ -70,11 +70,11 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ## Changelog ##
 ### 2.2.3 ###
-* generated a POT file
-* added German formal translation
-* updated, translated + formatted README.md
-* updated expired link URLs in plugin and languages files
-* updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
+* New: Generated a POT file
+* New: Added German formal translation
+* Updated, translated + formatted README.md
+* Updated expired link URLs in plugin and languages files
+* Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
 ### 2.2.2 ###
 * Fix: Parameter-Rückgabe beim Filter `dashboard_glance_items`
