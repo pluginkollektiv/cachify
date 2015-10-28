@@ -336,10 +336,13 @@ final class Cachify_HDD {
 
 	private static function _file_path($path = NULL)
 	{
+		$prefix = is_ssl() ? '443-' : '';
+
 		$path = sprintf(
-			'%s%s%s%s',
+			'%s%s%s%s%s',
 			CACHIFY_CACHE_DIR,
 			DIRECTORY_SEPARATOR,
+			$prefix,
 			parse_url(
 				'http://' .strtolower($_SERVER['HTTP_HOST']),
 				PHP_URL_HOST
