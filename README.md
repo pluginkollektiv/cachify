@@ -30,9 +30,9 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 
 > #### Auf Deutsch? ####
-> Für eine ausführliche Dokumentation besuche bitte das [Cachify-Wiki](https://github.com/pluginkollektiv/antivirus/wiki).
+> Für eine ausführliche Dokumentation besuche bitte das [Cachify-Wiki](https://github.com/pluginkollektiv/cachify/wiki).
 >
-> **Community-Support auf Deutsch** erhältst du in einem der [deutschsprachigen Foren](https://de.forums.wordpress.org/forum/plugins); im [Plugin-Forum für AntiVirus](https://wordpress.org/support/plugin/antivirus) wird, wie in allen Plugin-Foren auf wordpress.org, ausschließlich **Englisch** gesprochen.
+> **Community-Support auf Deutsch** erhältst du in einem der [deutschsprachigen Foren](https://de.forums.wordpress.org/forum/plugins); im [Plugin-Forum für Cachify](https://wordpress.org/support/plugin/cachify) wird, wie in allen Plugin-Foren auf wordpress.org, ausschließlich **Englisch** gesprochen.
 
 
 ### Languages ###
