@@ -1078,7 +1078,7 @@ final class Cachify {
 
 	private static function _cache_hash($url = '')
 	{
-		$prefix = is_ssl() ? '443-' : '';
+		$prefix = is_ssl() ? '443' : '80';
 		return md5(
 			$prefix . empty($url) ? ( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH) )
 		) . '.cachify';
