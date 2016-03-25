@@ -117,7 +117,7 @@ final class Cachify_HDD {
 	public static function clear_cache()
 	{
 		self::_clear_dir(
-			CACHIFY_CACHE_DIR
+			self::_cache_dir()
 		);
 	}
 
@@ -146,7 +146,7 @@ final class Cachify_HDD {
 
 	public static function get_stats()
 	{
-		return self::_dir_size( CACHIFY_CACHE_DIR );
+		return self::_dir_size( self::_cache_dir() );
 	}
 
 
@@ -170,6 +170,21 @@ final class Cachify_HDD {
 				current_time('timestamp')
 			)
 		);
+	}
+
+
+	/**
+	* Cache Verzeichnis
+	*
+	* @since   2.0
+	* @change  2.0.5
+	*
+	* @return  string  $dir  Cache Directory für die aktuelle Seite
+	*/
+
+	private static function _cache_dir()
+	{
+		return CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . strtolower($_SERVER['HTTP_HOST']);
 	}
 
 
@@ -338,15 +353,10 @@ final class Cachify_HDD {
 	{
 
 		$path = sprintf(
-			'%s%s%s%s%s%s',
-			CACHIFY_CACHE_DIR,
+			'%s%s%s%s',
+			self::_cache_dir(),
 			DIRECTORY_SEPARATOR,
 			$_SERVER['SERVER_PORT'],
-			DIRECTORY_SEPARATOR,
-			parse_url(
-				'http://' .strtolower($_SERVER['HTTP_HOST']),
-				PHP_URL_HOST
-			),
 			parse_url(
 				( $path ? $path : $_SERVER['REQUEST_URI'] ),
 				PHP_URL_PATH
