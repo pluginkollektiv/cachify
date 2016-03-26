@@ -184,7 +184,7 @@ final class Cachify_HDD {
 
 	private static function _cache_dir()
 	{
-		return CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . strtolower($_SERVER['HTTP_HOST']);
+		return CACHIFY_CACHE_DIR . (is_network_admin() ? '' : DIRECTORY_SEPARATOR . strtolower($_SERVER['HTTP_HOST']));
 	}
 
 
