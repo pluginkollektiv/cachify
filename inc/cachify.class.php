@@ -705,7 +705,7 @@ final class Cachify {
 		}
 
 		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} .ab-icon{margin:0 !important} .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
+		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
 
 		/* Hinzufügen */
 		$wp_admin_bar->add_menu(
