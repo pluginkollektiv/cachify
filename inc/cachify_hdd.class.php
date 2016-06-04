@@ -116,8 +116,17 @@ final class Cachify_HDD {
 
 	public static function clear_cache()
 	{
+		if ( ! is_multisite() || ! is_subdomain_install() || is_network_admin() )
+		{
+			// clear entire cache if single site install or subdir install or network admin
+			$clear_dir = CACHIFY_CACHE_DIR;
+		} else {
+			// clear blog subdomain cache otherwise
+			$clear_dir = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . strtolower( $_SERVER['HTTP_HOST'] );
+		}
+		
 		self::_clear_dir(
-			CACHIFY_CACHE_DIR
+			$clear_dir
 		);
 	}
 
@@ -336,14 +345,17 @@ final class Cachify_HDD {
 
 	private static function _file_path($path = NULL)
 	{
+
 		$path = sprintf(
-			'%s%s%s%s',
+			'%s%s%s%s%s%s',
 			CACHIFY_CACHE_DIR,
 			DIRECTORY_SEPARATOR,
 			parse_url(
 				'http://' .strtolower($_SERVER['HTTP_HOST']),
 				PHP_URL_HOST
 			),
+			DIRECTORY_SEPARATOR,
+			$_SERVER['SERVER_PORT'],
 			parse_url(
 				( $path ? $path : $_SERVER['REQUEST_URI'] ),
 				PHP_URL_PATH
