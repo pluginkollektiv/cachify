@@ -573,7 +573,7 @@ final class Cachify {
 						),
 						admin_url('options-general.php')
 					),
-					__('Settings')
+					__( 'Settings', 'cachify' )
 				)
 			)
 		);
@@ -601,9 +601,7 @@ final class Cachify {
 		return array_merge(
 			$input,
 			array(
-				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a>',
-				'<a href="https://flattr.com/t/1327625" target="_blank">Flattr</a>',
-				'<a href="https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/" target="_blank">Wishlist</a>'
+				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank">PayPal</a>'
 			)
 		);
 	}
@@ -707,7 +705,7 @@ final class Cachify {
 		}
 
 		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} .ab-icon{margin:0 !important} .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
+		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
 
 		/* Hinzufügen */
 		$wp_admin_bar->add_menu(
@@ -1513,12 +1511,12 @@ final class Cachify {
 	 				<a href="#" class="cancel-cachify-status hide-if-no-js button-cancel">%6$s</a>
 	 			</div>
 			</div>',
-			esc_html__('Remove', 'cachify'),
+			esc_html__( 'Remove', 'cachify' ),
 			$available_options[$current_action],
-			esc_html__('Edit'),
+			esc_html__( 'Edit', 'cachify' ),
 			$dropdown_options,
-			esc_html__('OK'),
-			esc_html__('Cancel')
+			esc_html__( 'OK', 'cachify' ),
+			esc_html__( 'Cancel', 'cachify' )
 		);
 	}
 
@@ -1533,8 +1531,8 @@ final class Cachify {
 	public static function add_page()
 	{
 		add_options_page(
-			'Cachify',
-			'Cachify',
+			__( 'Cachify', 'cachify' ),
+			__( 'Cachify', 'cachify' ),
 			'manage_options',
 			'cachify',
 			array(
@@ -1665,7 +1663,7 @@ final class Cachify {
 				'cachify_method_tip',
 				'cachify_method_tip',
 				sprintf(
-					'%s [<a href="http://playground.ebiene.de/cachify-wordpress-cache/" target="_blank">?</a>]',
+					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank">?</a>]',
 					esc_html__('The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify')
 				),
 				'updated'
@@ -1803,7 +1801,7 @@ final class Cachify {
 							<?php submit_button() ?>
 						</th>
 						<td>
-							<a href="http://playground.ebiene.de/cachify-wordpress-cache/" target="_blank"><?php esc_html_e('Manual', 'cachify') ?></a> &bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a> &bull; <a href="https://flattr.com/t/1327625" target="_blank">Flattr</a> &bull; <a href="https://www.amazon.de/registry/wishlist/2U5I7F9649LOJ/" target="_blank">Wishlist</a>
+							<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank"><?php esc_html_e('Manual', 'cachify') ?></a> &bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank">PayPal</a>
 						</td>
 					</tr>
 				</table>

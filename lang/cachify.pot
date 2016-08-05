@@ -1,141 +1,143 @@
+# Copyright (C) 2015 pluginkollektiv
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Cachify\n"
+"Project-Id-Version: Cachify 2.2.3\n"
 "Report-Msgid-Bugs-To: https://pascalbirchler.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Pascal Birchler <pascal@required.ch>\n"
-"Language-Team: Sergej Müller\n"
-"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.8.4\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Pascal Birchler\n"
+"Language-Team: Pascal Birchler <pascal@required.ch>\n"
+"X-Generator: grunt-wp-i18n 0.5.3\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: Switzerland\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
 
 #: inc/cachify.class.php:576
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr ""
 
 #: inc/cachify.class.php:648
 msgid "Caching method"
-msgstr "Caching-Methode"
+msgstr ""
 
 #: inc/cachify.class.php:650
 msgid "Empty"
-msgstr "Leerer"
+msgstr ""
 
 #: inc/cachify.class.php:717
 msgid "Flush the cachify cache"
-msgstr "Cachify-Cache leeren"
+msgstr ""
 
 #: inc/cachify.class.php:830
 msgid "Cachify cache is flushed."
-msgstr "Cachify-Cache ist geleert."
+msgstr ""
 
 #: inc/cachify.class.php:1483
 msgid "Total cache"
-msgstr "Gesamtcache"
+msgstr ""
 
 #: inc/cachify.class.php:1484
 msgid "Page cache"
-msgstr "Seitencache"
+msgstr ""
 
 #: inc/cachify.class.php:1514
 msgid "Remove"
-msgstr "Löschen"
+msgstr ""
 
 #: inc/cachify.class.php:1516
 msgid "Edit"
-msgstr "Bearbeiten"
+msgstr ""
 
 #: inc/cachify.class.php:1518
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: inc/cachify.class.php:1519
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "Cachify"
-msgstr "Cachify"
+msgstr ""
 
 #: inc/cachify.class.php:1559
 msgid "Database"
-msgstr "Datenbank"
+msgstr ""
 
 #: inc/cachify.class.php:1561
 msgid "Hard disk"
-msgstr "Festplatte"
+msgstr ""
 
 #: inc/cachify.class.php:1596
 msgid "No minify"
-msgstr "Keine Minimierung"
+msgstr ""
 
 #: inc/cachify.class.php:1667
 msgid "The server configuration file (e.g. .htaccess) needs to be adjusted"
 msgstr ""
-"Die Serverkonfigurationsdatei (z.B. .htaccess) muss jetzt erweitert werden"
 
 #: inc/cachify.class.php:1715
 msgid "Cache method"
-msgstr "Cache-Aufbewahrungsort"
+msgstr ""
 
 #: inc/cachify.class.php:1730
 msgid "Cache expiration"
-msgstr "Cache-Gültigkeit"
+msgstr ""
 
 #: inc/cachify.class.php:1735
 msgid "Hours"
-msgstr "Stunden"
+msgstr ""
 
 #: inc/cachify.class.php:1742
 msgid "Cache generation"
-msgstr "Cache-Generierung"
+msgstr ""
 
 #: inc/cachify.class.php:1748
 msgid "No cache generation by logged in users"
-msgstr "Kein Cache-Aufbau durch eingeloggte Nutzer"
+msgstr ""
 
 #: inc/cachify.class.php:1755
 msgid "Flush the cache at new comments"
-msgstr "Neue Kommentare leeren den Cache"
+msgstr ""
 
 #: inc/cachify.class.php:1763
 msgid "Cache exceptions"
-msgstr "Cache-Ausnahmen"
+msgstr ""
 
 #: inc/cachify.class.php:1784
 msgid "Cache minify"
-msgstr "Cache-Minimierung"
+msgstr ""
 
 #: inc/cachify.class.php:1804
 msgid "Manual"
-msgstr "Dokumentation"
+msgstr ""
 
 #. Plugin URI of the plugin/theme
 msgid "https://wordpress.org/plugins/cachify/"
-msgstr "https://wordpress.org/plugins/cachify/"
+msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
 "Easy to use WordPress caching plugin. Serving static blog pages from "
 "database, disk, Memcached or APC."
 msgstr ""
-"Smarter Cache für WordPress. Zwischenspeicherung der Inhalte als statische "
-"Dateien wahlweise in der Datenbank, Festplatte, Memcached oder APC."
 
 #. Author of the plugin/theme
 msgid "pluginkollektiv"
-msgstr "pluginkollektiv"
+msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://pluginkollektiv.org"
-msgstr "http://pluginkollektiv.org"
-
-#~ msgid "Books"
-#~ msgstr "Handbücher"
+msgstr ""
