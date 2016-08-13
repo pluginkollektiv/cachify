@@ -336,7 +336,7 @@ final class Cachify_HDD {
 
 	private static function _file_path($path = NULL)
 	{
-		$prefix = is_ssl() ? 'https$' : '';
+		$prefix = is_ssl() ? 'https-' : '';
 
 		$path = sprintf(
 			'%s%s%s%s%s',
