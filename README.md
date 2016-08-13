@@ -3,8 +3,8 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
 * Tags:              apc, cache, caching, performance
 * Requires at least: 3.8
-* Tested up to:      4.3
-* Stable tag:        2.2.3
+* Tested up to:      4.6
+* Stable tag:        2.2.4
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,6 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 ## Installation ##
 * If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
-
 ### Requirements ###
 * PHP 5.2.4 or greater
 * WordPress 3.8 or greater
@@ -69,6 +68,12 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 
 ## Changelog ##
+
+### 2.2.4 ###
+* Fixes caching for mixed HTTPS and HTTP setups
+* Fixes an issue with the icon styling in the admin toolbar
+* Ensures compatibility with the latest WordPress version
+
 ### 2.2.3 ###
 * New: Generated a POT file
 * New: Added German formal translation
@@ -241,6 +246,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 ### 0.6 ###
 * Live auf wordpress.org
 
+## Upgrade Notice ##
+
+### 2.2.4 ###
+This is mainly a maintenance release ensuring compatibility with the latest version of WordPress. Expect bigger changes in 2.3.0 soon!
 
 ## Screenshots ##
 1. Cachify Dashboard Widget
