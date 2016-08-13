@@ -1078,8 +1078,9 @@ final class Cachify {
 
 	private static function _cache_hash($url = '')
 	{
+		$prefix = is_ssl() ? 'https-' : '';
 		return md5(
-			empty($url) ? ( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH) )
+			empty($url) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH) )
 		) . '.cachify';
 	}
 
