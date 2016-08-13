@@ -1613,10 +1613,9 @@ final class Cachify {
 		load_plugin_textdomain(
 			'cachify',
 			false,
-			'cachify/lang'
+			CACHIFY_DIR . '/lang'
 		);
 	}
-
 
 	/**
 	* Registrierung der Settings
