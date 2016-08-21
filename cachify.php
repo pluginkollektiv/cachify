@@ -35,7 +35,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 defined('ABSPATH') OR exit;
 
 
-/* Konstanten */
+/* Constants */
 define('CACHIFY_FILE', __FILE__);
 define('CACHIFY_DIR', dirname(__FILE__));
 define('CACHIFY_BASE', plugin_basename(__FILE__));
@@ -76,7 +76,7 @@ register_uninstall_hook(
 /* Autoload Init */
 spl_autoload_register('cachify_autoload');
 
-/* Autoload Funktion */
+/* Autoload function */
 function cachify_autoload($class) {
 	if ( in_array($class, array('Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED')) ) {
 		require_once(

@@ -42,19 +42,19 @@ final class Cachify_DB {
 
 
 	/**
-	* Speicherung im Cache
+	* Store item in cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string   $hash      Hash des Eintrags
-	* @param   string   $data      Inhalt des Eintrags
-	* @param   integer  $lifetime  Lebensdauer des Eintrags
+	* @param   string   $hash      Hash of the entry
+	* @param   string   $data      Content of the entry
+	* @param   integer  $lifetime  Lifetime of the entry
 	*/
 
 	public static function store_item($hash, $data, $lifetime)
 	{
-		/* Leer? */
+		/* Empty? */
 		if ( empty($hash) or empty($data) ) {
 			wp_die('DB add item: Empty input.');
 		}
@@ -77,13 +77,13 @@ final class Cachify_DB {
 
 
 	/**
-	* Lesen aus dem Cache
+	* Read item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @return  mixed   $diff  Wert des Eintrags
+	* @param   string  $hash  Hash of the entry
+	* @return  mixed          Content of the entry
 	*/
 
 	public static function get_item($hash)
@@ -98,29 +98,29 @@ final class Cachify_DB {
 
 
 	/**
-	* Entfernung aus dem Cache
+	* Delete item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @param   string  $url   URL des Eintrags [optional]
+	* @param   string  $hash  Hash of the entry
+	* @param   string  $url   URL of the entry [optional]
 	*/
 
 	public static function delete_item($hash, $url = '')
 	{
-		/* Leer? */
+		/* Empty? */
 		if ( empty($hash) ) {
 			wp_die('DB delete item: Empty input.');
 		}
 
-		/* Löschen */
+		/* Delete */
 		delete_transient($hash);
 	}
 
 
 	/**
-	* Leerung des Cache
+	* Clear the cache
 	*
 	* @since   2.0
 	* @change  2.0
@@ -131,23 +131,23 @@ final class Cachify_DB {
 		/* Init */
 		global $wpdb;
 
-		/* Löschen */
+		/* Clear */
 		$wpdb->query("DELETE FROM `" .$wpdb->options. "` WHERE `option_name` LIKE ('\_transient%.cachify')");
 	}
 
 
 	/**
-	* Ausgabe des Cache
+	* Print the cache
 	*
 	* @since   2.0
 	* @change  2.0.2
 	*
-	* @param   array  $cache  Array mit Cache-Werten
+	* @param   array  $cache  Array of cache values
 	*/
 
 	public static function print_cache($cache)
 	{
-		/* Kein Array? */
+		/* No array? */
 		if ( ! is_array($cache) ) {
 			return;
 		}
@@ -155,23 +155,23 @@ final class Cachify_DB {
 		/* Content */
 		echo $cache['data'];
 
-		/* Signatur */
+		/* Signature */
 		if ( isset($cache['meta']) ) {
 			echo self::_cache_signatur($cache['meta']);
 		}
 
-		/* Raus */
+		/* Quit */
 		exit;
 	}
 
 
 	/**
-	* Ermittlung der Cache-Größe
+	* Get the cache size
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  integer  $diff  Spaltengröße
+	* @return  integer  Column size
 	*/
 
 	public static function get_stats()
@@ -179,7 +179,7 @@ final class Cachify_DB {
 		/* Init */
 		global $wpdb;
 
-		/* Auslesen */
+		/* Read */
 		return $wpdb->get_var(
 			"SELECT SUM( CHAR_LENGTH(option_value) ) FROM `" .$wpdb->options. "` WHERE `option_name` LIKE ('\_transient%.cachify')"
 		);
@@ -187,18 +187,18 @@ final class Cachify_DB {
 
 
 	/**
-	* Generierung der Signatur
+	* Generate signature
 	*
 	* @since   2.0
 	* @change  2.0.5
 	*
-	* @param   array   $meta  Inhalt der Metadaten
-	* @return  string  $diff  Signatur als String
+	* @param   array   $meta  Content of metadata
+	* @return  string         Signature string
 	*/
 
 	private static function _cache_signatur($meta)
 	{
-		/* Kein Array? */
+		/* No array? */
 		if ( ! is_array($meta) ) {
 			return;
 		}
@@ -227,12 +227,12 @@ final class Cachify_DB {
 
 
 	/**
-	* Rückgabe der Query-Anzahl
+	* Return query count
 	*
 	* @since   0.1
 	* @change  2.0
 	*
-	* @return  intval  $diff  Query-Anzahl
+	* @return  integer  Numbe rof queries
 	*/
 
 	private static function _page_queries()
@@ -242,12 +242,12 @@ final class Cachify_DB {
 
 
 	/**
-	* Rückgabe der Ausführungszeit
+	* REturn execution time
 	*
 	* @since   0.1
 	* @change  2.0
 	*
-	* @return  intval  $diff  Anzahl der Sekunden
+	* @return  integer  Execution time in seconds
 	*/
 
 	private static function _page_timer()
@@ -257,12 +257,12 @@ final class Cachify_DB {
 
 
 	/**
-	* Rückgabe des Speicherverbrauchs
+	* Return memory consumption
 	*
 	* @since   0.7
 	* @change  2.0
 	*
-	* @return  string  $diff  Konvertierter Größenwert
+	* @return  string  Formatted memory size
 	*/
 
 	private static function _page_memory()
