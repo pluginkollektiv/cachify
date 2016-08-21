@@ -42,14 +42,14 @@ final class Cachify_HDD {
 
 
 	/**
-	* Speicherung im Cache
+	* Store item in cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string   $hash      Hash des Eintrags [optional]
-	* @param   string   $data      Inhalt des Eintrags
-	* @param   integer  $lifetime  Lebensdauer des Eintrags [optional]
+	* @param   string   $hash      Hash  of the entry [optional]
+	* @param   string   $data      Content of the entry
+	* @param   integer  $lifetime  Lifetime of the entry [optional]
 	*/
 
 	public static function store_item($hash, $data, $lifetime)
@@ -67,12 +67,12 @@ final class Cachify_HDD {
 
 
 	/**
-	* Lesen aus dem Cache
+	* Read item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  boolean  $diff  TRUE wenn Cache vorhanden
+	* @return  boolean  $diff  TRUE if cache is present
 	*/
 
 	public static function get_item()
@@ -84,23 +84,23 @@ final class Cachify_HDD {
 
 
 	/**
-	* Entfernen aus dem Cache
+	* Delete item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string   $hash  Hash des Eintrags [optional]
-	* @param   string   $url   URL des Eintrags
+	* @param   string   $hash  Hash of the entry [optional]
+	* @param   string   $url   URL of the entry
 	*/
 
 	public static function delete_item($hash = '', $url)
 	{
-		/* Leer? */
+		/* Empty? */
 		if ( empty($url) ) {
 			wp_die('HDD delete item: Empty input.');
 		}
 
-		/* Löschen */
+		/* Delete */
 		self::_clear_dir(
 			self::_file_path($url)
 		);
@@ -108,7 +108,7 @@ final class Cachify_HDD {
 
 
 	/**
-	* Leerung des Cache
+	* Clear the cache
 	*
 	* @since   2.0
 	* @change  2.0
@@ -123,7 +123,7 @@ final class Cachify_HDD {
 
 
 	/**
-	* Ausgabe des Cache
+	* Print the cache
 	*
 	* @since   2.0
 	* @change  2.0
@@ -136,12 +136,12 @@ final class Cachify_HDD {
 
 
 	/**
-	* Ermittlung der Cache-Größe
+	* Get the cache size
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  integer  $diff  Ordnergröße
+	* @return  integer  Directory size
 	*/
 
 	public static function get_stats()
@@ -151,12 +151,12 @@ final class Cachify_HDD {
 
 
 	/**
-	* Generierung der Signatur
+	* Generate signature
 	*
 	* @since   2.0
 	* @change  2.0.5
 	*
-	* @return  string  $diff  Signatur als String
+	* @return  string  Signature string
 	*/
 
 	private static function _cache_signatur()
@@ -174,29 +174,29 @@ final class Cachify_HDD {
 
 
 	/**
-	* Initialisierung des Cache-Speichervorgangs
+	* Initialize caching process
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $data  Cache-Inhalt
+	* @param   string  $data  Cache content
 	*/
 
 	private static function _create_files($data)
 	{
-		/* Ordner anlegen */
+		/* Create directory */
 		if ( ! wp_mkdir_p( self::_file_path() ) ) {
 			wp_die('Unable to create directory.');
 		}
 
-		/* Dateien schreiben */
+		/* Write to file */
 		self::_create_file( self::_file_html(), $data );
 		self::_create_file( self::_file_gzip(), gzencode($data, 9) );
 	}
 
 
 	/**
-	* Anlegen der Cache-Datei
+	* Create cache file
 	*
 	* @since   2.0
 	* @change  2.0
@@ -207,12 +207,12 @@ final class Cachify_HDD {
 
 	private static function _create_file($file, $data)
 	{
-		/* Beschreibbar? */
+		/* Writable? */
 		if ( ! $handle = @fopen($file, 'wb') ) {
 			wp_die('Could not write file.');
 		}
 
-		/* Schreiben */
+		/* Write */
 		@fwrite($handle, $data);
 		fclose($handle);
 		clearstatcache();
@@ -227,40 +227,40 @@ final class Cachify_HDD {
 
 
 	/**
-	* Rekrusive Leerung eines Ordners
+	* Clear directory recursively
 	*
 	* @since   2.0
 	* @change  2.0.5
 	*
-	* @param   string  $dir  Ordnerpfad
+	* @param   string  $dir  Directory path
 	*/
 
 	private static function _clear_dir($dir) {
-		/* Weg mit dem Slash */
+		/* Remote training slash */
 		$dir = untrailingslashit($dir);
 
-		/* Ordner? */
+		/* Is directory? */
 		if ( ! is_dir($dir) ) {
 			return;
 		}
 
-		/* Einlesen */
+		/* Read */
 		$objects = array_diff(
 			scandir($dir),
 			array('..', '.')
 		);
 
-		/* Leer? */
+		/* Empty? */
 		if ( empty($objects) ) {
 			return;
 		}
 
-		/* Loopen */
+		/* Loop over items */
 		foreach ( $objects as $object ) {
-			/* Um Pfad erweitern */
+			/* Expand path */
 			$object = $dir. DIRECTORY_SEPARATOR .$object;
 
-			/* Ordner/Datei */
+			/* Directory or file */
 			if ( is_dir($object) ) {
 				self::_clear_dir($object);
 			} else {
@@ -268,38 +268,38 @@ final class Cachify_HDD {
 			}
 		}
 
-		/* Killen */
+		/* Remove directory */
 		@rmdir($dir);
 
-		/* Aufräumen */
+		/* CleanUp */
 		clearstatcache();
 	}
 
 
 	/**
-	* Ermittlung der Ordnergröße
+	* Get directory size
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $dir   Ordnerpfad
-	* @return  mixed   $size  Ordnergröße
+	* @param   string  $dir   Directory path
+	* @return  mixed          Directory size
 	*/
 
 	public static function _dir_size($dir = '.')
 	{
-		/* Ordner? */
+		/* Is directory? */
 		if ( ! is_dir($dir) ) {
 			return;
 		}
 
-		/* Einlesen */
+		/* Read */
 		$objects = array_diff(
 			scandir($dir),
 			array('..', '.')
 		);
 
-		/* Leer? */
+		/* Empty? */
 		if ( empty($objects) ) {
 			return;
 		}
@@ -307,12 +307,12 @@ final class Cachify_HDD {
 		/* Init */
 		$size = 0;
 
-		/* Loopen */
+		/* Loop over items */
 		foreach ( $objects as $object ) {
-			/* Um Pfad erweitern */
+			/* Expand path */
 			$object = $dir. DIRECTORY_SEPARATOR .$object;
 
-			/* Ordner/Datei */
+			/* Directory or file */
 			if ( is_dir($object) ) {
 				$size += self::_dir_size($object);
 			} else {
@@ -325,13 +325,13 @@ final class Cachify_HDD {
 
 
 	/**
-	* Pfad der Cache-Datei
+	* Path to cache file
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $path  Request-URI oder Permalink [optional]
-	* @return  string  $diff  Pfad zur Cache-Datei
+	* @param   string  $path  Request-URI or Permalink [optional]
+	* @return  string         Path to cache file
 	*/
 
 	private static function _file_path($path = NULL)
@@ -362,12 +362,12 @@ final class Cachify_HDD {
 
 
 	/**
-	* Pfad der HTML-Datei
+	* Path to HTML file
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  string  $diff  Pfad zur HTML-Datei
+	* @return  string  Path to HTML file
 	*/
 
 	private static function _file_html()
@@ -377,12 +377,12 @@ final class Cachify_HDD {
 
 
 	/**
-	* Pfad der GZIP-Datei
+	* Path to GZIP file
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  string  $diff  Pfad zur GZIP-Datei
+	* @return  string  Path to GZIP file
 	*/
 
 	private static function _file_gzip()

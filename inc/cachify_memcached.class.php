@@ -52,14 +52,14 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Speicherung im Cache
+	* Store item in cache
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @param   string   $hash      Hash des Eintrags
-	* @param   string   $data      Inhalt des Eintrags
-	* @param   integer  $lifetime  Lebensdauer des Eintrags
+	* @param   string   $hash      Hash of the entry
+	* @param   string   $data      Content of the entry
+	* @param   integer  $lifetime  Lifetime of the entry
 	*/
 
 	public static function store_item($hash, $data, $lifetime)
@@ -84,13 +84,13 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Lesen aus dem Cache
+	* Read item from cache
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @return  mixed   $diff  Wert des Eintrags
+	* @param   string  $hash  Hash of the entry
+	* @return  mixed          Content of the entry
 	*/
 
 	public static function get_item($hash)
@@ -108,13 +108,13 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Entfernung aus dem Cache
+	* Delete item from cache
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @param   string  $url   URL des Eintrags [optional]
+	* @param   string  $hash  Hash of the entry
+	* @param   string  $url   URL of the entry [optional]
 	*/
 
 	public static function delete_item($hash, $url = '')
@@ -132,7 +132,7 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Leerung des Cache
+	* Clear the cache
 	*
 	* @since   2.0.7
 	* @change  2.0.7
@@ -151,7 +151,7 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Ausgabe des Cache
+	* Print the cache
 	*
 	* @since   2.0.7
 	* @change  2.0.7
@@ -164,12 +164,12 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Ermittlung der Cache-Größe
+	* Get the cache size
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @return  mixed  $diff  Cache-Größe
+	* @return  mixed  Cache size
 	*/
 
 	public static function get_stats()
@@ -179,7 +179,7 @@ final class Cachify_MEMCACHED {
 			wp_die('MEMCACHE: Not enabled.');
 		}
 
-		/* Infos */
+		/* Info */
 		$data = self::$_memcached->getStats();
 
 		/* No stats? */
@@ -190,7 +190,7 @@ final class Cachify_MEMCACHED {
 		/* Get first key */
 		$data = $data[key($data)];
 
-		/* Leer */
+		/* Empty */
 		if ( empty($data['bytes']) ) {
 			return NULL;
 		}
@@ -200,12 +200,12 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Generierung der Signatur
+	* Generate signature
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @return  string  $diff  Signatur als String
+	* @return  string  Signature string
 	*/
 
 	private static function _cache_signatur()
@@ -223,13 +223,13 @@ final class Cachify_MEMCACHED {
 
 
 	/**
-	* Pfad der Cache-Datei
+	* Path of cache file
 	*
 	* @since   2.0.7
 	* @change  2.0.7
 	*
-	* @param   string  $path  Request-URI oder Permalink [optional]
-	* @return  string  $diff  Pfad zur Cache-Datei
+	* @param   string  $path  Request-URI or Permalink [optional]
+	* @return  string         Path to cache file
 	*/
 
 	private static function _file_path($path = NULL)
@@ -255,7 +255,7 @@ final class Cachify_MEMCACHED {
 	*
 	* @hook    array  cachify_memcached_servers  Array with memcached servers
 	*
-	* @return  boolean  true/false  TRUE bei Erfolg
+	* @return  boolean  true/false  TRUE on success
 	*/
 
 	private static function _connect_server()

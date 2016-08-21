@@ -42,14 +42,14 @@ final class Cachify_APC {
 
 
 	/**
-	* Speicherung im Cache
+	* Store item in cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string   $hash      Hash des Eintrags
-	* @param   string   $data      Inhalt des Eintrags
-	* @param   integer  $lifetime  Lebensdauer des Eintrags
+	* @param   string   $hash      Hash of the entry
+	* @param   string   $data      Content of the entry
+	* @param   integer  $lifetime  Lifetime of the entry
 	*/
 
 	public static function store_item($hash, $data, $lifetime)
@@ -69,18 +69,18 @@ final class Cachify_APC {
 
 
 	/**
-	* Lesen aus dem Cache
+	* Read item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @return  mixed   $diff  Wert des Eintrags
+	* @param   string  $hash  Hash of the entry
+	* @return  mixed          Content of the entry
 	*/
 
 	public static function get_item($hash)
 	{
-		/* Leer? */
+		/* Empty? */
 		if ( empty($hash) ) {
 			wp_die('APC get item: Empty input.');
 		}
@@ -90,29 +90,29 @@ final class Cachify_APC {
 
 
 	/**
-	* Entfernung aus dem Cache
+	* Delete item from cache
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @param   string  $hash  Hash des Eintrags
-	* @param   string  $url   URL des Eintrags [optional]
+	* @param   string  $hash  Hash of the entry
+	* @param   string  $url   URL of the entry [optional]
 	*/
 
 	public static function delete_item($hash, $url = '')
 	{
-		/* Leer? */
+		/* Empty? */
 		if ( empty($hash) ) {
 			wp_die('APC delete item: Empty input.');
 		}
 
-		/* Löschen */
+		/* Delete */
 		apc_delete($hash);
 	}
 
 
 	/**
-	* Leerung des Cache
+	* Clear the cache
 	*
 	* @since   2.0.0
 	* @change  2.0.7
@@ -129,7 +129,7 @@ final class Cachify_APC {
 
 
 	/**
-	* Ausgabe des Cache
+	* Print the cache
 	*
 	* @since   2.0
 	* @change  2.0
@@ -142,20 +142,20 @@ final class Cachify_APC {
 
 
 	/**
-	* Ermittlung der Cache-Größe
+	* Get the cache size
 	*
 	* @since   2.0
 	* @change  2.0
 	*
-	* @return  mixed  $diff  Cache-Größe
+	* @return  mixed  Cache size
 	*/
 
 	public static function get_stats()
 	{
-		/* Infos */
+		/* Info */
 		$data = apc_cache_info('user');
 
-		/* Leer */
+		/* Empty */
 		if ( empty($data['mem_size']) ) {
 			return NULL;
 		}
@@ -165,12 +165,12 @@ final class Cachify_APC {
 
 
 	/**
-	* Generierung der Signatur
+	* Generate signature
 	*
 	* @since   2.0
 	* @change  2.0.5
 	*
-	* @return  string  $diff  Signatur als String
+	* @return  string  Signature string
 	*/
 
 	private static function _cache_signatur()
