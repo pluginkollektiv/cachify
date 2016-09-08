@@ -70,7 +70,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
 ### 2.2.2 ###
-* Fix: parameter response by filter `dashboard_glance_items`
+* Fix: parameter return by filter `dashboard_glance_items`
 * Generous use of the filter `esc_html`
 
 ### 2.2.1 ###
