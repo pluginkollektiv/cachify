@@ -36,9 +36,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
 ### Contribute ###
-* Active development of this plugin is handled on GitHub.
+* Active development of this plugin is handled on GitHub. (see here: https://github.com/pluginkollektiv/cachify)
 * Pull requests for documented bugs are highly appreciated.
 * If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
+* If you want to help us translate this plugin you can do so here: https://translate.wordpress.org/projects/wp-plugins/cachify
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
@@ -69,15 +70,15 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
 ### 2.2.2 ###
-* Fix: Parameter-Rückgabe beim Filter `dashboard_glance_items`
-* Großzügige Anwendung des Filters `esc_html`
+* Fix: parameter response by filter `dashboard_glance_items`
+* Generous use of the filter `esc_html`
 
 ### 2.2.1 ###
-* Fix für die Meldung "Call to undefined function is_plugin_active_for_network" in WordPress-Multisite
+* Fix for the note "Call to undefined function is_plugin_active_for_network" on WordPress-Multisites
 
 ### 2.2.0 ###
-* Werkzeugleiste: Anzeige des "Cache leeren" Buttons im Frontend der Website
-* Werkzeugleiste: Steuerung der Anzeige des "Cache leeren" Buttons via Hook
+* Toolbar: Display of the "Flush the cachify cache" button on the frontend
+* Toolbar: Controlling the display of the "Flush the cachify cache" button via hook
 
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
 
