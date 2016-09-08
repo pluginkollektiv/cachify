@@ -74,7 +74,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Generous use of the filter `esc_html`
 
 ### 2.2.1 ###
-* Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress-Multisite
+* Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress Multisite
 
 ### 2.2.0 ###
 * Toolbar: Display of the "Flush the cachify cache" button on the frontend
