@@ -36,10 +36,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
 ### Contribute ###
-* Active development of this plugin is handled on GitHub. (see here: https://github.com/pluginkollektiv/cachify)
+* Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/cachify).
 * Pull requests for documented bugs are highly appreciated.
 * If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
-* If you want to help us translate this plugin you can do so here: https://translate.wordpress.org/projects/wp-plugins/cachify
+* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify).
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
@@ -74,7 +74,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Generous use of the filter `esc_html`
 
 ### 2.2.1 ###
-* Fix for the note "Call to undefined function is_plugin_active_for_network" on WordPress-Multisites
+* Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress-Multisites
 
 ### 2.2.0 ###
 * Toolbar: Display of the "Flush the cachify cache" button on the frontend
