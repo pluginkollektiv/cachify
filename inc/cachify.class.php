@@ -1776,14 +1776,14 @@ final class Cachify {
 							<fieldset>
 								<label for="cachify_without_ids">
 									<input type="text" name="cachify[without_ids]" id="cachify_without_ids" value="<?php echo esc_attr($options['without_ids']) ?>" />
-									Post/Pages-IDs
+									__('Post/Pages-IDs (separated by commas)', 'cachify' );
 								</label>
 
 								<br />
 
 								<label for="cachify_without_agents">
 									<input type="text" name="cachify[without_agents]" id="cachify_without_agents" value="<?php echo esc_attr($options['without_agents']) ?>" />
-									Browser User-Agents
+									__('Browser User-Agents (separated by commas)', 'cachify' );
 								</label>
 							</fieldset>
 						</td>
