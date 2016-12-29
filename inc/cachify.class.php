@@ -1604,9 +1604,9 @@ final class Cachify {
 	private static function _minify_select()
 	{
 		return array(
-			self::MINIFY_DISABLED  => esc_html__('No minify', 'cachify'),
-			self::MINIFY_HTML_ONLY => esc_html__('HTML', 'cachify'),
-			self::MINIFY_HTML_JS   => esc_html__('HTML + Inline JavaScript', 'cachify')
+			self::MINIFY_DISABLED  => esc_html__( 'No minify', 'cachify' ),
+			self::MINIFY_HTML_ONLY => esc_html__( 'HTML', 'cachify' ),
+			self::MINIFY_HTML_JS   => esc_html__( 'HTML + Inline JavaScript', 'cachify' )
 		);
 	}
 
