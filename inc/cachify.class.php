@@ -1604,9 +1604,9 @@ final class Cachify {
 	private static function _minify_select()
 	{
 		return array(
-			self::MINIFY_DISABLED  => esc_html__('No minify', 'cachify'),
-			self::MINIFY_HTML_ONLY => 'HTML',
-			self::MINIFY_HTML_JS   => 'HTML + Inline JavaScript'
+			self::MINIFY_DISABLED  => esc_html__( 'No minify', 'cachify' ),
+			self::MINIFY_HTML_ONLY => esc_html__( 'HTML', 'cachify' ),
+			self::MINIFY_HTML_JS   => esc_html__( 'HTML + Inline JavaScript', 'cachify' )
 		);
 	}
 
@@ -1776,14 +1776,14 @@ final class Cachify {
 							<fieldset>
 								<label for="cachify_without_ids">
 									<input type="text" name="cachify[without_ids]" id="cachify_without_ids" value="<?php echo esc_attr($options['without_ids']) ?>" />
-									Post/Pages-IDs
+									esc_html__( 'Post/Pages-IDs (separated by commas)', 'cachify' );
 								</label>
 
 								<br />
 
 								<label for="cachify_without_agents">
 									<input type="text" name="cachify[without_agents]" id="cachify_without_agents" value="<?php echo esc_attr($options['without_agents']) ?>" />
-									Browser User-Agents
+									esc_html__( 'Browser User-Agents (separated by commas)', 'cachify' );
 								</label>
 							</fieldset>
 						</td>
