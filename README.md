@@ -74,7 +74,7 @@ Compared to APC (Alternative PHP Cache), PHP OPCache is not able to contain cont
 * After publishing new custom post types
 * After publishing new sheduled posts (only Cachify DB)
 * After updating WordPress
-* If you confirm the  trash button on the adminbar
+* If you confirm the trash button on the adminbar
 * After saving Cachify and wpSEO settings
 
 ### Which parts of the website are not cached by default? ###
