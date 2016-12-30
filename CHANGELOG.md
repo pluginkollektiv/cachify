@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file. This projec
 * Enhance - Cache exceptions/User-Agents translation, see #52, props timse201
 * Enhance - Readme FAQ, see #51, props timse201
 * Enhance - sizeable exclusion boxes + placeholder, see #53, props timse201
+* Enhance - FAQ and Support links, see #55, props timse201
+* Security - Tabnabbing prevention, see #55, props timse201
 
 ## 2.2.4
 * Fixes caching for mixed HTTPS and HTTP setups
