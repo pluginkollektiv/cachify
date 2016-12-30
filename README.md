@@ -1,9 +1,9 @@
 # Cachify #
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-* Tags:              apc, cache, caching, performance
+* Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google speed, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache
 * Requires at least: 3.8
-* Tested up to:      4.6
+* Tested up to:      4.7
 * Stable tag:        2.2.4
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
