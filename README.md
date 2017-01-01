@@ -1,12 +1,5 @@
 # Cachify #
-* Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-* Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
-* Requires at least: 3.8
-* Tested up to:      4.7
-* Stable tag:        2.2.4
-* License:           GPLv2 or later
-* License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
 Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
 
@@ -97,36 +90,4 @@ Allow: /`
 A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
 
 ## Changelog ##
-
-### 2.2.4 ###
-* Fixes caching for mixed HTTPS and HTTP setups
-* Fixes an issue with the icon styling in the admin toolbar
-* Ensures compatibility with the latest WordPress version
-
-### 2.2.3 ###
-* New: Generated a POT file
-* New: Added German formal translation
-* Updated, translated + formatted README.md
-* Updated expired link URLs in plugin and languages files
-* Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
-
-### 2.2.2 ###
-* Fix: parameter return by filter `dashboard_glance_items`
-* Generous use of the filter `esc_html`
-
-### 2.2.1 ###
-* Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress Multisite
-
-### 2.2.0 ###
-* Toolbar: Display of the "Flush the cachify cache" button on the frontend
-* Toolbar: Controlling the display of the "Flush the cachify cache" button via hook
-
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
-
-## Upgrade Notice ##
-
-### 2.2.4 ###
-This is mainly a maintenance release ensuring compatibility with the latest version of WordPress. Expect bigger changes in 2.3.0 soon!
-
-## Screenshots ##
-1. Cachify Dashboard Widget
