@@ -94,6 +94,7 @@ To ensure that Google and other search engines do not index the static contents 
 Disallow: /wp-content/cache/cachify/
 Allow: /`
 
+A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
 
 ## Changelog ##
 
