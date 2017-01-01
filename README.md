@@ -46,50 +46,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ## Frequently Asked Questions ##
 
-### PHP Fatal error: Cannot use output buffering in output buffering display handlers in Unknown on line 0 ###
-This error message may occur after commissioning the caching plug-in. The hint appears because there are no cache files on the HDD for output. This is probably due to the fact that Cachify could not store files in the cache folder. Please check the write-permissions for the cache folder (found in the WordPress directory *wp-content*) and set them if necessary.
-
-### My Website looks in some parts broken after activating Cachify! ###
-Please make sure there is no issue that caused by the Cache minify feature. Just deactivate it or use HTML only. If the issue still exist please feel free to report it at the [support forums](https://wordpress.org/support/plugin/cachify). With this feature any unnecessary characters such as breaks and HTML comments are removed from the source code.
-
-### Cachify HDD: Character encoding does not work correctly ###
-If you use Cachify to store the cache on HDD there is no PHP to run. In the case of misconfigured servers, this can lead to incorrect display of the special characters on web pages. The error can be corrected by an extension of the system file .htaccess: *AddDefaultCharset UTF-8*
-
-### Cachify with CDN support? ###
-Currently the caching plugin for WordPress has no connection to a CDN provider. Although the Buzzword CDN (Content Delivery Network) is praised as a performance factor, CDN makes little sense for WordPress websites with a national audience. In this case, a home host could provide the requested files faster than a worldwide CDN service provider because the next node could be far away.
-
-### PHP OPcache as a caching method? ###
-Compared to APC (Alternative PHP Cache), PHP OPCache is not able to contain content with custom keys and values. Because of this Cachify can not consider the PHP OPCache as a caching method.
-
-### When does Cachify automaticaly flush its cache? ###
-* After publishing new posts
-* After publishing new pages
-* After publishing new custom post types
-* After publishing new sheduled posts (only Cachify DB)
-* After updating WordPress
-* If you confirm the trash button on the adminbar
-* After saving Cachify and wpSEO settings
-
-### Which parts of the website are not cached by default? ###
-* Password protected pages
-* Feeds
-* Trackbacks
-* Robots
-* Previews
-* Mobile-themes (WP-Touch, Carrington, Jetpack Mobile)
-* Search
-* Error pages
-
-### The cache folder is indexed by search engines! ###
-To ensure that Google and other search engines do not index the static contents of the cache folder (otherwise there could be duplicate content), the robots.txt file which is located in the main directory of a WordPress installation should be expanded by disabling the path to the cache file (disallow ). This issue should only happen if you use a *static robots.txt* or you changed the *wp-content* location. And so might look a robots.txt:
-
-```
-User-agent: *
-Disallow: /wp-content/cache/cachify/
-Allow: /
-```
+Please have a look [here](https://github.com/pluginkollektiv/cachify/wiki/en-FAQ)
 
 A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
+
 
 ## Changelog ##
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
