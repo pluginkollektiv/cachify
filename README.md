@@ -52,4 +52,4 @@ A complete documentation is available in the [GitHub repository Wiki](https://gi
 
 
 ## Changelog ##
-For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
+For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify/blob/master/CHANGELOG.md).
