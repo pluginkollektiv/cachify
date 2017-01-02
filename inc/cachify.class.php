@@ -1567,10 +1567,10 @@ final class Cachify {
 	{
 		/* Defaults */
 		$methods = array(
-			self::METHOD_DB  => esc_html__('Database', 'cachify'),
-			self::METHOD_APC => esc_html__('APC', 'cachify'),
-			self::METHOD_HDD => esc_html__('Hard disk', 'cachify'),
-			self::METHOD_MMC => esc_html__('Memcached', 'cachify')
+			self::METHOD_DB  => esc_html__( 'Database', 'cachify' ),
+			self::METHOD_APC => esc_html__( 'APC', 'cachify' ),
+			self::METHOD_HDD => esc_html__( 'Hard disk', 'cachify' ),
+			self::METHOD_MMC => esc_html__( 'Memcached', 'cachify' )
 		);
 
 		/* APC */
