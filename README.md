@@ -1,6 +1,4 @@
 # Cachify #
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-
 Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
 
 ## Description ##
@@ -29,6 +27,9 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
 * If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify).
 
+### Donate
+[Donate for us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ)
+
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org)
@@ -45,11 +46,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 
 ## Frequently Asked Questions ##
-
-Please have a look [here](https://github.com/pluginkollektiv/cachify/wiki/en-FAQ).
+Please have a look [in the FAQ pages](https://github.com/pluginkollektiv/cachify/wiki/en-FAQ).
 
 A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
 
 
 ## Changelog ##
-For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify/blob/master/CHANGELOG.md).
+[Changelog](./CHANGELOG.md).
