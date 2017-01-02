@@ -605,7 +605,7 @@ final class Cachify {
 		return array_merge(
 			$input,
 			array(
-				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank">PayPal</a>'
+				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer">PayPal</a>'
 			)
 		);
 	}
@@ -1673,7 +1673,7 @@ final class Cachify {
 				'cachify_method_tip',
 				'cachify_method_tip',
 				sprintf(
-					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank">?</a>]',
+					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer">?</a>]',
 					esc_html__('The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify')
 				),
 				'updated'
