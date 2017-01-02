@@ -641,7 +641,7 @@ final class Cachify {
 
 		/* Right now item */
 		$items[] = sprintf(
-			'<a href="%s" class="cachify-icon cachify-icon--%s" title="%s: %s">%s Cache</a>',
+			'<a href="%s" class="cachify-icon cachify-icon--%s" title="%s: %s">%s esc_html__( 'Cache', 'cachify' )</a>',
 			add_query_arg(
 				array(
 					'page' => 'cachify'
@@ -649,9 +649,9 @@ final class Cachify {
 				admin_url('options-general.php')
 			),
 			esc_attr(strtolower($method)),
-			esc_html__('Caching method', 'cachify'),
+			esc_html__( 'Caching method', 'cachify' ),
 			esc_attr($method),
-			( empty($size) ? esc_html__('Empty', 'cachify') : size_format($size) )
+			( empty($size) ? esc_html__( 'Empty', 'cachify' ) : size_format($size) )
 		);
 
 		return $items;
@@ -718,7 +718,7 @@ final class Cachify {
 				'href'   => wp_nonce_url( add_query_arg('_cachify', 'flush'), '_cachify__flush_nonce'), // esc_url in /wp-includes/class-wp-admin-bar.php#L438
 				'parent' => 'top-secondary',
 				'title'	 => '<span class="ab-icon dashicons"></span>',
-				'meta'   => array( 'title' => esc_html__('Flush the cachify cache', 'cachify') )
+				'meta'   => array( 'title' => esc_html__( 'Flush the cachify cache', 'cachify' ) )
 			)
 		);
 	}
@@ -831,7 +831,7 @@ final class Cachify {
 
 		echo sprintf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-			esc_html__('Cachify cache is flushed.', 'cachify')
+			esc_html__( 'Cachify cache is flushed.', 'cachify' )
 		);
 	}
 
@@ -1490,8 +1490,8 @@ final class Cachify {
 		/* Init vars */
 		$dropdown_options = '';
 		$available_options = array(
-			esc_html__('Total cache', 'cachify'),
-			esc_html__('Page cache', 'cachify')
+			esc_html__( 'Total cache', 'cachify' ),
+			esc_html__( 'Page cache', 'cachify' )
 		);
 
 		/* Select options */
@@ -1568,9 +1568,9 @@ final class Cachify {
 		/* Defaults */
 		$methods = array(
 			self::METHOD_DB  => esc_html__('Database', 'cachify'),
-			self::METHOD_APC => 'APC',
+			self::METHOD_APC => esc_html__('APC', 'cachify'),
 			self::METHOD_HDD => esc_html__('Hard disk', 'cachify'),
-			self::METHOD_MMC => 'Memcached'
+			self::METHOD_MMC => esc_html__('Memcached', 'cachify')
 		);
 
 		/* APC */
@@ -1674,7 +1674,7 @@ final class Cachify {
 				'cachify_method_tip',
 				sprintf(
 					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer">?</a>]',
-					esc_html__('The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify')
+					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify' )
 				),
 				'updated'
 			);
@@ -1722,7 +1722,7 @@ final class Cachify {
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">
-							<?php esc_html_e('Cache method', 'cachify') ?>
+							<?php esc_html_e( 'Cache method', 'cachify' ) ?>
 						</th>
 						<td>
 							<label for="cachify_cache_method">
@@ -1742,27 +1742,27 @@ final class Cachify {
 						<td>
 							<label for="cachify_cache_expires">
 								<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr($options['cache_expires']) ?>" class="small-text" />
-								<?php esc_html_e('Hours', 'cachify') ?>
+								<?php esc_html_e( 'Hours', 'cachify' ) ?>
 							</label>
 						</td>
 					</tr>
 
 					<tr valign="top">
 						<th scope="row">
-							<?php esc_html_e('Cache generation', 'cachify') ?>
+							<?php esc_html_e( 'Cache generation', 'cachify' ) ?>
 						</th>
 						<td>
 							<fieldset>
 								<label for="cachify_only_guests">
 									<input type="checkbox" name="cachify[only_guests]" id="cachify_only_guests" value="1" <?php checked('1', $options['only_guests']); ?> />
-									<?php esc_html_e('No cache generation by logged in users', 'cachify') ?>
+									<?php esc_html_e( 'No cache generation by logged in users', 'cachify' ) ?>
 								</label>
 
 								<br />
 
 								<label for="cachify_reset_on_comment">
 									<input type="checkbox" name="cachify[reset_on_comment]" id="cachify_reset_on_comment" value="1" <?php checked('1', $options['reset_on_comment']); ?> />
-									<?php esc_html_e('Flush the cache at new comments', 'cachify') ?>
+									<?php esc_html_e( 'Flush the cache at new comments', 'cachify' ) ?>
 								</label>
 							</fieldset>
 						</td>
@@ -1770,7 +1770,7 @@ final class Cachify {
 
 					<tr valign="top">
 						<th scope="row">
-							<?php esc_html_e('Cache exceptions', 'cachify') ?>
+							<?php esc_html_e( 'Cache exceptions', 'cachify' ) ?>
 						</th>
 						<td>
 							<fieldset>
@@ -1791,7 +1791,7 @@ final class Cachify {
 
 					<tr valign="top">
 						<th scope="row">
-							<?php esc_html_e('Cache minify', 'cachify') ?>
+							<?php esc_html_e( 'Cache minify', 'cachify' ) ?>
 						</th>
 						<td>
 							<label for="cachify_compress_html">
