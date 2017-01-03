@@ -640,10 +640,10 @@ final class Cachify {
 		);
 
 		/* Output of the cache size */
-		$cachesize = ( $size == 0 )
+		$cachesize = ( $size === 0 )
 			? esc_html__( 'Empty Cache', 'cachify' ) :
 			/* translators: %s: cache size */
-			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );;
+			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );
 
 		/* Right now item */
 		$items[] = sprintf(
