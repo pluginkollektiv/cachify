@@ -21,7 +21,7 @@
 }
 #dashboard_right_now .cachify-icon--apc:before,
 #dashboard_right_now .cachify-icon--memcached:before {
-	margin: 3px 6px 0 0;
+	margin: 3px 2px 0 0;
 	content: "\e800";
 	font-size: 13px;
 }
