@@ -639,6 +639,12 @@ final class Cachify {
 			)
 		);
 
+		/* Output of the cache size */
+		$cachesize = ( $size == 0 )
+			? esc_html__( 'Empty Cache', 'cachify' ) :
+			/* translators: %s: cache size */
+			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );;
+
 		/* Right now item */
 		$items[] = sprintf(
 			'<a href="%s" class="cachify-icon cachify-icon--%s" title="%s: %s">%s</a>',
@@ -651,7 +657,7 @@ final class Cachify {
 			esc_attr(strtolower($method)),
 			esc_html__( 'Caching method', 'cachify' ),
 			esc_attr($method),
-			( empty($size) ? esc_html__( 'Empty Cache', 'cachify' ) : size_format($size) . ' ' . esc_html__( 'Cache', 'cachify' ) )
+			$cachesize
 		);
 
 		return $items;
