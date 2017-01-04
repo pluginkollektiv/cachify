@@ -53,6 +53,9 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ## Frequently Asked Questions ##
 
+### No cache expiration while using HDD cache? ###
+The cache expiration can not be considered due to technical reasons. If the cache stock has to be emptied at certain time intervals, then it is recommended to call a prepared PHP file by a cronjob.
+
 ### PHP Fatal error: Cannot use output buffering in output buffering display handlers in Unknown on line 0 ###
 This error message may occur after commissioning the caching plug-in. The hint appears because there are no cache files on the HDD for output. This is probably due to the fact that Cachify could not store files in the cache folder. Please check the write-permissions for the cache folder (found in the WordPress directory *wp-content*) and set them if necessary.
 
