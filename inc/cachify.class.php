@@ -1747,7 +1747,9 @@ final class Cachify {
 						</th>
 						<td>
 							<label for="cachify_cache_expires">
-								<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr($options['cache_expires']) ?>" class="small-text" />
+								<?php if ( $options [ 'use_apc' ] === self::METHOD_HDD): ?>&#8734;
+								<?php else: ?><input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr($options [ 'cache_expires' ] ) ?>" class="small-text" />
+								<?php endif; ?>
 								<?php esc_html_e( 'Hours', 'cachify' ); ?>
 							</label>
 						</td>
