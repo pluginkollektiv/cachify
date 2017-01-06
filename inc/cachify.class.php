@@ -657,13 +657,13 @@ final class Cachify {
 				),
 				admin_url('options-general.php')
 			),
-			esc_attr(strtolower($method)),
+			esc_attr( strtolower( $method ) ),
 			esc_html__( 'Caching method', 'cachify' ),
-			esc_attr($method),
+			esc_attr( $method ),
 			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
-			esc_attr(strtolower($method)),
+			esc_attr( strtolower( $method ) ),
 			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
-			esc_attr(strtolower($method)),
+			esc_attr( strtolower( $method ) ),
 			$cachesize
 		);
 
