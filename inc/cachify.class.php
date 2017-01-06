@@ -624,9 +624,9 @@ final class Cachify {
 	public static function add_dashboard_count( $items = array() )
 	{
 		/* Skip */
-        if ( ! current_user_can('manage_options') ) {
-            return $items;
-        }
+		if ( ! current_user_can('manage_options') ) {
+			return $items;
+		}
 
 		/* Cache size */
 		$size = self::get_cache_size();
@@ -635,12 +635,12 @@ final class Cachify {
 		$method = call_user_func(
 			array(
 				self::$method,
-				'stringify‎_method'
+				'stringify‎_method',
 			)
 		);
 
 		/* Output of the cache size */
-		$cachesize = ( $size === 0 )
+		$cachesize = ( 0 === $size )
 			? esc_html__( 'Empty Cache', 'cachify' ) :
 			/* translators: %s: cache size */
 			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );
@@ -653,7 +653,7 @@ final class Cachify {
 				</svg> %s</a>',
 			add_query_arg(
 				array(
-					'page' => 'cachify'
+					'page' => 'cachify',
 				),
 				admin_url('options-general.php')
 			),
