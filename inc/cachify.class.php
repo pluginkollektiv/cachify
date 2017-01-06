@@ -647,7 +647,10 @@ final class Cachify {
 
 		/* Right now item */
 		$items[] = sprintf(
-			'<a href="%s" class="cachify-icon cachify-icon--%s" title="%s: %s">%s</a>',
+			'<a href="%s" title="%s: %s" class="cachify-glance">
+				<svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
+					<use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s">
+				</svg> %s</a>',
 			add_query_arg(
 				array(
 					'page' => 'cachify'
@@ -657,6 +660,10 @@ final class Cachify {
 			esc_attr(strtolower($method)),
 			esc_html__( 'Caching method', 'cachify' ),
 			esc_attr($method),
+			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_attr(strtolower($method)),
+			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_attr(strtolower($method)),
 			$cachesize
 		);
 
