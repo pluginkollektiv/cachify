@@ -46,7 +46,7 @@ final class Cachify_MEMCACHED {
 	* @return  string  Caching method
 	*/
 
-	public static function stringify‎_method() {
+	public static function stringify_method() {
 		return 'Memcached';
 	}
 

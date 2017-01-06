@@ -36,7 +36,7 @@ final class Cachify_HDD {
 	* @return  string  Caching method
 	*/
 
-	public static function stringify‎_method() {
+	public static function stringify_method() {
 		return 'HDD';
 	}
 
