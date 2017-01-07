@@ -134,4 +134,4 @@ This is mainly a maintenance release ensuring compatibility with the latest vers
 ## Screenshots ##
 1. Cachify settings
 2. Cachify Dashboard Widget
-3. Cache empty if articles have been edited
+3. Discard page/post cache or total cache if page/post is updated.
