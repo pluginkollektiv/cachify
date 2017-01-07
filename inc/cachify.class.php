@@ -635,7 +635,7 @@ final class Cachify {
 		$method = call_user_func(
 			array(
 				self::$method,
-				'stringify‎_method'
+				'stringify_method'
 			)
 		);
 
