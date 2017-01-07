@@ -1,0 +1,210 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Cachify 2.3.0\n"
+"POT-Creation-Date: 2017-01-07 02:11+0100\n"
+"PO-Revision-Date: 2017-01-07 02:16+0100\n"
+"Last-Translator: Gabriele Lauricella <gab.lau@gmail.com>\n"
+"Language-Team: Gabriele Lauricella <gab.lau@gmail.com>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: cachify.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: inc/cachify.class.php:590
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: inc/cachify.class.php:654 inc/cachify.class.php:664
+msgid "Empty Cache"
+msgstr "Cache Vuota"
+
+#. translators: %s: cache size
+#: inc/cachify.class.php:656
+#, php-format
+msgid "%s Cache"
+msgstr "%s Cache"
+
+#. translators: %s: cache size
+#: inc/cachify.class.php:666
+#, php-format
+msgid "%s Pages Cached"
+msgstr "%s Pagine in Cache"
+
+#: inc/cachify.class.php:682
+msgid "Caching method"
+msgstr "Metodo di Caching"
+
+#: inc/cachify.class.php:782
+msgid "Flush the cachify cache"
+msgstr "Svuotare la cache di cachify"
+
+#: inc/cachify.class.php:895
+msgid "Cachify cache is flushed."
+msgstr "Cachify cache svuotata."
+
+#: inc/cachify.class.php:1578
+msgid "Total cache"
+msgstr "Cache Totale"
+
+#: inc/cachify.class.php:1579
+msgid "Page cache"
+msgstr "Cache pagina"
+
+#: inc/cachify.class.php:1609
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: inc/cachify.class.php:1611
+msgid "Edit"
+msgstr "Modifica"
+
+#: inc/cachify.class.php:1613
+msgid "OK"
+msgstr "OK"
+
+#: inc/cachify.class.php:1614
+msgid "Cancel"
+msgstr "Annulla"
+
+#. Plugin Name of the plugin/theme
+#: inc/cachify.class.php:1629 inc/cachify.class.php:1630
+msgid "Cachify"
+msgstr "Cachify"
+
+#: inc/cachify.class.php:1655
+msgid "Database"
+msgstr "Database"
+
+#: inc/cachify.class.php:1656
+msgid "APC"
+msgstr "APC"
+
+#: inc/cachify.class.php:1657
+msgid "Hard disk"
+msgstr "Hard disk"
+
+#: inc/cachify.class.php:1658
+msgid "Memcached"
+msgstr "Memcached"
+
+#: inc/cachify.class.php:1659
+msgid "Redis (Need more test)"
+msgstr "Redis (da testare bene)"
+
+#: inc/cachify.class.php:1660
+msgid "Memcache (Need more test)"
+msgstr "Memcache (da testare bene)"
+
+#: inc/cachify.class.php:1704
+msgid "No minify"
+msgstr "Nessun minify"
+
+#: inc/cachify.class.php:1705
+msgid "HTML"
+msgstr "HTML"
+
+#: inc/cachify.class.php:1706
+msgid "HTML + Inline JavaScript"
+msgstr "HTML + JavaScript in linea"
+
+#: inc/cachify.class.php:1774
+msgid "The server configuration file (e.g. .htaccess) needs to be adjusted"
+msgstr "Il file di configurazione del server (es. htaccess) deve essere sistemato"
+
+#: inc/cachify.class.php:1822
+msgid "Cache method"
+msgstr "Metodo di cache"
+
+#: inc/cachify.class.php:1837
+msgid "Cache expiration"
+msgstr "Scadenza cache"
+
+#: inc/cachify.class.php:1844
+msgid "Hours"
+msgstr "Ore"
+
+#: inc/cachify.class.php:1851
+msgid "Cache generation"
+msgstr "Generazione della cache"
+
+#: inc/cachify.class.php:1857
+msgid "No cache generation by logged in users"
+msgstr "Nessuna cache per gli utenti registrati"
+
+#: inc/cachify.class.php:1864
+msgid "Flush the cache at new comments"
+msgstr "Svuotare la cache ad un nuovo commento"
+
+#: inc/cachify.class.php:1872
+msgid "Cache exceptions"
+msgstr "Eccezioni della cache"
+
+#: inc/cachify.class.php:1877
+msgid "e.g. 1,2,3"
+msgstr "es 1,2,3"
+
+#: inc/cachify.class.php:1878
+msgid "Post/Pages-IDs (separated by commas)"
+msgstr "ID Articoli/Pagine (separati da virgole)"
+
+#: inc/cachify.class.php:1884
+msgid "e.g. MSIE 6, Opera"
+msgstr "es. MSIE 6, Opera"
+
+#: inc/cachify.class.php:1885
+msgid "Browser User-Agents (separated by commas)"
+msgstr "User-Agent dei browser (separati da virgole)"
+
+#: inc/cachify.class.php:1893
+msgid "Cache minify"
+msgstr "Cache minify"
+
+#: inc/cachify.class.php:1913
+msgid "https://wordpress.org/plugins/cachify/faq/"
+msgstr "https://wordpress.org/plugins/cachify/faq/"
+
+#: inc/cachify.class.php:1913
+msgid "FAQ"
+msgstr "FAQ"
+
+#: inc/cachify.class.php:1913
+msgid "Manual"
+msgstr "Manuale"
+
+#: inc/cachify.class.php:1913
+msgid "PayPal"
+msgstr "PayPal"
+
+#: inc/cachify.class.php:1913
+msgid "Support"
+msgstr "Supporto"
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/cachify/"
+msgstr "https://wordpress.org/plugins/cachify/"
+
+#. Description of the plugin/theme
+msgid ""
+"Easy to use WordPress caching plugin. Serving static blog pages from database, "
+"disk, Memcached or APC."
+msgstr ""
+"Un plugin per la cache di WordPress facile da usare. Servire pagine statiche "
+"del blog dal database, disco, Memcached, APC o Redis."
+
+#. Author of the plugin/theme
+msgid "pluginkollektiv"
+msgstr "pluginkollektiv"
+
+#. Author URI of the plugin/theme
+msgid "http://pluginkollektiv.org"
+msgstr "http://pluginkollektiv.org"

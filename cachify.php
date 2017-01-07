@@ -78,7 +78,7 @@ spl_autoload_register('cachify_autoload');
 
 /* Autoload function */
 function cachify_autoload($class) {
-	if ( in_array($class, array('Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED')) ) {
+	if ( in_array($class, array('Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_REDIS', 'Cachify_MEMCACHE')) ) {
 		require_once(
 			sprintf(
 				'%s/inc/%s.class.php',

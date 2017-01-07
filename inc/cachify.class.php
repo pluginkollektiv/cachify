@@ -39,10 +39,12 @@ final class Cachify {
 	* @var    integer
 	*/
 
-	const METHOD_DB = 0;
-	const METHOD_APC = 1;
-	const METHOD_HDD = 2;
-	const METHOD_MMC = 3;
+	const METHOD_DB        = 0;
+	const METHOD_APC       = 1;
+	const METHOD_HDD       = 2;
+	const METHOD_MEMCACHED = 3;
+	const METHOD_REDIS     = 4;
+	const METHOD_MEMCACHE  = 5;
 
 
 	/**
@@ -465,7 +467,7 @@ final class Cachify {
 	* Set default options
 	*
 	* @since   2.0
-	* @change  2.0.7
+	* @change  2.3.0
 	*/
 
 	private static function _set_default_vars()
@@ -482,9 +484,17 @@ final class Cachify {
 			self::$method = new Cachify_HDD;
 
 		/* MEMCACHED */
-		} else if ( self::$options['use_apc'] === self::METHOD_MMC && Cachify_MEMCACHED::is_available() ) {
+		} else if ( self::$options['use_apc'] === self::METHOD_MEMCACHED && Cachify_MEMCACHED::is_available() ) {
 			self::$method = new Cachify_MEMCACHED;
-
+    
+		/* REDIS */
+		} else if ( self::$options['use_apc'] === self::METHOD_REDIS && Cachify_REDIS::is_available() ) {
+			self::$method = new Cachify_REDIS;
+      
+		/* MEMCACHE */
+		} else if ( self::$options['use_apc'] === self::METHOD_MEMCACHE && Cachify_MEMCACHE::is_available() ) {
+			self::$method = new Cachify_MEMCACHE;
+      
 		/* DB */
 		} else {
 			self::$method = new Cachify_DB;
@@ -615,7 +625,7 @@ final class Cachify {
 	* Add cache properties to dashboard
 	*
 	* @since   2.0.0
-	* @change  2.2.2
+	* @change  2.3.0
 	*
 	* @param   array  $items  Initial array with dashboard items
 	* @return  array          Merged array with dashboard items
@@ -644,6 +654,20 @@ final class Cachify {
 			? esc_html__( 'Empty Cache', 'cachify' ) :
 			/* translators: %s: cache size */
 			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );
+
+		if ( self::$options['use_apc'] === self::METHOD_REDIS || self::$options['use_apc'] === self::METHOD_MEMCACHE){
+			/* Pages Cached */
+			$pages = self::get_cache_pages();
+
+			/* Output of the cache page*/
+			$cachepages = ( $pages === 0 )
+				? esc_html__( 'Empty Cache', 'cachify' ) :
+				/* translators: %s: cache size */
+				sprintf( esc_html__( '%s Pages Cached', 'cachify' ), $pages );
+
+			if($pages>0)  
+			$cachesize.=' - '.$cachepages;
+		}
 
 		/* Right now item */
 		$items[] = sprintf(
@@ -687,6 +711,37 @@ final class Cachify {
 			/* Save */
 			set_transient(
 			  'cachify_cache_size',
+			  $size,
+			  60 * 15
+			);
+		}
+
+		return $size;
+	}
+
+	/**
+	* Get the cache pages
+	*
+	* @since   2.3.0
+	* @change  2.3.0
+	*
+	* @return  integer    Number of Pages in Cache
+	*/
+
+	public static function get_cache_pages()
+	{
+		if ( ! $size = get_transient('cachify_cache_pages') ) {
+			/* Read */
+			$size = (int) call_user_func(
+				array(
+					self::$method,
+					'get_pages'
+				)
+			);
+
+			/* Save */
+			set_transient(
+			  'cachify_cache_pages',
 			  $size,
 			  60 * 15
 			);
@@ -1081,7 +1136,7 @@ final class Cachify {
 	* Get hash value for caching
 	*
 	* @since   0.1
-	* @change  2.0
+	* @change  2.3.0
 	*
 	* @param   string  $url  URL to hash [optional]
 	* @return  string        Cachify hash value
@@ -1089,10 +1144,26 @@ final class Cachify {
 
 	private static function _cache_hash($url = '')
 	{
-		$prefix = is_ssl() ? 'https-' : '';
-		return md5(
-			empty($url) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH) )
-		) . '.cachify';
+		self::$options = self::_get_options();
+
+		/* Redis method*/
+		if ( self::$options['use_apc'] === self::METHOD_REDIS){
+			//user redis change key: "cachify:host:scheme:path"
+			$prefix = is_ssl() ? 'https' : 'http';
+			if(empty($url)) {
+			$hash = 'cachify:'.$_SERVER['HTTP_HOST'] . ':' . $prefix .':'. $_SERVER['REQUEST_URI']; 
+			} else { 
+			$hash = 'cachify:'.parse_url($url, PHP_URL_HOST) . ':' . $prefix .':'. parse_url($url, PHP_URL_PATH) ;
+			}
+  			return $hash;
+		}
+		/* all other method */
+		else {
+			$prefix = is_ssl() ? 'https-' : '';
+			return md5(
+				empty($url) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH) )
+			) . '.cachify';
+		}
 	}
 
 
@@ -1308,7 +1379,7 @@ final class Cachify {
 	* Flush total cache
 	*
 	* @since   0.1
-	* @change  2.0
+	* @change  2.3.0
 	*
 	* @param bool  $clear_all_methods  Flush all caching methods (default: FALSE)
 	*/
@@ -1327,6 +1398,13 @@ final class Cachify {
 
 			/* MEMCACHED */
 			Cachify_MEMCACHED::clear_cache();
+
+			/* REDIS */
+			Cachify_REDIS::clear_cache();
+
+			/* MEMCACHE */
+			Cachify_MEMCACHE::clear_cache();
+
 		} else {
 			call_user_func(
 				array(
@@ -1338,6 +1416,7 @@ final class Cachify {
 
 		/* Transient */
 		delete_transient('cachify_cache_size');
+		delete_transient('cachify_cache_pages');
 	}
 
 
@@ -1563,7 +1642,7 @@ final class Cachify {
 	* Available caching methods
 	*
 	* @since  2.0.0
-	* @change 2.1.3
+	* @change 2.3.0
 	*
 	* @param  array  $methods  Array of all available methods
 	* @return array            Array of actually available methods
@@ -1573,10 +1652,12 @@ final class Cachify {
 	{
 		/* Defaults */
 		$methods = array(
-			self::METHOD_DB  => esc_html__( 'Database', 'cachify' ),
-			self::METHOD_APC => esc_html__( 'APC', 'cachify' ),
-			self::METHOD_HDD => esc_html__( 'Hard disk', 'cachify' ),
-			self::METHOD_MMC => esc_html__( 'Memcached', 'cachify' )
+			self::METHOD_DB        => esc_html__( 'Database', 'cachify' ),
+			self::METHOD_APC       => esc_html__( 'APC', 'cachify' ),
+			self::METHOD_HDD       => esc_html__( 'Hard disk', 'cachify' ),
+			self::METHOD_MEMCACHED => esc_html__( 'Memcached', 'cachify' ),
+			self::METHOD_REDIS     => esc_html__( 'Redis (Need more test)', 'cachify' ),
+			self::METHOD_MEMCACHE  => esc_html__( 'Memcache (Need more test)', 'cachify' )
 		);
 
 		/* APC */
@@ -1592,6 +1673,16 @@ final class Cachify {
 		/* HDD */
 		if ( ! Cachify_HDD::is_available() ) {
 			unset($methods[2]);
+		}
+
+		/* Redis */
+		if ( ! Cachify_REDIS::is_available() ) {
+			unset($methods[4]);
+		}
+
+		/* Memcache */
+		if ( ! Cachify_MEMCACHE::is_available() ) {
+			unset($methods[5]);
 		}
 
 		return $methods;
@@ -1657,7 +1748,7 @@ final class Cachify {
 	* Validate options
 	*
 	* @since   1.0.0
-	* @change  2.1.3
+	* @change  2.3.0
 	*
 	* @param   array  $data  Array of form values
 	* @return  array         Array of validated values
@@ -1674,7 +1765,7 @@ final class Cachify {
 		self::flush_total_cache(true);
 
 		/* Notification */
-		if ( self::$options['use_apc'] != $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
+		if ( self::$options['use_apc'] != $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC && $data['use_apc'] != self::METHOD_REDIS && $data['use_apc'] != self::METHOD_MEMCACHE ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
