@@ -606,7 +606,7 @@ final class Cachify {
 			$input,
 			array(
 				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer">' . __( 'Donate', 'cachify' ) . '</a>',
-				'<a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer">' . __( 'Support', 'cachify' ) . '</a>'
+				'<a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer">' . __( 'Support', 'cachify' ) . '</a>',
 			)
 		);
 	}
