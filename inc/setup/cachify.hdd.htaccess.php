@@ -1,18 +1,8 @@
-	<table class="form-table">
-		<tr>
-			<th>
-			<?php esc_html_e( '.htaccess HDD setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					please add the following lines to your .htaccess file
-				</label>
-			</td>
-		</tr>
-	</table>
+<?php
+/* Quit */
+defined('ABSPATH') OR exit;
 
-	<div name="cachify[hdd_htaccess]" style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre>
-# BEGIN CACHIFY
+$beginning = '# BEGIN CACHIFY
 &lt;IfModule mod_rewrite.c&gt;
 # ENGINE ON
 RewriteEngine on
@@ -43,8 +33,57 @@ RewriteCond %{REQUEST_METHOD} !=POST
 RewriteCond %{QUERY_STRING} =""
 RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
 RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
-RewriteCond %{DOCUMENT_ROOT}/wp-content/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
-RewriteRule ^(.*) /wp-content/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+RewriteCond %{DOCUMENT_ROOT}';
+
+$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
+RewriteRule ^(.*) ';
+
+$ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
 &lt;/IfModule&gt;
-# END CACHIFY
-</pre></div>
+# END CACHIFY';
+
+?>
+	
+	<table class="form-table">
+		<tr>
+			<th>
+				<?php esc_html_e( '.htaccess HDD setup', 'cachify' ); ?>
+			</th>
+			<td>
+				<?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?>
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				<?php esc_html_e( 'Notes', 'cachify' ); ?>
+			</th>
+			<td>
+				<ul style="list-style-type:circle">
+					<li>
+						<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'Some few Webhosters do not provide %{DOCUMENT_ROOT}. In such cases, please manually prepend the document path.', 'cachify' ); ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help.', 'cachify' ); ?>
+					</li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+
+	<div name="cachify[hdd_htaccess]" style="background:#fff;border:1px solid #ccc;padding:10px 20px">
+		<?php echo sprintf ( '%s%s%s%s%s%s%s',
+			'<pre>',
+			$beginning,
+			content_url( $path ),
+			$middle,
+			content_url( $path ),
+			$ending,
+			'</pre>' ); ?>
+	</div>
