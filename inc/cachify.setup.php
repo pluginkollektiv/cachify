@@ -1,14 +1,19 @@
-<?php if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
+<?php
+/* Quit */
+defined('ABSPATH') OR exit;
+
+/* Include specific config page */
+if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
 	if ($is_nginx) { include 'setup/cachify.hdd.nginx.php'; }
 		else { include 'setup/cachify.hdd.htaccess.php'; }
-} ?>
+}
 
-<?php if ( $options [ 'use_apc' ] === self::METHOD_APC) {
+if ( $options [ 'use_apc' ] === self::METHOD_APC) {
 	if ($is_nginx) { include 'setup/cachify.apc.nginx.php'; }
 		else { include 'setup/cachify.apc.htaccess.php'; }
-} ?>
+}
 
-<?php if ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
+if ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
 	{include 'setup/cachify.apc.nginx.php';
 } ?>
 
