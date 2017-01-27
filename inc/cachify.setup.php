@@ -14,7 +14,7 @@ elseif ( $options [ 'use_apc' ] === self::METHOD_APC) {
 }
 
 elseif ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
-	{include 'setup/cachify.apc.nginx.php';
+	{include 'setup/cachify.memcached.nginx.php';
 } ?>
 
 	<table class="form-table">
