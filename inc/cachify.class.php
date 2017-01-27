@@ -1,6 +1,4 @@
 <?php
-
-
 /* Quit */
 defined('ABSPATH') OR exit;
 
@@ -1717,30 +1715,29 @@ final class Cachify {
 		</style>
 
 		<div class="wrap" id="cachify_settings">
-			<h2>
+			<h1>
 				Cachify
-			</h2>
+			</h1>
 
 			<form method="post" action="options.php">
 				<?php settings_fields('cachify') ?>
 
 				<?php $options = self::_get_options() ?>
 
-		<?php if ( $options [ 'use_apc' ] !== self::METHOD_DB): ?>
-			<?php
+		<?php if ( $options [ 'use_apc' ] !== self::METHOD_DB) {
 				$cachify_tabs = array('settings'  => __('Settings', 'cachify'),
 									'setup' => __('Setup', 'cachify'),
 							);
 
 				$current_tab = isset($_GET['cachify_tab']) ? $_GET['cachify_tab'] : 'settings';
 				
-				echo '<h3 class="nav-tab-wrapper">';
+				echo '<h2 class="nav-tab-wrapper">';
 				foreach($cachify_tabs as $tab => $name){
 					$class = ($tab == $current_tab) ? ' nav-tab-active' : '';
 					$link = "?page=cachify&cachify_tab=$tab";
 					echo "<a class='nav-tab$class' href='$link'>$name</a>";
 				}
-				echo '</h3>';
+				echo '</h2>';
 
 				switch ($current_tab){
 					case 'settings' :
@@ -1750,10 +1747,9 @@ final class Cachify {
 						include_once 'cachify.setup.php';
 						break;
 				}
-				?>
-				<?php else : include 'cachify.settings.php'; ?>
-		<?php endif; ?>
-		
+			}
+			else { include 'cachify.settings.php'; }
+		?>
 			</form>
 		</div><?php
 	}
