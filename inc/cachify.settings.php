@@ -1,3 +1,8 @@
+<?php
+/* Quit */
+defined('ABSPATH') OR exit;
+?>
+
 	<table class="form-table">
 		<tr>
 			<th scope="row">
