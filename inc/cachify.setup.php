@@ -8,12 +8,12 @@ if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
 		else { include 'setup/cachify.hdd.htaccess.php'; }
 }
 
-if ( $options [ 'use_apc' ] === self::METHOD_APC) {
+elseif ( $options [ 'use_apc' ] === self::METHOD_APC) {
 	if ($is_nginx) { include 'setup/cachify.apc.nginx.php'; }
 		else { include 'setup/cachify.apc.htaccess.php'; }
 }
 
-if ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
+elseif ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
 	{include 'setup/cachify.apc.nginx.php';
 } ?>
 
