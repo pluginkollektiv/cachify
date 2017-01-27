@@ -1,12 +1,30 @@
+<?php
+/* Quit */
+defined('ABSPATH') OR exit;
+?>
+
 	<table class="form-table">
 		<tr>
 			<th>
-			<?php esc_html_e( 'nginxconf HDD setup', 'cachify' ); ?>
+				<?php esc_html_e( 'nginxconf HDD setup', 'cachify' ); ?>
 			</th>
 			<td>
 				<label for="cachify_setup">
-					please add the following lines to your nginxconf
+					<?php esc_html_e( 'Please add the following lines to your nginxconf', 'cachify' ); ?>
 				</label>
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				<?php esc_html_e( 'Notes', 'cachify' ); ?>
+			</th>
+			<td>
+				<ul style="list-style-type:circle">
+					<li>
+						<?php esc_html_e( 'For domains with FQDN, the variable ${http_host} must be used instead of ${host}.', 'cachify' ); ?>
+					</li>
+				</ul>
 			</td>
 		</tr>
 	</table>
