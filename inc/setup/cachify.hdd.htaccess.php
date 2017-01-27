@@ -3,6 +3,11 @@
 defined('ABSPATH') OR exit;
 
 $beginning = '# BEGIN CACHIFY
+<IfModule mod_cache.c>
+# Disables Apache Content Cache which could cause partial redirects errors
+CacheDisable /
+</IfModule>
+
 &lt;IfModule mod_rewrite.c&gt;
 # ENGINE ON
 RewriteEngine on
@@ -64,13 +69,10 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 						<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
 					</li>
 					<li>
-						<?php esc_html_e( 'Some few Webhosters do not provide %{DOCUMENT_ROOT}. In such cases, please manually prepend the document path.', 'cachify' ); ?>
+						<?php esc_html_e( 'Some few Webhosters do not provide %{DOCUMENT_ROOT}. In such cases, please manually prepend the document path. E.g. this is the full path to the root of your WordPress installation:', 'cachify' ); ?> <?php echo get_home_path(); ?>
 					</li>
 					<li>
 						<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
-					</li>
-					<li>
-						<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help.', 'cachify' ); ?>
 					</li>
 				</ul>
 			</td>
