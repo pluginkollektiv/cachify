@@ -1679,7 +1679,7 @@ final class Cachify {
 				'cachify_method_tip',
 				sprintf(
 					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer">?</a>]',
-					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify' )
+					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the Setup-Tab', 'cachify' )
 				),
 				'updated'
 			);
@@ -1707,12 +1707,6 @@ final class Cachify {
 
 	public static function options_page()
 	{ ?>
-		<style>
-			#cachify_settings input[type="text"],
-			#cachify_settings input[type="number"] {
-				height: 30px;
-			}
-		</style>
 
 		<div class="wrap" id="cachify_settings">
 			<h1>
@@ -1724,32 +1718,45 @@ final class Cachify {
 
 				<?php $options = self::_get_options() ?>
 
-		<?php if ( $options [ 'use_apc' ] !== self::METHOD_DB) {
-				$cachify_tabs = array('settings'  => __('Settings', 'cachify'),
-									'setup' => __('Setup', 'cachify'),
-							);
+				<?php /* Adds a navbar and includes the specific page */
+					if ( $options [ 'use_apc' ] !== self::METHOD_DB) {
+						$cachify_tabs = array('settings'  => __('Settings', 'cachify'),
+											'setup' => __('Setup', 'cachify'),
+									);
 
-				$current_tab = isset($_GET['cachify_tab']) ? $_GET['cachify_tab'] : 'settings';
-				
-				echo '<h2 class="nav-tab-wrapper">';
-				foreach($cachify_tabs as $tab => $name){
-					$class = ($tab == $current_tab) ? ' nav-tab-active' : '';
-					$link = "?page=cachify&cachify_tab=$tab";
-					echo "<a class='nav-tab$class' href='$link'>$name</a>";
-				}
-				echo '</h2>';
+						$current_tab = isset($_GET['cachify_tab']) ? $_GET['cachify_tab'] : 'settings';
 
-				switch ($current_tab){
-					case 'settings' :
-						include_once 'cachify.settings.php';
-						break;
-					case 'setup' :
-						include_once 'cachify.setup.php';
-						break;
-				}
-			}
-			else { include 'cachify.settings.php'; }
-		?>
+						echo '<h2 class="nav-tab-wrapper">';
+						foreach($cachify_tabs as $tab => $name){
+							$class = ($tab == $current_tab) ? ' nav-tab-active' : '';
+							$link = "?page=cachify&cachify_tab=$tab";
+							echo "<a class='nav-tab$class' href='$link'>$name</a>";
+						}
+						echo '</h2>';
+
+						switch ($current_tab){
+							case 'settings' :
+								include_once 'cachify.settings.php';
+								break;
+							case 'setup' :
+								if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
+									if ($is_nginx) { include 'setup/cachify.hdd.nginx.php'; }
+									else { include 'setup/cachify.hdd.htaccess.php'; }
+								}
+
+								elseif ( $options [ 'use_apc' ] === self::METHOD_APC) {
+									if ($is_nginx) { include 'setup/cachify.apc.nginx.php'; }
+									else { include 'setup/cachify.apc.htaccess.php'; }
+								}
+
+								elseif ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
+									{include 'setup/cachify.memcached.nginx.php';
+								}
+								break;
+						}
+					}
+					else { include 'cachify.settings.php'; }
+				?>
 			</form>
 		</div><?php
 	}
