@@ -76,11 +76,22 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 		</tr>
 	</table>
 
-	<div name="cachify[hdd_htaccess]" style="background:#fff;border:1px solid #ccc;padding:10px 20px">
+	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
 		<pre><?php echo sprintf ( '%s%s%s%s%s',
-			$beginning,
-			WP_CONTENT_DIR,
-			$middle,
-			content_url( $path ),
-			$ending ); ?></pre>
+				$beginning,
+				WP_CONTENT_DIR,
+				$middle,
+				content_url( $path ),
+				$ending ); ?></pre>
 	</div>
+
+	<table class="form-table">
+		<tr>
+			<td>
+				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Donate', 'cachify' ); ?></a>
+				&bull; <a href="<?php esc_html_e( 'https://wordpress.org/plugins/cachify/faq/', 'cachify' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'FAQ', 'cachify' ); ?></a>
+				&bull; <a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Manual', 'cachify' ); ?></a>
+				&bull; <a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Support', 'cachify' ); ?></a>
+			</td>
+		</tr>
+	</table>
