@@ -3,10 +3,10 @@
 defined('ABSPATH') OR exit;
 
 $beginning = '# BEGIN CACHIFY
-<IfModule mod_cache.c>
+&lt;IfModule mod_cache.c&gt;
 # Disables Apache Content Cache which could cause partial redirects errors
 CacheDisable /
-</IfModule>
+&lt;/IfModule&gt;
 
 &lt;IfModule mod_rewrite.c&gt;
 # ENGINE ON
@@ -38,7 +38,7 @@ RewriteCond %{REQUEST_METHOD} !=POST
 RewriteCond %{QUERY_STRING} =""
 RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
 RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
-RewriteCond %{DOCUMENT_ROOT}';
+RewriteCond ';
 
 $middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
 RewriteRule ^(.*) ';
@@ -69,9 +69,6 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 						<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
 					</li>
 					<li>
-						<?php esc_html_e( 'Some few Webhosters do not provide %{DOCUMENT_ROOT}. In such cases, please manually prepend the document path. E.g. this is the full path to the root of your WordPress installation:', 'cachify' ); ?> <?php echo get_home_path(); ?>
-					</li>
-					<li>
 						<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
 					</li>
 				</ul>
@@ -80,12 +77,10 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 	</table>
 
 	<div name="cachify[hdd_htaccess]" style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<?php echo sprintf ( '%s%s%s%s%s%s%s',
-			'<pre>',
+		<pre><?php echo sprintf ( '%s%s%s%s%s',
 			$beginning,
-			content_url( $path ),
+			WP_CONTENT_DIR,
 			$middle,
 			content_url( $path ),
-			$ending,
-			'</pre>' ); ?>
+			$ending ); ?></pre>
 	</div>
