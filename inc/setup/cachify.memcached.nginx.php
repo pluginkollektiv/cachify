@@ -10,7 +10,7 @@ defined('ABSPATH') OR exit;
 			</th>
 			<td>
 				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your nginxconf', 'cachify' ); ?>
+					<?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?>
 				</label>
 			</td>
 		</tr>
