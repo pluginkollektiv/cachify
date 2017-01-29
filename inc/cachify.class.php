@@ -1736,7 +1736,7 @@ final class Cachify {
 
 						switch ($current_tab){
 							case 'settings' :
-								include_once 'cachify.settings.php';
+								include 'cachify.settings.php';
 								break;
 							case 'setup' :
 								if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
