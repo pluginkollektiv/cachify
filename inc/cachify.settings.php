@@ -62,14 +62,14 @@ defined('ABSPATH') OR exit;
 				<fieldset>
 					<label for="cachify_without_ids">
 						<textarea name="cachify[without_ids]" id="cachify_without_ids" rows="1" placeholder="<?php esc_attr_e( 'e.g. 1,2,3', 'cachify' ); ?>"><?php echo esc_attr($options['without_ids']) ?></textarea>
-						<?php esc_html_e( 'Post/Pages-IDs (separated by commas)', 'cachify' ); ?>
+						<?php esc_html_e( 'Post/Pages-IDs', 'cachify' ); ?>
 					</label>
 
 					<br />
 
 					<label for="cachify_without_agents">
 						<textarea name="cachify[without_agents]" id="cachify_without_agents" rows="1" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>"><?php echo esc_attr($options['without_agents']) ?></textarea>
-						<?php esc_html_e( 'Browser User-Agents (separated by commas)', 'cachify' ); ?>
+						<?php esc_html_e( 'Browser User-Agents', 'cachify' ); ?>
 					</label>
 				</fieldset>
 			</td>
