@@ -4,7 +4,7 @@ defined('ABSPATH') OR exit;
 
 $beginning = '# BEGIN CACHIFY
 &lt;IfModule mod_cache.c&gt;
-# Disables Apache Content Cache which could cause partial redirects errors
+# Disables Apache Content Cache which could cause partial redirect errors
 CacheDisable /
 &lt;/IfModule&gt;
 
