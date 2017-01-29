@@ -1678,8 +1678,8 @@ final class Cachify {
 				'cachify_method_tip',
 				'cachify_method_tip',
 				sprintf(
-					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer">?</a>]',
-					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the Setup-Tab', 'cachify' )
+					'&#8505; %s',
+					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the Setup-Tab.', 'cachify' )
 				),
 				'updated'
 			);
