@@ -53,7 +53,7 @@ location / {
 
     error_page 405 = @nocache;
 
-    try_files /wp-content/cache/cachify/${host}${uri}index.html @nocache;
+    try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
 }
 
 ## NOCACHE LOCATION
