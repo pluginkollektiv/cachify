@@ -1720,8 +1720,8 @@ final class Cachify {
 
 				<?php /* Adds a navbar and includes the specific page */
 					if ( $options [ 'use_apc' ] !== self::METHOD_DB) {
-						$cachify_tabs = array('settings'  => __('Settings', 'cachify'),
-											'setup' => __('Setup', 'cachify'),
+						$cachify_tabs = array('settings'  => esc_html__('Settings', 'cachify'),
+											'setup' => esc_html__('Setup', 'cachify'),
 									);
 
 						$current_tab = isset($_GET['cachify_tab']) ? $_GET['cachify_tab'] : 'settings';
