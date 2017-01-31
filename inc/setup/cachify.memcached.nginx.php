@@ -24,6 +24,14 @@ defined('ABSPATH') OR exit;
 					<li>
 						<?php esc_html_e( 'For domains with FQDN, the variable ${http_host} must be used instead of ${host}.', 'cachify' ); ?>
 					</li>
+					<li>
+						<?php echo sprintf(
+							esc_html__( 'If you have errors please try to change %s to %s This forces IPv4 because some servers that allow ipv4 and ipv6 are configured to bind memcached to ipv4 only.', 'cachify' ),
+								'memcached_pass localhost:11211;',
+								'memcached_pass 127.0.0.1:11211;'
+								
+						); ?>
+					</li>
 				</ul>
 			</td>
 		</tr>
