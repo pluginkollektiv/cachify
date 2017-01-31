@@ -3,11 +3,6 @@
 defined('ABSPATH') OR exit;
 
 $beginning = '# BEGIN CACHIFY
-&lt;IfModule mod_cache.c&gt;
-# Disables Apache Content Cache which could cause partial redirect errors
-CacheDisable /
-&lt;/IfModule&gt;
-
 &lt;IfModule mod_rewrite.c&gt;
 # ENGINE ON
 RewriteEngine on
@@ -46,7 +41,6 @@ RewriteRule ^(.*) ';
 $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
 &lt;/IfModule&gt;
 # END CACHIFY';
-
 ?>
 	
 	<table class="form-table">
@@ -70,6 +64,12 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 					</li>
 					<li>
 						<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
+						&lt;IfModule mod_cache.c&gt;<br />
+						CacheDisable /<br />
+						&lt;/IfModule&gt;
 					</li>
 				</ul>
 			</td>
