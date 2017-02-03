@@ -117,7 +117,8 @@ final class Cachify_HDD {
 	public static function clear_cache()
 	{
 		self::_clear_dir(
-			CACHIFY_CACHE_DIR
+			CACHIFY_CACHE_DIR,
+			true
 		);
 	}
 
@@ -227,15 +228,16 @@ final class Cachify_HDD {
 
 
 	/**
-	* Clear directory recursively
+	* Clear directory
 	*
 	* @since   2.0
 	* @change  2.0.5
 	*
-	* @param   string  $dir  Directory path
+	* @param   string   $dir        Directory path
+	* @param   boolean  $recursive  clear subdirectories
 	*/
 
-	private static function _clear_dir($dir) {
+	private static function _clear_dir($dir, $recursive = false) {
 		/* Remote training slash */
 		$dir = untrailingslashit($dir);
 
@@ -261,15 +263,17 @@ final class Cachify_HDD {
 			$object = $dir. DIRECTORY_SEPARATOR .$object;
 
 			/* Directory or file */
-			if ( is_dir($object) ) {
-				self::_clear_dir($object);
+			if ( is_dir($object) && $recursive ) {
+				self::_clear_dir($object, $recursive);
 			} else {
 				unlink($object);
 			}
 		}
 
 		/* Remove directory */
-		@rmdir($dir);
+		if( $recursive ) {
+			@rmdir($dir);
+		}
 
 		/* CleanUp */
 		clearstatcache();
