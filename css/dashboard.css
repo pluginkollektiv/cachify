@@ -20,7 +20,9 @@
 	font-size: 18px;
 }
 #dashboard_right_now .cachify-icon--apc:before,
-#dashboard_right_now .cachify-icon--memcached:before {
+#dashboard_right_now .cachify-icon--memcached:before,
+#dashboard_right_now .cachify-icon--redis:before,
+#dashboard_right_now .cachify-icon--memcache:before {
 	margin: 3px 2px 0 0;
 	content: "\e800";
 	font-size: 13px;
