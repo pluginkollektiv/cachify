@@ -1,6 +1,6 @@
 # Cachify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
 * Requires at least: 3.8
 * Tested up to:      4.7

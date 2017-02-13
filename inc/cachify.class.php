@@ -1,6 +1,4 @@
 <?php
-
-
 /* Quit */
 defined('ABSPATH') OR exit;
 
@@ -605,7 +603,8 @@ final class Cachify {
 		return array_merge(
 			$input,
 			array(
-				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer">PayPal</a>'
+				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Donate', 'cachify' ) . '</a>',
+				'<a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'cachify' ) . '</a>',
 			)
 		);
 	}
@@ -1679,8 +1678,8 @@ final class Cachify {
 				'cachify_method_tip',
 				'cachify_method_tip',
 				sprintf(
-					'%s [<a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer">?</a>]',
-					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted', 'cachify' )
+					'&#8505; %s',
+					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the Setup-Tab.', 'cachify' )
 				),
 				'updated'
 			);
@@ -1708,121 +1707,56 @@ final class Cachify {
 
 	public static function options_page()
 	{ ?>
-		<style>
-			#cachify_settings input[type="text"],
-			#cachify_settings input[type="number"] {
-				height: 30px;
-			}
-		</style>
 
 		<div class="wrap" id="cachify_settings">
-			<h2>
+			<h1>
 				Cachify
-			</h2>
+			</h1>
 
 			<form method="post" action="options.php">
 				<?php settings_fields('cachify') ?>
 
 				<?php $options = self::_get_options() ?>
 
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row">
-							<?php esc_html_e( 'Cache method', 'cachify' ); ?>
-						</th>
-						<td>
-							<label for="cachify_cache_method">
-								<select name="cachify[use_apc]" id="cachify_cache_method">
-									<?php foreach( self::_method_select() as $k => $v ) { ?>
-										<option value="<?php echo esc_attr($k) ?>" <?php selected($options['use_apc'], $k); ?>><?php echo esc_html($v) ?></option>
-									<?php } ?>
-								</select>
-							</label>
-						</td>
-					</tr>
+				<?php /* Adds a navbar and includes the specific page */
+					if ( $options [ 'use_apc' ] !== self::METHOD_DB) {
+						$cachify_tabs = array('settings'  => esc_html__('Settings', 'cachify'),
+											'setup' => esc_html__('Setup', 'cachify'),
+									);
 
-					<tr valign="top">
-						<th scope="row">
-							<?php esc_html_e('Cache expiration', 'cachify') ?>
-						</th>
-						<td>
-							<label for="cachify_cache_expires">
-								<?php if ( $options [ 'use_apc' ] === self::METHOD_HDD): ?>&#8734;
-								<?php else: ?><input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr($options [ 'cache_expires' ] ) ?>" class="small-text" />
-								<?php endif; ?>
-								<?php esc_html_e( 'Hours', 'cachify' ); ?>
-							</label>
-						</td>
-					</tr>
+						$current_tab = isset($_GET['cachify_tab']) ? $_GET['cachify_tab'] : 'settings';
 
-					<tr valign="top">
-						<th scope="row">
-							<?php esc_html_e( 'Cache generation', 'cachify' ); ?>
-						</th>
-						<td>
-							<fieldset>
-								<label for="cachify_only_guests">
-									<input type="checkbox" name="cachify[only_guests]" id="cachify_only_guests" value="1" <?php checked('1', $options['only_guests']); ?> />
-									<?php esc_html_e( 'No cache generation by logged in users', 'cachify' ); ?>
-								</label>
+						echo '<h2 class="nav-tab-wrapper">';
+						foreach($cachify_tabs as $tab => $name){
+							$class = ($tab == $current_tab) ? ' nav-tab-active' : '';
+							$link = "?page=cachify&cachify_tab=$tab";
+							echo "<a class='nav-tab$class' href='$link'>$name</a>";
+						}
+						echo '</h2>';
 
-								<br />
+						switch ($current_tab){
+							case 'settings' :
+								include 'cachify.settings.php';
+								break;
+							case 'setup' :
+								if ( $options [ 'use_apc' ] === self::METHOD_HDD) {
+									if ($is_nginx) { include 'setup/cachify.hdd.nginx.php'; }
+									else { include 'setup/cachify.hdd.htaccess.php'; }
+								}
 
-								<label for="cachify_reset_on_comment">
-									<input type="checkbox" name="cachify[reset_on_comment]" id="cachify_reset_on_comment" value="1" <?php checked('1', $options['reset_on_comment']); ?> />
-									<?php esc_html_e( 'Flush the cache at new comments', 'cachify' ); ?>
-								</label>
-							</fieldset>
-						</td>
-					</tr>
+								elseif ( $options [ 'use_apc' ] === self::METHOD_APC) {
+									if ($is_nginx) { include 'setup/cachify.apc.nginx.php'; }
+									else { include 'setup/cachify.apc.htaccess.php'; }
+								}
 
-					<tr valign="top">
-						<th scope="row">
-							<?php esc_html_e( 'Cache exceptions', 'cachify' ); ?>
-						</th>
-						<td>
-							<fieldset>
-								<label for="cachify_without_ids">
-									<textarea name="cachify[without_ids]" id="cachify_without_ids" rows="1" placeholder="<?php esc_attr_e( 'e.g. 1,2,3', 'cachify' ); ?>"><?php echo esc_attr($options['without_ids']) ?></textarea>
-									<?php esc_html_e( 'Post/Pages-IDs (separated by commas)', 'cachify' ); ?>
-								</label>
-
-								<br />
-
-								<label for="cachify_without_agents">
-									<textarea name="cachify[without_agents]" id="cachify_without_agents" rows="1" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>"><?php echo esc_attr($options['without_agents']) ?></textarea>
-									<?php esc_html_e( 'Browser User-Agents (separated by commas)', 'cachify' ); ?>
-								</label>
-							</fieldset>
-						</td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row">
-							<?php esc_html_e( 'Cache minify', 'cachify' ); ?>
-						</th>
-						<td>
-							<label for="cachify_compress_html">
-								<select name="cachify[compress_html]" id="cachify_compress_html">
-									<?php foreach( self::_minify_select() as $k => $v ) { ?>
-										<option value="<?php echo esc_attr($k) ?>" <?php selected($options['compress_html'], $k); ?>>
-											<?php echo esc_html($v) ?>
-										</option>
-									<?php } ?>
-								</select>
-							</label>
-						</td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row">
-							<?php submit_button() ?>
-						</th>
-						<td>
-							<a href="<?php esc_html_e( 'https://wordpress.org/plugins/cachify/faq/', 'cachify' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'FAQ', 'cachify' ); ?></a> &bull; <a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Manual', 'cachify' ); ?></a> &bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'PayPal', 'cachify' ); ?></a> &bull; <a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Support', 'cachify' ); ?></a>
-						</td>
-					</tr>
-				</table>
+								elseif ( ( $options [ 'use_apc' ] === self::METHOD_MMC) && ($is_nginx) )
+									{include 'setup/cachify.memcached.nginx.php';
+								}
+								break;
+						}
+					}
+					else { include 'cachify.settings.php'; }
+				?>
 			</form>
 		</div><?php
 	}
