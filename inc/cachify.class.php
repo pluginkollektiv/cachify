@@ -623,9 +623,9 @@ final class Cachify {
 	public static function add_dashboard_count( $items = array() )
 	{
 		/* Skip */
-        if ( ! current_user_can('manage_options') ) {
-            return $items;
-        }
+		if ( ! current_user_can('manage_options') ) {
+			return $items;
+		}
 
 		/* Cache size */
 		$size = self::get_cache_size();
@@ -634,28 +634,35 @@ final class Cachify {
 		$method = call_user_func(
 			array(
 				self::$method,
-				'stringify_method'
+				'stringify_method',
 			)
 		);
 
 		/* Output of the cache size */
-		$cachesize = ( $size === 0 )
+		$cachesize = ( 0 === $size )
 			? esc_html__( 'Empty Cache', 'cachify' ) :
 			/* translators: %s: cache size */
 			sprintf( esc_html__( '%s Cache', 'cachify' ), size_format($size) );
 
 		/* Right now item */
 		$items[] = sprintf(
-			'<a href="%s" class="cachify-icon cachify-icon--%s" title="%s: %s">%s</a>',
+			'<a href="%s" title="%s: %s" class="cachify-glance">
+				<svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
+					<use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s">
+				</svg> %s</a>',
 			add_query_arg(
 				array(
-					'page' => 'cachify'
+					'page' => 'cachify',
 				),
 				admin_url('options-general.php')
 			),
-			esc_attr(strtolower($method)),
+			esc_attr( strtolower( $method ) ),
 			esc_html__( 'Caching method', 'cachify' ),
-			esc_attr($method),
+			esc_attr( $method ),
+			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_attr( strtolower( $method ) ),
+			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_attr( strtolower( $method ) ),
 			$cachesize
 		);
 
