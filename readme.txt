@@ -1,6 +1,6 @@
 # Cachify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
 * Requires at least: 3.8
 * Tested up to:      4.7
@@ -53,7 +53,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ## Frequently Asked Questions ##
 
-### No cache expiration while using HDD cache? ###
+### No cache expiration option while using HDD cache? ###
 The cache expiration can not be considered due to technical reasons. If the cache stock has to be emptied at certain time intervals, then it is recommended to call a prepared PHP file by a cronjob.
 
 ### PHP Fatal error: Cannot use output buffering in output buffering display handlers in Unknown on line 0 ###
@@ -132,4 +132,6 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 This is mainly a maintenance release ensuring compatibility with the latest version of WordPress. Expect bigger changes in 2.3.0 soon!
 
 ## Screenshots ##
-1. Cachify Dashboard Widget
+1. Cachify settings
+2. Cachify Dashboard Widget
+3. Discard page/post cache or total cache if page/post is updated.
