@@ -271,7 +271,7 @@ final class Cachify_HDD {
 		}
 
 		/* Remove directory */
-		if( $recursive ) {
+		if ( $recursive ) {
 			@rmdir($dir);
 		}
 
