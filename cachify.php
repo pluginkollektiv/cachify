@@ -32,14 +32,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 /* Quit */
-defined('ABSPATH') OR exit;
+defined( 'ABSPATH' ) || exit;
 
 
 /* Constants */
-define('CACHIFY_FILE', __FILE__);
-define('CACHIFY_DIR', dirname(__FILE__));
-define('CACHIFY_BASE', plugin_basename(__FILE__));
-define('CACHIFY_CACHE_DIR', WP_CONTENT_DIR. '/cache/cachify');
+define( 'CACHIFY_FILE', __FILE__ );
+define( 'CACHIFY_DIR', dirname( __FILE__ ) );
+define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
+define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
 
 
 /* Hooks */
@@ -47,43 +47,43 @@ add_action(
 	'plugins_loaded',
 	array(
 		'Cachify',
-		'instance'
+		'instance',
 	)
 );
 register_activation_hook(
 	__FILE__,
 	array(
 		'Cachify',
-		'on_activation'
+		'on_activation',
 	)
 );
 register_deactivation_hook(
 	__FILE__,
 	array(
 		'Cachify',
-		'on_deactivation'
+		'on_deactivation',
 	)
 );
 register_uninstall_hook(
 	__FILE__,
 	array(
 		'Cachify',
-		'on_uninstall'
+		'on_uninstall',
 	)
 );
 
 
 /* Autoload Init */
-spl_autoload_register('cachify_autoload');
+spl_autoload_register( 'cachify_autoload' );
 
 /* Autoload function */
-function cachify_autoload($class) {
-	if ( in_array($class, array('Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED')) ) {
+function cachify_autoload( $class ) {
+	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED' ) ) ) {
 		require_once(
 			sprintf(
 				'%s/inc/%s.class.php',
 				CACHIFY_DIR,
-				strtolower($class)
+				strtolower( $class )
 			)
 		);
 	}
