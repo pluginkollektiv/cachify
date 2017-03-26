@@ -1,6 +1,6 @@
 <?php
 /* Quit */
-defined('ABSPATH') OR exit;
+defined( 'ABSPATH' ) || exit;
 ?>
 
 	<table class="form-table">
@@ -38,32 +38,32 @@ charset utf-8;
 
 ## INDEX LOCATION
 location / {
-    if ( $query_string ) {
-        return 405;
-    }
-    if ( $request_method = POST ) {
-        return 405;
-    }
-    if ( $request_uri ~ /wp-admin/ ) {
-        return 405;
-    }
-    if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
-        return 405;
-    }
+	if ( $query_string ) {
+		return 405;
+	}
+	if ( $request_method = POST ) {
+		return 405;
+	}
+	if ( $request_uri ~ /wp-admin/ ) {
+		return 405;
+	}
+	if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
+		return 405;
+	}
 
-    error_page 405 = @nocache;
+	error_page 405 = @nocache;
 
-    try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
+	try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
 }
 
 ## NOCACHE LOCATION
 location @nocache {
-    try_files $uri $uri/ /index.php?$args;
+	try_files $uri $uri/ /index.php?$args;
 }
 
 ## PROTECT CACHE
 location ~ /wp-content/cache {
-    internal;
+	internal;
 }
 </pre></div>
 
