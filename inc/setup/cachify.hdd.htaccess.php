@@ -1,6 +1,6 @@
 <?php
 /* Quit */
-defined('ABSPATH') OR exit;
+defined( 'ABSPATH' ) || exit;
 
 $beginning = '# BEGIN CACHIFY
 &lt;IfModule mod_rewrite.c&gt;
@@ -42,7 +42,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 &lt;/IfModule&gt;
 # END CACHIFY';
 ?>
-	
+
 	<table class="form-table">
 		<tr>
 			<th>
@@ -77,12 +77,12 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 	</table>
 
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre><?php echo sprintf ( '%s%s%s%s%s',
-				$beginning,
-				WP_CONTENT_DIR,
-				$middle,
-				wp_make_link_relative( content_url( $path ) ),
-				$ending ); ?></pre>
+		<pre><?php echo sprintf( '%s%s%s%s%s',
+			$beginning,
+			WP_CONTENT_DIR,
+			$middle,
+			wp_make_link_relative( content_url( $path ) ),
+		$ending ); ?></pre>
 	</div>
 
 	<table class="form-table">
