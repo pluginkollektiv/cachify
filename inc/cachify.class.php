@@ -1580,6 +1580,7 @@ final class Cachify {
 	 * @change  2.2.2
 	 */
 	public static function options_page() {
+		global $is_nginx;
 	?>
 
 		<div class="wrap" id="cachify_settings">
