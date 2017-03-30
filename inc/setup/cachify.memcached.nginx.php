@@ -1,6 +1,6 @@
 <?php
 /* Quit */
-defined('ABSPATH') OR exit;
+defined( 'ABSPATH' ) || exit;
 ?>
 
 	<table class="form-table">
@@ -26,10 +26,9 @@ defined('ABSPATH') OR exit;
 					</li>
 					<li>
 						<?php echo sprintf(
-							esc_html__( 'If you have errors please try to change %s to %s This forces IPv4 because some servers that allow ipv4 and ipv6 are configured to bind memcached to ipv4 only.', 'cachify' ),
-								'memcached_pass localhost:11211;',
-								'memcached_pass 127.0.0.1:11211;'
-								
+							esc_html__( 'If you have errors please try to change %1$s to %2$s This forces IPv4 because some servers that allow ipv4 and ipv6 are configured to bind memcached to ipv4 only.', 'cachify' ),
+							'memcached_pass localhost:11211;',
+							'memcached_pass 127.0.0.1:11211;'
 						); ?>
 					</li>
 				</ul>
@@ -46,30 +45,30 @@ charset utf-8;
 
 ## INDEX LOCATION
 location / {
-    error_page 404 405 = @nocache;﻿
+	error_page 404 405 = @nocache;
 
-    if ( $query_string ) {
-        return 405;
-    }
-    if ( $request_method = POST ) {
-        return 405;
-    }
-    if ( $request_uri ~ "/wp-" ) {
-        return 405;
-    }
-    if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
-        return 405;
-    }
+	if ( $query_string ) {
+		return 405;
+	}
+	if ( $request_method = POST ) {
+		return 405;
+	}
+	if ( $request_uri ~ "/wp-" ) {
+		return 405;
+	}
+	if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
+		return 405;
+	}
 
-    default_type text/html;
-    add_header X-Powered-By Cachify;
-    set $memcached_key $host$uri;
-    memcached_pass localhost:11211;
+	default_type text/html;
+	add_header X-Powered-By Cachify;
+	set $memcached_key $host$uri;
+	memcached_pass localhost:11211;
 }
 
 ## NOCACHE LOCATION
 location @nocache {
-    try_files $uri $uri/ /index.php?$args;
+	try_files $uri $uri/ /index.php?$args;
 }
 </pre></div>
 
