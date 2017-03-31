@@ -24,6 +24,14 @@ final class Cachify {
 	private static $method;
 
 	/**
+	 * Whether we are on an Nginx server or not.
+	 *
+	 * @since 2.2.5
+	 * @var   boolean
+	 */
+	private static $is_nginx;
+
+	/**
 	 * Method settings
 	 *
 	 * @since  2.0.9
@@ -66,6 +74,8 @@ final class Cachify {
 	public function __construct() {
 		/* Set defaults */
 		self::_set_default_vars();
+
+		self::$is_nginx = $GLOBALS['is_nginx'];
 
 		/* Publish hooks */
 		add_action(
@@ -1580,7 +1590,6 @@ final class Cachify {
 	 * @change  2.2.2
 	 */
 	public static function options_page() {
-		global $is_nginx;
 	?>
 
 		<div class="wrap" id="cachify_settings">
@@ -1616,10 +1625,10 @@ final class Cachify {
 							break;
 						case 'setup' :
 							if ( self::METHOD_HDD === $options ['use_apc'] ) {
-								if ( $is_nginx ) { include 'setup/cachify.hdd.nginx.php';
+								if ( self::$is_nginx ) { include 'setup/cachify.hdd.nginx.php';
 								} else { include 'setup/cachify.hdd.htaccess.php'; }
 							} elseif ( self::METHOD_APC === $options ['use_apc'] ) {
-								if ( $is_nginx ) { include 'setup/cachify.apc.nginx.php';
+								if ( self::$is_nginx ) { include 'setup/cachify.apc.nginx.php';
 								} else { include 'setup/cachify.apc.htaccess.php'; }
 							} elseif ( ( self::METHOD_MMC === $options ['use_apc']) && ($is_nginx) ) {include 'setup/cachify.memcached.nginx.php';
 							}
