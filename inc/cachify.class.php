@@ -1630,7 +1630,7 @@ final class Cachify {
 							} elseif ( self::METHOD_APC === $options ['use_apc'] ) {
 								if ( self::$is_nginx ) { include 'setup/cachify.apc.nginx.php';
 								} else { include 'setup/cachify.apc.htaccess.php'; }
-							} elseif ( ( self::METHOD_MMC === $options ['use_apc']) && ($is_nginx) ) {include 'setup/cachify.memcached.nginx.php';
+							} elseif ( ( self::METHOD_MMC === $options ['use_apc']) && self::$is_nginx ) {include 'setup/cachify.memcached.nginx.php';
 							}
 							break;
 					}
