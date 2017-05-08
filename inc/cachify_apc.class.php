@@ -43,7 +43,7 @@ final class Cachify_APC {
 	 * @param   integer $lifetime  Lifetime of the entry.
 	 */
 	public static function store_item( $hash, $data, $lifetime ) {
-		/* Leer? */
+		/* Empty? */
 		if ( empty( $hash ) || empty( $data ) ) {
 			wp_die( 'APC add item: Empty input.' );
 		}
@@ -51,7 +51,7 @@ final class Cachify_APC {
 		/* Store */
 		apc_store(
 			$hash,
-			gzencode( $data . self::_cache_signatur(), 9 ),
+			gzencode( $data . self::_cache_signature(), 9 ),
 			$lifetime
 		);
 	}
@@ -145,7 +145,7 @@ final class Cachify_APC {
 	 *
 	 * @return  string  Signature string
 	 */
-	private static function _cache_signatur() {
+	private static function _cache_signature() {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | http://cachify.de',

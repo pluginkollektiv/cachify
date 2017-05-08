@@ -70,11 +70,11 @@ final class Cachify_DB {
 	 * @since   2.0
 	 * @change  2.0
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @return  mixed          Content of the entry
+	 * @param   string $hash    Hash of the entry.
+	 * @return  mixed           Content of the entry
 	 */
 	public static function get_item( $hash ) {
-		/* Leer? */
+		/* Empty? */
 		if ( empty( $hash ) ) {
 			wp_die( 'DB get item: Empty input.' );
 		}
@@ -134,7 +134,7 @@ final class Cachify_DB {
 
 		/* Signature */
 		if ( isset( $cache['meta'] ) ) {
-			echo self::_cache_signatur( $cache['meta'] );
+			echo self::_cache_signature( $cache['meta'] );
 		}
 
 		/* Quit */
@@ -168,7 +168,7 @@ final class Cachify_DB {
 	 * @param   array $meta  Content of metadata.
 	 * @return  string       Signature string
 	 */
-	private static function _cache_signatur( $meta ) {
+	private static function _cache_signature( $meta ) {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
 			return;
@@ -178,19 +178,19 @@ final class Cachify_DB {
 			"\n\n<!--\n%s\n%s\n%s\n%s\n-->",
 			'Cachify | http://cachify.de',
 			sprintf(
-				'Ohne Plugin: %d DB-Anfragen, %s Sekunden, %s',
+				'Without Cachify: %d DB queries, %s seconds, %s',
 				$meta['queries'],
 				$meta['timer'],
 				$meta['memory']
 			),
 			sprintf(
-				'Mit Plugin: %d DB-Anfragen, %s Sekunden, %s',
+				'With Cachify: %d DB queries, %s seconds, %s',
 				self::_page_queries(),
 				self::_page_timer(),
 				self::_page_memory()
 			),
 			sprintf(
-				'Generiert: %s zuvor',
+				'Cachify saved %s of execution time',
 				human_time_diff( $meta['time'], current_time( 'timestamp' ) )
 			)
 		);
@@ -202,14 +202,14 @@ final class Cachify_DB {
 	 * @since   0.1
 	 * @change  2.0
 	 *
-	 * @return  integer  Numbe rof queries
+	 * @return  integer  Number of queries
 	 */
 	private static function _page_queries() {
 		return $GLOBALS['wpdb']->num_queries;
 	}
 
 	/**
-	 * REturn execution time
+	 * Return execution time
 	 *
 	 * @since   0.1
 	 * @change  2.0

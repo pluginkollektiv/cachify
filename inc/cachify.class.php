@@ -53,7 +53,7 @@ final class Cachify {
 	const MINIFY_HTML_JS = 2;
 
 	/**
-	 * Pseudo-Constructor
+	 * Pseudo constructor
 	 *
 	 * @since   2.0.5
 	 * @change  2.0.5
@@ -299,7 +299,7 @@ final class Cachify {
 	public static function on_activation() {
 		/* Multisite & Network */
 		if ( is_multisite() && ! empty( $_GET['networkwide'] ) ) {
-			/* Blog-IDs */
+			/* Blog IDs */
 			$ids = self::_get_blog_ids();
 
 			/* Loop over blogs */
@@ -317,7 +317,7 @@ final class Cachify {
 	}
 
 	/**
-	 * Plugin-Installation on new MU-Blogs
+	 * Plugin installation on new MU blog.
 	 *
 	 * @since   1.0
 	 * @change  1.0
@@ -325,7 +325,7 @@ final class Cachify {
 	 * @param integer $id  Blog ID.
 	 */
 	public static function install_later( $id ) {
-		/* No network-plugin */
+		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
@@ -357,7 +357,7 @@ final class Cachify {
 	}
 
 	/**
-	 * Uninstalling of the plugin per MU-Blog
+	 * Uninstalling of the plugin per MU blog.
 	 *
 	 * @since   1.0
 	 * @change  2.1.0
@@ -371,7 +371,7 @@ final class Cachify {
 			/* Alter Blog */
 			$old = $wpdb->blogid;
 
-			/* Blog-IDs */
+			/* Blog IDs */
 			$ids = self::_get_blog_ids();
 
 			/* Loop */
@@ -388,7 +388,7 @@ final class Cachify {
 	}
 
 	/**
-	 * Uninstalling of the plugin für MU and Network
+	 * Uninstalling of the plugin for MU and network.
 	 *
 	 * @since   1.0
 	 * @change  1.0
@@ -431,7 +431,7 @@ final class Cachify {
 	 * @since   1.0
 	 * @change  1.0
 	 *
-	 * @return  array  Blog-IDs
+	 * @return  array  Blog IDs
 	 */
 	private static function _get_blog_ids() {
 		/* Global */
@@ -639,7 +639,7 @@ final class Cachify {
 	 * @since   2.0.6
 	 * @change  2.0.6
 	 *
-	 * @return  integer    Cache size in Bytes.
+	 * @return  integer    Cache size in bytes.
 	 */
 	public static function get_cache_size() {
 		if ( ! $size = get_transient( 'cachify_cache_size' ) ) {
@@ -731,7 +731,7 @@ final class Cachify {
 			/* Old blog */
 			$old = $GLOBALS['wpdb']->blogid;
 
-			/* Blog-IDs */
+			/* Blog IDs */
 			$ids = self::_get_blog_ids();
 
 			/* Loop over blogs */
@@ -790,7 +790,7 @@ final class Cachify {
 	 * @hook    mixed  cachify_user_can_flush_cache
 	 */
 	public static function flush_notice() {
-		/* No Admin */
+		/* No admin */
 		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
 			return false;
 		}
