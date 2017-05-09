@@ -81,7 +81,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 			$beginning,
 			WP_CONTENT_DIR,
 			$middle,
-			wp_make_link_relative( content_url( $path ) ),
+			wp_make_link_relative( content_url() ),
 		$ending ); ?></pre>
 	</div>
 
