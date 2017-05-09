@@ -43,14 +43,14 @@ final class Cachify_HDD {
 	 * @param   integer $lifetime  Lifetime of the entry [optional].
 	 */
 	public static function store_item( $hash, $data, $lifetime ) {
-		/* Leer? */
+		/* Empty? */
 		if ( empty( $data ) ) {
 			wp_die( 'HDD add item: Empty input.' );
 		}
 
-		/* Speichern */
+		/* Store data */
 		self::_create_files(
-			$data . self::_cache_signatur()
+			$data . self::_cache_signature()
 		);
 	}
 
@@ -60,7 +60,7 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.0
 	 *
-	 * @return  boolean  $diff  TRUE if cache is present
+	 * @return  boolean  True if cache is present.
 	 */
 	public static function get_item() {
 		return is_readable(
@@ -132,7 +132,7 @@ final class Cachify_HDD {
 	 *
 	 * @return  string  Signature string
 	 */
-	private static function _cache_signatur() {
+	private static function _cache_signature() {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | http://cachify.de',
@@ -169,8 +169,8 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.0
 	 *
-	 * @param   string $file  Pfad der Cache-Datei.
-	 * @param   string $data  Cache-Inhalt.
+	 * @param   string $file  Path to cache file.
+	 * @param   string $data  Cache content.
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
@@ -198,7 +198,7 @@ final class Cachify_HDD {
 	 * @change  2.0.5
 	 *
 	 * @param   string  $dir        Directory path.
-	 * @param   boolean $recursive  clear subdirectories.
+	 * @param   boolean $recursive  Clear subdirectories?
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
 		/* Remote training slash */
@@ -238,7 +238,7 @@ final class Cachify_HDD {
 			@rmdir( $dir );
 		}
 
-		/* CleanUp */
+		/* Clean up */
 		clearstatcache();
 	}
 
@@ -293,7 +293,7 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.0
 	 *
-	 * @param   string $path  Request-URI or Permalink [optional].
+	 * @param   string $path  Request URI or permalink [optional].
 	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
@@ -315,7 +315,7 @@ final class Cachify_HDD {
 		);
 
 		if ( validate_file( $path ) > 0 ) {
-			wp_die( 'Invalide file path.' );
+			wp_die( 'Invalid file path.' );
 		}
 
 		return trailingslashit( $path );

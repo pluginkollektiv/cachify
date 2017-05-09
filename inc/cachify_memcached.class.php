@@ -65,7 +65,7 @@ final class Cachify_MEMCACHED {
 		/* Add item */
 		self::$_memcached->set(
 			self::_file_path(),
-			$data . self::_cache_signatur(),
+			$data . self::_cache_signature(),
 			$lifetime
 		);
 	}
@@ -179,7 +179,7 @@ final class Cachify_MEMCACHED {
 	 *
 	 * @return  string  Signature string
 	 */
-	private static function _cache_signatur() {
+	private static function _cache_signature() {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | http://cachify.de',
@@ -197,7 +197,7 @@ final class Cachify_MEMCACHED {
 	 * @since   2.0.7
 	 * @change  2.0.7
 	 *
-	 * @param   string $path  Request-URI or Permalink [optional].
+	 * @param   string $path  Request URI or permalink [optional].
 	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
