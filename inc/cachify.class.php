@@ -451,15 +451,15 @@ final class Cachify {
 		self::$options = self::_get_options();
 
 		/* APC */
-		if ( self::METHOD_APC && Cachify_APC::is_available() === self::$options['use_apc'] ) {
+		if ( self::METHOD_APC === self::$options['use_apc'] && Cachify_APC::is_available() ) {
 			self::$method = new Cachify_APC;
 
 			/* HDD */
-		} elseif ( self::METHOD_HDD && Cachify_HDD::is_available() === self::$options['use_apc'] ) {
+		} elseif ( self::METHOD_HDD === self::$options['use_apc'] && Cachify_HDD::is_available() ) {
 			self::$method = new Cachify_HDD;
 
 			/* MEMCACHED */
-		} elseif ( self::METHOD_MMC && Cachify_MEMCACHED::is_available() === self::$options['use_apc'] ) {
+		} elseif ( self::METHOD_MMC === self::$options['use_apc'] && Cachify_MEMCACHED::is_available() ) {
 			self::$method = new Cachify_MEMCACHED;
 
 			/* DB */
