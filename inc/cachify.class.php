@@ -545,7 +545,7 @@ final class Cachify {
 						),
 						admin_url( 'options-general.php' )
 					),
-					__( 'Settings', 'cachify' )
+					esc_html__( 'Settings', 'cachify' )
 				)
 			)
 		);
