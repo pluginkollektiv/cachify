@@ -103,10 +103,14 @@ final class Cachify_HDD {
 	 * Print the cache
 	 *
 	 * @since   2.0
-	 * @change  2.0
+	 * @change  2.3
 	 */
 	public static function print_cache() {
-		return;
+		$size = @readfile( self::_file_html() );
+		if ( ! empty ( $size ) ) {
+			/* Ok, cache file has been sent to output. */
+			exit;
+		}
 	}
 
 	/**
