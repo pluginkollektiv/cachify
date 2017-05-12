@@ -73,6 +73,11 @@ final class Cachify {
 		/* Set defaults */
 		self::_set_default_vars();
 
+		if ( ! is_admin() ) {
+			/* Check whether there are cached data to be printed. */
+			self::print_cache();
+		}
+
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
 		/* Publish hooks */
@@ -1282,16 +1287,10 @@ final class Cachify {
 	}
 
 	/**
-	 * Manage the cache
-	 *
-	 * @since   0.1
-	 * @change  2.0
+	 * Retrieve cache contents if there are any.
+	 * @since 2.3
 	 */
-	public static function manage_cache() {
-		/* No caching? */
-		if ( self::_skip_cache() ) {
-			return;
-		}
+	public static function print_cache() {
 
 		/* Data present in cache */
 		$cache = call_user_func(
@@ -1302,20 +1301,33 @@ final class Cachify {
 			self::_cache_hash()
 		);
 
-		/* No cache? */
-		if ( empty( $cache ) ) {
-			ob_start( 'Cachify::set_cache' );
+		/* Cache hit? */
+		if ( ! empty( $cache ) ) {
+			/* Process cache */
+			call_user_func(
+				array(
+					self::$method,
+					'print_cache',
+				),
+				$cache
+			);
+		}
+	}
+
+	/**
+	 * Initialize buffering of output to get cache data (unless caching should
+	 * be skipped).
+	 *
+	 * @since   0.1
+	 * @change  2.3
+	 */
+	public static function manage_cache() {
+		/* No caching? */
+		if ( self::_skip_cache() ) {
 			return;
 		}
 
-		/* Process cache */
-		call_user_func(
-			array(
-				self::$method,
-				'print_cache',
-			),
-			$cache
-		);
+		ob_start( 'Cachify::set_cache' );
 	}
 
 	/**
