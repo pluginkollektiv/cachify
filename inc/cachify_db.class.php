@@ -1,8 +1,5 @@
 <?php
 
-/* Quit */
-defined( 'ABSPATH' ) || exit;
-
 /**
 * Cachify_DB
 */

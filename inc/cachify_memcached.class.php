@@ -1,8 +1,5 @@
 <?php
 
-/* Quit */
-defined( 'ABSPATH' ) or exit;
-
 /**
 * Cachify_MEMCACHED
 */
