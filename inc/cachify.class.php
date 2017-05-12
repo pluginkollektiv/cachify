@@ -73,7 +73,7 @@ final class Cachify {
 		/* Set defaults */
 		self::_set_default_vars();
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() && ! self::_skip_cache( true ) ) {
 			/* Check whether there are cached data to be printed. */
 			self::print_cache();
 		}
@@ -1101,13 +1101,34 @@ final class Cachify {
 	 * Define exclusions for caching
 	 *
 	 * @since   0.2
-	 * @change  2.1.7
+	 * @change  2.3.0
 	 *
-	 * @return  boolean  TRUE on exclusion
+	 * @param   boolean..$base_check Check only if request vars are empty and
+	 *                               whether to skip caching for logged users.
+	 * @return  boolean              TRUE on exclusion
 	 *
 	 * @hook    boolean  cachify_skip_cache
 	 */
-	private static function _skip_cache() {
+	private static function _skip_cache( $base_check = false ) {
+
+		/* Plugin options */
+		$options = self::$options;
+
+		/* Request vars */
+		if ( ! empty( $_POST ) || ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) ) {
+			return true;
+		}
+
+		/* Logged in */
+		if ( $options['only_guests'] && self::_is_logged_in() ) {
+			return true;
+		}
+
+		/* If base check only has been requested, stop here. */
+		if ( $base_check ) {
+			return false;
+		}
+
 		/* No cache hook */
 		if ( apply_filters( 'cachify_skip_cache', false ) ) {
 			return true;
@@ -1120,19 +1141,6 @@ final class Cachify {
 
 		/* WooCommerce usage */
 		if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
-			return true;
-		}
-
-		/* Plugin options */
-		$options = self::$options;
-
-		/* Request vars */
-		if ( ! empty( $_POST ) || ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) ) {
-			return true;
-		}
-
-		/* Logged in */
-		if ( $options['only_guests'] && self::_is_logged_in() ) {
 			return true;
 		}
 
