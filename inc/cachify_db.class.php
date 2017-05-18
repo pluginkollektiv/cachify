@@ -187,7 +187,7 @@ final class Cachify_DB {
 				self::_page_memory()
 			),
 			sprintf(
-				'Cachify saved %s of execution time',
+				'Generated: %s ago',
 				human_time_diff( $meta['time'], current_time( 'timestamp' ) )
 			)
 		);
