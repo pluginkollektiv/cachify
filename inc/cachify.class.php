@@ -1095,6 +1095,8 @@ final class Cachify {
 				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/**
