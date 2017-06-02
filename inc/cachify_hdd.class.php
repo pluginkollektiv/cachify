@@ -106,7 +106,8 @@ final class Cachify_HDD {
 	 * @change  2.3
 	 */
 	public static function print_cache() {
-		$size = @readfile( self::_file_html() );
+		$filename = self::_file_html();
+		$size = is_readable( $filename ) ? readfile( $filename ) : false;
 		if ( ! empty ( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
