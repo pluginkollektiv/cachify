@@ -1,0 +1,28 @@
+{
+  "name": "pluginkollektiv/cachify",
+  "type": "wordpress-plugin",
+  "license": "GPL 2.0",
+  "description": "Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!",
+  "homepage": "https://wordpress.org/plugins/cachify/",
+  "authors": [
+    {
+      "name": "Sergej Müller",
+      "homepage": "https://sergejmueller.github.io"
+    },
+    {
+      "name": "pluginkollektiv",
+      "homepage": "http://pluginkollektiv.org"
+    }
+  ],
+  "keywords": [
+    "wordpress", "wordpress-plugin"
+  ],
+  "support": {
+    "issues": "https://github.com/pluginkollektiv/cachify",
+    "forum": "https://wordpress.org/support/plugin/cachify"
+  },
+  "require": {
+    "php": ">=5.2.0",
+    "composer/installers": "~1.0"
+  }
+}
