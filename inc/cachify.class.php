@@ -475,7 +475,7 @@ final class Cachify {
 	 * Get options
 	 *
 	 * @since   2.0
-	 * @change  2.1.2
+	 * @change  2.3.0
 	 *
 	 * @return  array  Array of option values
 	 */
@@ -490,6 +490,7 @@ final class Cachify {
 				'without_agents' 	=> '',
 				'use_apc'		 	=> self::METHOD_DB,
 				'reset_on_comment'  => 0,
+				'sig_detail'        => 0,
 			)
 		);
 	}
@@ -1025,7 +1026,7 @@ final class Cachify {
 	 * @return  bool  Show details in signature.
 	 */
 	private static function _signature_details() {
-		return isset(self::$options['sig_detail']) ? self::$options['sig_detail'] == 1 : true;
+		return isset(self::$options['sig_detail']) ? self::$options['sig_detail'] == 1 : false;
 	}
 
 	/**
