@@ -172,8 +172,13 @@ final class Cachify_DB {
 		}
 
 		return sprintf(
-			"\n\n<!--\n%s\n%s\n%s\n%s\n-->",
+			"\n\n<!-- %s\n%s @ %s\n%s\n%s\n-->",
 			'Cachify | http://cachify.de',
+			'DB Cache',
+			date_i18n(
+				'd.m.Y H:i:s',
+				$meta['time']
+			),
 			sprintf(
 				'Without Cachify: %d DB queries, %s seconds, %s',
 				$meta['queries'],
@@ -185,10 +190,6 @@ final class Cachify_DB {
 				self::_page_queries(),
 				self::_page_timer(),
 				self::_page_memory()
-			),
-			sprintf(
-				'Generated: %s ago',
-				human_time_diff( $meta['time'], current_time( 'timestamp' ) )
 			)
 		);
 	}
