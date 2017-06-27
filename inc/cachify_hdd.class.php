@@ -33,13 +33,14 @@ final class Cachify_HDD {
 	 * Store item in cache
 	 *
 	 * @since   2.0
-	 * @change  2.0
+	 * @change  2.3.0
 	 *
-	 * @param   string  $hash      Hash  of the entry [optional].
-	 * @param   string  $data      Content of the entry.
-	 * @param   integer $lifetime  Lifetime of the entry [optional].
+	 * @param   string  $hash       Hash  of the entry [optional].
+	 * @param   string  $data       Content of the entry.
+	 * @param   integer $lifetime   Lifetime of the entry [optional].
+	 * @param   bool    $sigDetail  Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime ) {
+	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
 		/* Empty? */
 		if ( empty( $data ) ) {
 			wp_die( 'HDD add item: Empty input.' );
@@ -47,7 +48,7 @@ final class Cachify_HDD {
 
 		/* Store data */
 		self::_create_files(
-			$data . self::_cache_signature()
+			$data . self::_cache_signature( $sigDetail )
 		);
 	}
 
@@ -130,15 +131,16 @@ final class Cachify_HDD {
 	 * Generate signature
 	 *
 	 * @since   2.0
-	 * @change  2.0.5
+	 * @change  2.3.0
 	 *
-	 * @return  string  Signature string
+	 * @param   bool $detail  Show details in signature
+	 * @return  string        Signature string
 	 */
-	private static function _cache_signature() {
+	private static function _cache_signature( $detail ) {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | http://cachify.de',
-			'HDD Cache',
+			( $detail ? 'HDD Cache' : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
 				current_time( 'timestamp' )

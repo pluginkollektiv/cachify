@@ -1018,6 +1018,17 @@ final class Cachify {
 	}
 
 	/**
+	 * Determine if cache details should be printed in signature
+	 *
+	 * @since   2.3.0
+	 *
+	 * @return  bool  Show details in signature.
+	 */
+	private static function _signature_details() {
+		return isset(self::$options['sig_detail']) ? self::$options['sig_detail'] == 1 : true;
+	}
+
+	/**
 	 * Get hash value for caching
 	 *
 	 * @since   0.1
@@ -1290,7 +1301,8 @@ final class Cachify {
 			),
 			self::_cache_hash(),
 			self::_minify_cache( $data ),
-			self::_cache_expires()
+			self::_cache_expires(),
+			self::_signature_details()
 		);
 
 		return $data;
@@ -1319,6 +1331,7 @@ final class Cachify {
 					self::$method,
 					'print_cache',
 				),
+				self::_signature_details(),
 				$cache
 			);
 		}
@@ -1600,6 +1613,7 @@ final class Cachify {
 			'without_agents'   => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
 			'use_apc'          => (int) $data['use_apc'],
 			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] )),
+			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] )),
 		);
 	}
 

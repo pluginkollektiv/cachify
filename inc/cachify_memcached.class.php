@@ -42,13 +42,14 @@ final class Cachify_MEMCACHED {
 	 * Store item in cache
 	 *
 	 * @since   2.0.7
-	 * @change  2.0.7
+	 * @change  2.3.0
 	 *
-	 * @param   string  $hash      Hash of the entry.
-	 * @param   string  $data      Content of the entry.
-	 * @param   integer $lifetime  Lifetime of the entry.
+	 * @param   string  $hash       Hash of the entry.
+	 * @param   string  $data       Content of the entry.
+	 * @param   integer $lifetime   Lifetime of the entry.
+	 * @param   bool    $sigDetail  Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime ) {
+	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
 		/* Empty? */
 		if ( empty( $data ) ) {
 			wp_die( 'MEMCACHE add item: Empty input.' );
@@ -62,7 +63,7 @@ final class Cachify_MEMCACHED {
 		/* Add item */
 		self::$_memcached->set(
 			self::_file_path(),
-			$data . self::_cache_signature(),
+			$data . self::_cache_signature( $sigDetail ),
 			$lifetime
 		);
 	}
@@ -172,15 +173,16 @@ final class Cachify_MEMCACHED {
 	 * Generate signature
 	 *
 	 * @since   2.0.7
-	 * @change  2.0.7
+	 * @change  2.3.0
 	 *
-	 * @return  string  Signature string
+	 * @param   bool $detail  Show details in signature.
+	 * @return  string        Signature string
 	 */
-	private static function _cache_signature() {
+	private static function _cache_signature( $detail ) {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | http://cachify.de',
-			'Memcached',
+			( $detail ? 'Memcached' : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
 				current_time( 'timestamp' )
