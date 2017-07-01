@@ -1607,56 +1607,82 @@ final class Cachify {
 	 * Display options page
 	 *
 	 * @since   1.0
-	 * @change  2.2.2
+	 * @change  2.3.0
 	 */
 	public static function options_page() {
+		$options = self::_get_options();
+		$cachify_tabs = self::_get_tabs($options);
+		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] ) ? $_GET['cachify_tab'] : 'settings';
 	?>
 
 		<div class="wrap" id="cachify_settings">
-			<h1>
-				Cachify
-			</h1>
+			<h1>Cachify</h1>
 
-			<form method="post" action="options.php">
-				<?php settings_fields( 'cachify' ) ?>
-
-				<?php $options = self::_get_options() ?>
-
-				<?php /* Adds a navbar and includes the specific page */
-				if ( self::METHOD_DB !== $options ['use_apc'] ) {
-					$cachify_tabs = array(
-					'settings'  => esc_html__( 'Settings', 'cachify' ),
-									'setup' => esc_html__( 'Setup', 'cachify' ),
-							);
-
-					$current_tab = isset( $_GET['cachify_tab'] ) ? $_GET['cachify_tab'] : 'settings';
-
+			<?php
+				/* Add a navbar if necessary */
+				if ( count($cachify_tabs) > 1 ) {
 					echo '<h2 class="nav-tab-wrapper">';
-					foreach ( $cachify_tabs as $tab => $name ) {
-						$class = ($tab === $current_tab) ? ' nav-tab-active' : '';
-						$link = "?page=cachify&cachify_tab=$tab";
-						echo "<a class='nav-tab$class' href='$link'>$name</a>";
+					foreach ( $cachify_tabs as $tab_key => $tab_data ) {
+						printf(
+							'<a class="nav-tab %s" href="%s">%s</a>',
+							$tab_key === $current_tab ? 'nav-tab-active' : '',
+							add_query_arg(
+								array( 'page' => 'cachify', 'cachify_tab' => $tab_key ),
+								admin_url('options-general.php')
+							),
+							esc_html($tab_data['name'])
+						);
 					}
 					echo '</h2>';
+				}
 
-					switch ( $current_tab ) {
-						case 'settings' :
-							include 'cachify.settings.php';
-							break;
-						case 'setup' :
-							if ( self::METHOD_HDD === $options ['use_apc'] ) {
-								if ( self::$is_nginx ) { include 'setup/cachify.hdd.nginx.php';
-								} else { include 'setup/cachify.hdd.htaccess.php'; }
-							} elseif ( self::METHOD_APC === $options ['use_apc'] ) {
-								if ( self::$is_nginx ) { include 'setup/cachify.apc.nginx.php';
-								} else { include 'setup/cachify.apc.htaccess.php'; }
-							} elseif ( ( self::METHOD_MMC === $options ['use_apc']) && self::$is_nginx ) {include 'setup/cachify.memcached.nginx.php';
-							}
-							break;
-					}
-				} else { include 'cachify.settings.php'; }// End if().
-				?>
-			</form>
+				/* Include current tab */
+				include $cachify_tabs[$current_tab]['page'];
+
+				/* Include common footer */
+				include 'cachify.settings_footer.php';
+			?>
 		</div><?php
+	}
+
+	/**
+	 * Return an array with all settings tabs applicable in context of current plugin options.
+	 *
+	 * @since   2.3.0
+	 * @change  2.3.0
+	 *
+	 * @param array $options
+	 * @return array
+	 */
+	private static function _get_tabs($options) {
+		/* Settings tab is always present */
+		$tabs = array(
+			'settings' => array(
+				'name' => __( 'Settings', 'cachify' ),
+				'page' => 'cachify.settings.php',
+			),
+		);
+
+		if ( self::METHOD_HDD === $options['use_apc'] ) {
+			/* Setup tab for HDD Cache */
+			$tabs['setup'] = array(
+				'name' => __( 'Setup', 'cachify' ),
+				'page' => 'setup/cachify.hdd.' . ( self::$is_nginx ? 'nginx' : 'htaccess' ) . '.php',
+			);
+		} elseif ( self::METHOD_APC === $options['use_apc'] ) {
+			/* Setup tab for APC */
+			$tabs['setup'] = array(
+				'name' => __( 'Setup', 'cachify' ),
+				'page' => 'setup/cachify.apc.' . ( self::$is_nginx ? 'nginx' : 'htaccess' ) . '.php',
+			);
+		} elseif ( self::METHOD_MMC === $options['use_apc'] && self::$is_nginx ) {
+			/* Setup tab for Memcached */
+			$tabs['setup'] = array(
+				'name' => __( 'Setup', 'cachify' ),
+				'page' => 'setup/cachify.memcached.nginx.php',
+			);
+		}
+
+		return $tabs;
 	}
 }
