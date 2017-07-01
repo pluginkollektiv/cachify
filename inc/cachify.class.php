@@ -1611,7 +1611,7 @@ final class Cachify {
 	 */
 	public static function options_page() {
 		$options = self::_get_options();
-		$cachify_tabs = self::_get_tabs($options);
+		$cachify_tabs = self::_get_tabs( $options );
 		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] ) ? $_GET['cachify_tab'] : 'settings';
 	?>
 
@@ -1620,7 +1620,7 @@ final class Cachify {
 
 			<?php
 				/* Add a navbar if necessary */
-				if ( count($cachify_tabs) > 1 ) {
+				if ( count( $cachify_tabs ) > 1 ) {
 					echo '<h2 class="nav-tab-wrapper">';
 					foreach ( $cachify_tabs as $tab_key => $tab_data ) {
 						printf(
@@ -1628,16 +1628,16 @@ final class Cachify {
 							$tab_key === $current_tab ? 'nav-tab-active' : '',
 							add_query_arg(
 								array( 'page' => 'cachify', 'cachify_tab' => $tab_key ),
-								admin_url('options-general.php')
+								admin_url( 'options-general.php' )
 							),
-							esc_html($tab_data['name'])
+							esc_html( $tab_data['name'] )
 						);
 					}
 					echo '</h2>';
 				}
 
 				/* Include current tab */
-				include $cachify_tabs[$current_tab]['page'];
+				include $cachify_tabs[ $current_tab ]['page'];
 
 				/* Include common footer */
 				include 'cachify.settings_footer.php';
@@ -1654,7 +1654,7 @@ final class Cachify {
 	 * @param array $options
 	 * @return array
 	 */
-	private static function _get_tabs($options) {
+	private static function _get_tabs( $options ) {
 		/* Settings tab is always present */
 		$tabs = array(
 			'settings' => array(
