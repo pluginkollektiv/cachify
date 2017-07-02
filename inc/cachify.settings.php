@@ -3,6 +3,8 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 
+<form method="post" action="options.php">
+	<?php settings_fields( 'cachify' ) ?>
 	<table class="form-table">
 		<tr>
 			<th scope="row">
@@ -25,8 +27,8 @@ defined( 'ABSPATH' ) || exit;
 			</th>
 			<td>
 				<label for="cachify_cache_expires">
-					<?php if ( self::METHOD_HDD === $options ['use_apc'] ) : ?>&#8734;
-						<?php else : ?><input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options ['cache_expires'] ) ?>" class="small-text" />
+					<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>&#8734;
+						<?php else : ?><input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
 					<?php endif; ?>
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				</label>
@@ -91,16 +93,7 @@ defined( 'ABSPATH' ) || exit;
 				</label>
 			</td>
 		</tr>
-
-		<tr>
-			<th scope="row">
-				<?php submit_button() ?>
-			</th>
-			<td>
-				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Donate', 'cachify' ); ?></a>
-				&bull; <a href="<?php echo esc_url( __( 'https://wordpress.org/plugins/cachify/faq/', 'cachify' ), 'https' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'FAQ', 'cachify' ); ?></a>
-				&bull; <a href="https://github.com/pluginkollektiv/cachify/wiki" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Manual', 'cachify' ); ?></a>
-				&bull; <a href="https://wordpress.org/support/plugin/cachify" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Support', 'cachify' ); ?></a>
-			</td>
-		</tr>
 	</table>
+
+	<?php submit_button() ?>
+</form>
