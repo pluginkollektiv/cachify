@@ -1,10 +1,10 @@
 # Cachify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
-* Requires at least: 3.8
-* Tested up to:      4.7
 * Stable tag:        2.2.4
+* Requires at least: 4.4
+* Tested up to:      4.8
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,8 +128,8 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
-### 2.2.4 ###
-This is mainly a maintenance release ensuring compatibility with the latest version of WordPress. Expect bigger changes in 2.3.0 soon!
+### 2.3.0 ###
+To improve Cachify and make use of new core functions, we decided to drop support for WordPress 4.3 and older. Please make sure your WordPress is always up to date.
 
 ## Screenshots ##
 1. Cachify settings

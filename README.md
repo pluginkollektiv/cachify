@@ -28,7 +28,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify).
 
 ### Donate
-[Donate for us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML)
+[Donate to us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW)
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
@@ -40,7 +40,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ### Requirements ###
 * PHP 5.2.4 or greater
-* WordPress 3.8 or greater
+* WordPress 4.4 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
 
