@@ -35,12 +35,12 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   string  $hash       Hash  of the entry [optional].
-	 * @param   string  $data       Content of the entry.
-	 * @param   integer $lifetime   Lifetime of the entry [optional].
-	 * @param   bool    $sigDetail  Show details in signature.
+	 * @param   string  $hash        Hash  of the entry [optional].
+	 * @param   string  $data        Content of the entry.
+	 * @param   integer $lifetime    Lifetime of the entry [optional].
+	 * @param   bool    $sig_detail  Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Empty? */
 		if ( empty( $data ) ) {
 			wp_die( 'HDD add item: Empty input.' );
@@ -48,7 +48,7 @@ final class Cachify_HDD {
 
 		/* Store data */
 		self::_create_files(
-			$data . self::_cache_signature( $sigDetail )
+			$data . self::_cache_signature( $sig_detail )
 		);
 	}
 
@@ -133,7 +133,7 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   bool $detail  Show details in signature
+	 * @param   bool $detail  Show details in signature.
 	 * @return  string        Signature string
 	 */
 	private static function _cache_signature( $detail ) {

@@ -35,12 +35,12 @@ final class Cachify_APC {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   string  $hash       Hash of the entry.
-	 * @param   string  $data       Content of the entry.
-	 * @param   integer $lifetime   Lifetime of the entry.
-	 * @param   bool    $sigDetail  Show details in signature.
+	 * @param   string  $hash        Hash of the entry.
+	 * @param   string  $data        Content of the entry.
+	 * @param   integer $lifetime    Lifetime of the entry.
+	 * @param   bool    $sig_detail  Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Empty? */
 		if ( empty( $hash ) || empty( $data ) ) {
 			wp_die( 'APC add item: Empty input.' );
@@ -49,7 +49,7 @@ final class Cachify_APC {
 		/* Store */
 		apc_store(
 			$hash,
-			gzencode( $data . self::_cache_signature( $sigDetail ), 9 ),
+			gzencode( $data . self::_cache_signature( $sig_detail ), 9 ),
 			$lifetime
 		);
 	}

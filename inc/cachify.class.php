@@ -1026,7 +1026,7 @@ final class Cachify {
 	 * @return  bool  Show details in signature.
 	 */
 	private static function _signature_details() {
-		return isset(self::$options['sig_detail']) ? self::$options['sig_detail'] == 1 : false;
+		return self::$options['sig_detail'] === 1;
 	}
 
 	/**

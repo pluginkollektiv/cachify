@@ -118,10 +118,10 @@ final class Cachify_DB {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   bool  $sigDetail  Show details in signature.
-	 * @param   array $cache      Array of cache values.
+	 * @param   bool  $sig_detail  Show details in signature.
+	 * @param   array $cache       Array of cache values.
 	 */
-	public static function print_cache( $sigDetail, $cache ) {
+	public static function print_cache( $sig_detail, $cache ) {
 		/* No array? */
 		if ( ! is_array( $cache ) ) {
 			return;
@@ -130,9 +130,9 @@ final class Cachify_DB {
 		/* Content */
 		echo $cache['data'];
 
-		/* Signature */
+		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
-			echo self::_cache_signature( $sigDetail, $cache['meta'] );
+			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
 
 		/* Quit */
@@ -163,7 +163,7 @@ final class Cachify_DB {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   bool  $detail  Show details in signature
+	 * @param   bool  $detail  Show details in signature.
 	 * @param   array $meta    Content of metadata.
 	 * @return  string         Signature string
 	 */
@@ -173,7 +173,7 @@ final class Cachify_DB {
 			return;
 		}
 
-		if ($detail) {
+		if ( $detail ) {
 			return sprintf(
 				"\n\n<!-- %s\n%s @ %s\n%s\n%s\n-->",
 				'Cachify | http://cachify.de',
