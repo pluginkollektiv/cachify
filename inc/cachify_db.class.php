@@ -116,11 +116,12 @@ final class Cachify_DB {
 	 * Print the cache
 	 *
 	 * @since   2.0
-	 * @change  2.0.2
+	 * @change  2.3.0
 	 *
-	 * @param   array $cache  Array of cache values.
+	 * @param   bool  $sig_detail  Show details in signature.
+	 * @param   array $cache       Array of cache values.
 	 */
-	public static function print_cache( $cache ) {
+	public static function print_cache( $sig_detail, $cache ) {
 		/* No array? */
 		if ( ! is_array( $cache ) ) {
 			return;
@@ -129,9 +130,9 @@ final class Cachify_DB {
 		/* Content */
 		echo $cache['data'];
 
-		/* Signature */
+		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
-			echo self::_cache_signature( $cache['meta'] );
+			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
 
 		/* Quit */
@@ -160,37 +161,51 @@ final class Cachify_DB {
 	 * Generate signature
 	 *
 	 * @since   2.0
-	 * @change  2.0.5
+	 * @change  2.3.0
 	 *
-	 * @param   array $meta  Content of metadata.
-	 * @return  string       Signature string
+	 * @param   bool  $detail  Show details in signature.
+	 * @param   array $meta    Content of metadata.
+	 * @return  string         Signature string
 	 */
-	private static function _cache_signature( $meta ) {
+	private static function _cache_signature( $detail, $meta ) {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
 			return;
 		}
 
-		return sprintf(
-			"\n\n<!--\n%s\n%s\n%s\n%s\n-->",
-			'Cachify | http://cachify.de',
-			sprintf(
-				'Without Cachify: %d DB queries, %s seconds, %s',
-				$meta['queries'],
-				$meta['timer'],
-				$meta['memory']
-			),
-			sprintf(
-				'With Cachify: %d DB queries, %s seconds, %s',
-				self::_page_queries(),
-				self::_page_timer(),
-				self::_page_memory()
-			),
-			sprintf(
-				'Generated: %s ago',
-				human_time_diff( $meta['time'], current_time( 'timestamp' ) )
-			)
-		);
+		if ( $detail ) {
+			return sprintf(
+				"\n\n<!-- %s\n%s @ %s\n%s\n%s\n-->",
+				'Cachify | http://cachify.de',
+				'DB Cache',
+				date_i18n(
+					'd.m.Y H:i:s',
+					$meta['time']
+				),
+				sprintf(
+					'Without Cachify: %d DB queries, %s seconds, %s',
+					$meta['queries'],
+					$meta['timer'],
+					$meta['memory']
+				),
+				sprintf(
+					'With Cachify: %d DB queries, %s seconds, %s',
+					self::_page_queries(),
+					self::_page_timer(),
+					self::_page_memory()
+				)
+			);
+		} else {
+			return sprintf(
+				"\n\n<!-- %s\n%s @ %s -->",
+				'Cachify | http://cachify.de',
+				__( 'Generated', 'cachify' ),
+				date_i18n(
+					'd.m.Y H:i:s',
+					$meta['time']
+				)
+			);
+		}
 	}
 
 	/**

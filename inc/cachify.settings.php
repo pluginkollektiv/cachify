@@ -93,6 +93,18 @@ defined( 'ABSPATH' ) || exit;
 				</label>
 			</td>
 		</tr>
+
+		<tr>
+			<th scope="row">
+				<?php esc_html_e( 'Cache signature', 'cachify' ); ?>
+			</th>
+			<td>
+				<label for="cachify_sig_detail">
+					<input type="checkbox" name="cachify[sig_detail]" id="cachify_sig_detail" value="1" <?php checked( '1', $options['sig_detail'] ); ?> />
+					<?php esc_html_e( 'Add additional details to Cachify signature (HTML comment)', 'cachify' ); ?>
+				</label>
+			</td>
+		</tr>
 	</table>
 
 	<?php submit_button() ?>
