@@ -303,7 +303,6 @@ final class Cachify_HDD {
 	private static function _file_path( $path = null ) {
 		$prefix = is_ssl() ? 'https-' : '';
 
-		$host_parts = wp_parse_url( 'http://' . strtolower( $_SERVER['HTTP_HOST'] ) );
 		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
 
 		$path = sprintf(
@@ -311,7 +310,7 @@ final class Cachify_HDD {
 			CACHIFY_CACHE_DIR,
 			DIRECTORY_SEPARATOR,
 			$prefix,
-			$host_parts['host'],
+			strtolower( $_SERVER['HTTP_HOST'] ),
 			$path_parts['path']
 		);
 
