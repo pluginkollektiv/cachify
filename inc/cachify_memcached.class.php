@@ -200,14 +200,13 @@ final class Cachify_MEMCACHED {
 	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
+		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
+
 		return trailingslashit(
 			sprintf(
 				'%s%s',
 				$_SERVER['HTTP_HOST'],
-				parse_url(
-					( $path ? $path : $_SERVER['REQUEST_URI'] ),
-					PHP_URL_PATH
-				)
+				$path_parts['path']
 			)
 		);
 	}

@@ -510,13 +510,13 @@ final class Cachify {
 			return $data;
 		}
 
-		/* Path */
-		$path = wp_parse_url( site_url(), PHP_URL_PATH );
+		/* Parse site URL */
+		$url_parts = wp_parse_url( site_url() );
 
 		/* Output */
 		$data .= sprintf(
 			'%2$sDisallow: %1$s/wp-content/cache/cachify/%2$s',
-			( empty( $path ) ? '' : $path ),
+			( empty( $url_parts['path'] ) ? '' : $url_parts['path'] ),
 			PHP_EOL
 		);
 
@@ -1040,8 +1040,9 @@ final class Cachify {
 	 */
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
+		$url_parts = wp_parse_url( $url );
 		return md5(
-			empty( $url ) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . wp_parse_url( $url, PHP_URL_HOST ) . wp_parse_url( $url, PHP_URL_PATH ) )
+			empty( $url ) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . $url_parts['host'] . $url_parts['path'] )
 		) . '.cachify';
 	}
 
