@@ -1062,12 +1062,12 @@ final class Cachify {
 	 * Check for index page
 	 *
 	 * @since   0.6
-	 * @change  1.0
+	 * @change  2.3.0
 	 *
 	 * @return  boolean  TRUE if index
 	 */
 	private static function _is_index() {
-		return basename( $_SERVER['SCRIPT_NAME'] ) !== 'index.php';
+		return basename( $_SERVER['SCRIPT_NAME'] ) === 'index.php';
 	}
 
 	/**
@@ -1149,7 +1149,7 @@ final class Cachify {
 		}
 
 		/* Conditional Tags */
-		if ( self::_is_index() || is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
+		if ( ! self::_is_index() || is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
 			return true;
 		}
 
