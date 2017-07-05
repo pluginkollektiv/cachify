@@ -1165,7 +1165,8 @@ final class Cachify {
 
 		/* Post IDs */
 		if ( $options['without_ids'] && is_singular() ) {
-			if ( in_array( $GLOBALS['wp_query']->get_queried_object_id(), self::_preg_split( $options['without_ids'] ), true ) ) {
+			$without_ids = array_map( 'intval', self::_preg_split( $options['without_ids'] ) );
+			if ( in_array( $GLOBALS['wp_query']->get_queried_object_id(), $without_ids, true ) ) {
 				return true;
 			}
 		}
