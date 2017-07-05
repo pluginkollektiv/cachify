@@ -41,9 +41,10 @@ final class Cachify_APC {
 	 * @param   bool    $sig_detail  Show details in signature.
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
-		/* Empty? */
-		if ( empty( $hash ) || empty( $data ) ) {
-			wp_die( 'APC add item: Empty input.' );
+		/* Do not store empty data. */
+		if ( empty( $data ) ) {
+			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			return;
 		}
 
 		/* Store */
@@ -64,11 +65,6 @@ final class Cachify_APC {
 	 * @return  mixed         Content of the entry
 	 */
 	public static function get_item( $hash ) {
-		/* Empty? */
-		if ( empty( $hash ) ) {
-			wp_die( 'APC get item: Empty input.' );
-		}
-
 		return ( function_exists( 'apc_exists' ) ? apc_exists( $hash ) : apc_fetch( $hash ) );
 	}
 
@@ -82,12 +78,6 @@ final class Cachify_APC {
 	 * @param   string $url   URL of the entry [optional].
 	 */
 	public static function delete_item( $hash, $url = '' ) {
-		/* Empty? */
-		if ( empty( $hash ) ) {
-			wp_die( 'APC delete item: Empty input.' );
-		}
-
-		/* Delete */
 		apc_delete( $hash );
 	}
 

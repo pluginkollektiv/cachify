@@ -40,9 +40,10 @@ final class Cachify_DB {
 	 * @param   integer $lifetime  Lifetime of the entry.
 	 */
 	public static function store_item( $hash, $data, $lifetime ) {
-		/* Empty? */
-		if ( empty( $hash ) || empty( $data ) ) {
-			wp_die( 'DB add item: Empty input.' );
+		/* Do not store empty data. */
+		if ( empty( $data ) ) {
+			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			return;
 		}
 
 		/* Store */
@@ -71,11 +72,6 @@ final class Cachify_DB {
 	 * @return  mixed           Content of the entry
 	 */
 	public static function get_item( $hash ) {
-		/* Empty? */
-		if ( empty( $hash ) ) {
-			wp_die( 'DB get item: Empty input.' );
-		}
-
 		return get_transient( $hash );
 	}
 
@@ -89,12 +85,6 @@ final class Cachify_DB {
 	 * @param   string $url   URL of the entry [optional].
 	 */
 	public static function delete_item( $hash, $url = '' ) {
-		/* Empty? */
-		if ( empty( $hash ) ) {
-			wp_die( 'DB delete item: Empty input.' );
-		}
-
-		/* Delete */
 		delete_transient( $hash );
 	}
 
