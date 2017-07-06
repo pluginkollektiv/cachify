@@ -1597,11 +1597,8 @@ final class Cachify {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
-				sprintf(
-					'&#8505; %s',
-					esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the Setup-Tab.', 'cachify' )
-				),
-				'updated'
+				esc_html__( 'The server configuration file (e.g. .htaccess) needs to be adjusted. Please have a look at the setup tab.', 'cachify' ),
+				'notice-warning'
 			);
 		}
 
