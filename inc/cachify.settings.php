@@ -63,14 +63,14 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<fieldset>
 					<label for="cachify_without_ids">
-						<textarea name="cachify[without_ids]" id="cachify_without_ids" rows="1" placeholder="<?php esc_attr_e( 'e.g. 1,2,3', 'cachify' ); ?>"><?php echo esc_attr( $options['without_ids'] ) ?></textarea>
+						<input type="text" name="cachify[without_ids]" id="cachify_without_ids" rows="1" placeholder="<?php esc_attr_e( 'e.g. 1, 2, 3', 'cachify' ); ?>"><?php echo esc_attr( $options['without_ids'] ) ?></input>
 						<?php esc_html_e( 'Post/Pages-IDs', 'cachify' ); ?>
 					</label>
 
 					<br />
 
 					<label for="cachify_without_agents">
-						<textarea name="cachify[without_agents]" id="cachify_without_agents" rows="1" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>"><?php echo esc_attr( $options['without_agents'] ) ?></textarea>
+						<input type="text" name="cachify[without_agents]" id="cachify_without_agents" rows="1" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>"><?php echo esc_attr( $options['without_agents'] ) ?></input>
 						<?php esc_html_e( 'Browser User-Agents', 'cachify' ); ?>
 					</label>
 				</fieldset>
