@@ -27,7 +27,8 @@ defined( 'ABSPATH' ) || exit;
 			</th>
 			<td>
 				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
-					<?php esc_html_e( 'HDD cache will not expire on its own.', 'cachify' ); ?>
+					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" /> Hours
+					<p class="description"><?php esc_html_e( 'HDD cache will only expire as you update posts or flush it yourself.', 'cachify' ); ?></p>
 				<?php else : ?>
 					<label for="cachify_cache_expires">
 						<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
