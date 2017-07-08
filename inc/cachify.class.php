@@ -730,8 +730,8 @@ final class Cachify {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
-		/* Multisite & Network */
-		if ( is_multisite() && is_plugin_active_for_network( CACHIFY_BASE ) ) {
+		/* Flush cache */
+		if ( is_multisite() && is_network_admin() ) {
 			/* Old blog */
 			$old = $GLOBALS['wpdb']->blogid;
 
@@ -758,7 +758,6 @@ final class Cachify {
 				);
 			}
 		} else {
-			/* Flush cache */
 			self::flush_total_cache();
 
 			/* Notice */
@@ -771,8 +770,7 @@ final class Cachify {
 					)
 				);
 			}
-		}// End if().
-
+		}
 		if ( ! is_admin() ) {
 			wp_safe_redirect(
 				remove_query_arg(
