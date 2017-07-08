@@ -35,15 +35,16 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.3.0
 	 *
-	 * @param   string  $hash        Hash  of the entry [optional].
+	 * @param   string  $hash        Hash  of the entry [ignored].
 	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry [optional].
+	 * @param   integer $lifetime    Lifetime of the entry [ignored].
 	 * @param   bool    $sig_detail  Show details in signature.
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
-		/* Empty? */
+		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			wp_die( 'HDD add item: Empty input.' );
+			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			return;
 		}
 
 		/* Store data */
@@ -72,16 +73,10 @@ final class Cachify_HDD {
 	 * @since   2.0
 	 * @change  2.0
 	 *
-	 * @param   string $hash  Hash of the entry [optional].
+	 * @param   string $hash  Hash of the entry [ignored].
 	 * @param   string $url   URL of the entry.
 	 */
-	public static function delete_item( $hash = '', $url ) {
-		/* Empty? */
-		if ( empty( $url ) ) {
-			wp_die( 'HDD delete item: Empty input.' );
-		}
-
-		/* Delete */
+	public static function delete_item( $hash, $url ) {
 		self::_clear_dir(
 			self::_file_path( $url )
 		);
@@ -157,14 +152,17 @@ final class Cachify_HDD {
 	 * @param   string $data  Cache content.
 	 */
 	private static function _create_files( $data ) {
+		$file_path = self::_file_path();
+
 		/* Create directory */
-		if ( ! wp_mkdir_p( self::_file_path() ) ) {
-			wp_die( 'Unable to create directory.' );
+		if ( ! wp_mkdir_p( $file_path ) ) {
+			trigger_error( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING );
+			return;
 		}
 
 		/* Write to file */
-		self::_create_file( self::_file_html(), $data );
-		self::_create_file( self::_file_gzip(), gzencode( $data, 9 ) );
+		self::_create_file( self::_file_html( $file_path ), $data );
+		self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
 	}
 
 	/**
@@ -179,7 +177,8 @@ final class Cachify_HDD {
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
 		if ( ! $handle = @fopen( $file, 'wb' ) ) {
-			wp_die( 'Could not write file.' );
+			trigger_error( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING );
+			return;
 		}
 
 		/* Write */
@@ -329,24 +328,26 @@ final class Cachify_HDD {
 	 * Path to HTML file
 	 *
 	 * @since   2.0
-	 * @change  2.0
+	 * @change  2.3.0
 	 *
-	 * @return  string  Path to HTML file
+	 * @param   string $file_path   File path [optional].
+	 * @return  string              Path to HTML file
 	 */
-	private static function _file_html() {
-		return self::_file_path() . 'index.html';
+	private static function _file_html( $file_path = '' ) {
+		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html';
 	}
 
 	/**
 	 * Path to GZIP file
 	 *
 	 * @since   2.0
-	 * @change  2.0
+	 * @change  2.3.0
 	 *
-	 * @return  string  Path to GZIP file
+	 * @param   string $file_path   File path [optional].
+	 * @return  string              Path to GZIP file
 	 */
-	private static function _file_gzip() {
-		return self::_file_path() . 'index.html.gz';
+	private static function _file_gzip( $file_path = '' ) {
+		return ( empty( $file_path ) ? self::_file_path() : $file_path )  . 'index.html.gz';
 	}
 
 	/**

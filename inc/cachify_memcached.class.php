@@ -44,15 +44,16 @@ final class Cachify_MEMCACHED {
 	 * @since   2.0.7
 	 * @change  2.3.0
 	 *
-	 * @param   string  $hash       Hash of the entry.
+	 * @param   string  $hash       Hash of the entry [ignored].
 	 * @param   string  $data       Content of the entry.
 	 * @param   integer $lifetime   Lifetime of the entry.
 	 * @param   bool    $sigDetail  Show details in signature.
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
-		/* Empty? */
+		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			wp_die( 'MEMCACHE add item: Empty input.' );
+			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			return;
 		}
 
 		/* Server connect */
@@ -147,7 +148,7 @@ final class Cachify_MEMCACHED {
 	public static function get_stats() {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
-			wp_die( 'MEMCACHE: Not enabled.' );
+			return null;
 		}
 
 		/* Info */
