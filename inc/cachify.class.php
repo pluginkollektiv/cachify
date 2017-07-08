@@ -1066,7 +1066,7 @@ final class Cachify {
 	 * @return  boolean  TRUE if index
 	 */
 	private static function _is_index() {
-		return basename( $_SERVER['SCRIPT_NAME'] ) !== 'index.php';
+		return basename( $_SERVER['SCRIPT_NAME'] ) === 'index.php';
 	}
 
 	/**
@@ -1116,7 +1116,7 @@ final class Cachify {
 	 * @since   0.2
 	 * @change  2.3.0
 	 *
-	 * @param   boolean..$base_check Check only if request vars are empty and
+	 * @param   boolean  $base_check Check only if request vars are empty and
 	 *                               whether to skip caching for logged users.
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1129,6 +1129,11 @@ final class Cachify {
 
 		/* Request vars */
 		if ( ! empty( $_POST ) || ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) ) {
+			return true;
+		}
+
+		/* Only cache requests routed through main index.php (skip AJAX, WP-Cron, WP-CLI etc.) */
+		if ( ! self::_is_index() ) {
 			return true;
 		}
 
@@ -1148,7 +1153,7 @@ final class Cachify {
 		}
 
 		/* Conditional Tags */
-		if ( self::_is_index() || is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
+		if ( is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
 			return true;
 		}
 
