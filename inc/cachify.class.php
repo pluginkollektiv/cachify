@@ -730,48 +730,19 @@ final class Cachify {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
-		/* Multisite & Network */
-		if ( is_multisite() && is_plugin_active_for_network( CACHIFY_BASE ) ) {
-			/* Old blog */
-			$old = $GLOBALS['wpdb']->blogid;
+		/* Flush cache */
+		self::flush_total_cache();
 
-			/* Blog IDs */
-			$ids = self::_get_blog_ids();
-
-			/* Loop over blogs */
-			foreach ( $ids as $id ) {
-				switch_to_blog( $id );
-				self::flush_total_cache();
-			}
-
-			/* Switch back to old blog */
-			switch_to_blog( $old );
-
-			/* Notice */
-			if ( is_admin() ) {
-				add_action(
-					'network_admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
-			}
-		} else {
-			/* Flush cache */
-			self::flush_total_cache();
-
-			/* Notice */
-			if ( is_admin() ) {
-				add_action(
-					'admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
-			}
-		}// End if().
+		/* Notice */
+		if ( is_admin() ) {
+			add_action(
+				'admin_notices',
+				array(
+					__CLASS__,
+					'flush_notice',
+				)
+			);
+		}
 
 		if ( ! is_admin() ) {
 			wp_safe_redirect(

@@ -233,13 +233,17 @@ final class Cachify_HDD {
 			if ( is_dir( $object ) && $recursive ) {
 				self::_clear_dir( $object, $recursive );
 			} else {
-				unlink( $object );
+				if ( self::_user_can_delete( $object ) ) {
+					unlink( $object );
+				}
 			}
 		}
 
 		/* Remove directory */
 		if ( $recursive ) {
-			@rmdir( $dir );
+			if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+				@rmdir( $dir );
+			}
 		}
 
 		/* Clean up */
@@ -343,5 +347,69 @@ final class Cachify_HDD {
 	 */
 	private static function _file_gzip() {
 		return self::_file_path() . 'index.html.gz';
+	}
+
+	/**
+	 * Does the user has the right to delete this file?
+	 *
+	 * @param string $file
+	 *
+	 * @return bool
+	 */
+	private static function _user_can_delete( $file ) {
+
+		if ( ! is_file( $file ) && ! is_dir( $file ) ) {
+			return false;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return false;
+		}
+
+		if ( 0 !== strpos( $file, CACHIFY_CACHE_DIR ) ) {
+			return false;
+		}
+
+		// If its just a single blog, the user has the right to delete this file.
+		// But also, if you are in the network admin, you should be able to delete all files.
+		if ( ! is_multisite() || is_network_admin() ) {
+			return true;
+		}
+
+		if ( is_dir( $file ) ) {
+			$file = trailingslashit( $file );
+		}
+
+		$ssl_prefix = is_ssl() ? 'https-' : '';
+		$current_blog = get_blog_details( get_current_blog_id() );
+		$blog_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
+
+		if ( 0 !== strpos( $file, $blog_path ) ) {
+			return false;
+		}
+
+		// We are on a subdirectory installation and the current blog is in a subdirectory
+		if ( '/' !== $current_blog->path ) {
+			return true;
+		}
+
+		// If we are on the root blog in a subdirectory multisite, we check, if the current file
+		// is part of another blog.
+		global $wpdb;
+		$sql = $wpdb->prepare(
+			'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
+			$current_blog->domain,
+			$current_blog->blog_id
+		);
+		$results = $wpdb->get_col( $sql );
+		foreach ( $results as $site ) {
+			$forbidden_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $site;
+			if ( 0 === strpos( $file, $forbidden_path ) ) {
+				return false;
+			}
+		}
+
+		return true;
+
 	}
 }
