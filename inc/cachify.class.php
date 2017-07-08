@@ -731,7 +731,7 @@ final class Cachify {
 		}
 
 		/* Flush cache */
-		if ( is_multisite() && is_network_admin() && is_plugin_active_for_network( CACHIFY_BASE ) ) {
+		if ( is_multisite() && is_network_admin() ) {
 			/* Old blog */
 			$old = $GLOBALS['wpdb']->blogid;
 
