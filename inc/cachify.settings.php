@@ -26,12 +26,15 @@ defined( 'ABSPATH' ) || exit;
 				<?php esc_html_e( 'Cache expiration', 'cachify' ) ?>
 			</th>
 			<td>
-				<label for="cachify_cache_expires">
-					<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>&#8734;
-						<?php else : ?><input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
-					<?php endif; ?>
-					<?php esc_html_e( 'Hours', 'cachify' ); ?>
-				</label>
+				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
+					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" /> Hours
+					<p class="description"><?php esc_html_e( 'HDD cache will only expire as you update posts or flush it yourself.', 'cachify' ); ?></p>
+				<?php else : ?>
+					<label for="cachify_cache_expires">
+						<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
+						<?php esc_html_e( 'Hours', 'cachify' ); ?>
+					</label>
+				<?php endif; ?>
 			</td>
 		</tr>
 
