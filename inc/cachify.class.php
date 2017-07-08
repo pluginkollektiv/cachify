@@ -731,19 +731,46 @@ final class Cachify {
 		}
 
 		/* Flush cache */
-		self::flush_total_cache();
+		if ( is_multisite() && is_network_admin() && is_plugin_active_for_network( CACHIFY_BASE ) ) {
+			/* Old blog */
+			$old = $GLOBALS['wpdb']->blogid;
 
-		/* Notice */
-		if ( is_admin() ) {
-			add_action(
-				'admin_notices',
-				array(
-					__CLASS__,
-					'flush_notice',
-				)
-			);
+			/* Blog IDs */
+			$ids = self::_get_blog_ids();
+
+			/* Loop over blogs */
+			foreach ( $ids as $id ) {
+				switch_to_blog( $id );
+				self::flush_total_cache();
+			}
+
+			/* Switch back to old blog */
+			switch_to_blog( $old );
+
+			/* Notice */
+			if ( is_admin() ) {
+				add_action(
+					'network_admin_notices',
+					array(
+						__CLASS__,
+						'flush_notice',
+					)
+				);
+			}
+		} else {
+			self::flush_total_cache();
+
+			/* Notice */
+			if ( is_admin() ) {
+				add_action(
+					'admin_notices',
+					array(
+						__CLASS__,
+						'flush_notice',
+					)
+				);
+			}
 		}
-
 		if ( ! is_admin() ) {
 			wp_safe_redirect(
 				remove_query_arg(
