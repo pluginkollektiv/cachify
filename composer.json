@@ -1,7 +1,7 @@
 {
   "name": "pluginkollektiv/cachify",
   "type": "wordpress-plugin",
-  "license": "GPL 2.0",
+  "license": "GPL-2.0+",
   "description": "Smart but efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!",
   "homepage": "https://wordpress.org/plugins/cachify/",
   "authors": [
