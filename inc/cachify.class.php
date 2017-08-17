@@ -124,6 +124,14 @@ final class Cachify {
 		);
 
 		add_action(
+			'before_delete_post',
+			array(
+				__CLASS__,
+				'flush_total_cache',
+			)
+		);
+
+		add_action(
 			'wp_trash_post',
 			array(
 				__CLASS__,
