@@ -363,7 +363,7 @@ final class Cachify_HDD {
 			return false;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
 			return false;
 		}
 
