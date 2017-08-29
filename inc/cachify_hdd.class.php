@@ -363,10 +363,6 @@ final class Cachify_HDD {
 			return false;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return false;
-		}
-
 		if ( 0 !== strpos( $file, CACHIFY_CACHE_DIR ) ) {
 			return false;
 		}
