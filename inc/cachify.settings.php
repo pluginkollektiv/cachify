@@ -8,32 +8,28 @@ defined( 'ABSPATH' ) || exit;
 	<table class="form-table">
 		<tr>
 			<th scope="row">
-				<?php esc_html_e( 'Cache method', 'cachify' ); ?>
+                <label for="cachify_cache_method"><?php esc_html_e( 'Cache method', 'cachify' ); ?></label>
 			</th>
 			<td>
-				<label for="cachify_cache_method">
-					<select name="cachify[use_apc]" id="cachify_cache_method">
-						<?php foreach ( self::_method_select() as $k => $v ) { ?>
-							<option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['use_apc'], $k ); ?>><?php echo esc_html( $v ) ?></option>
-						<?php } ?>
-					</select>
-				</label>
+                <select name="cachify[use_apc]" id="cachify_cache_method">
+                    <?php foreach ( self::_method_select() as $k => $v ) { ?>
+                        <option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['use_apc'], $k ); ?>><?php echo esc_html( $v ) ?></option>
+                    <?php } ?>
+                </select>
 			</td>
 		</tr>
 
 		<tr>
 			<th scope="row">
-				<?php esc_html_e( 'Cache expiration', 'cachify' ) ?>
+                <label for="cachify_cache_expires"><?php esc_html_e( 'Cache expiration', 'cachify' ) ?></label>
 			</th>
 			<td>
 				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
 					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" /> Hours
 					<p class="description"><?php esc_html_e( 'HDD cache will only expire as you update posts or flush it yourself.', 'cachify' ); ?></p>
 				<?php else : ?>
-					<label for="cachify_cache_expires">
-						<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
-						<?php esc_html_e( 'Hours', 'cachify' ); ?>
-					</label>
+                    <input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
+                    <?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
 			</td>
 		</tr>
@@ -82,30 +78,26 @@ defined( 'ABSPATH' ) || exit;
 
 		<tr>
 			<th scope="row">
-				<?php esc_html_e( 'Cache minify', 'cachify' ); ?>
+                <label for="cachify_compress_html"><?php esc_html_e( 'Cache minify', 'cachify' ); ?></label>
 			</th>
 			<td>
-				<label for="cachify_compress_html">
-					<select name="cachify[compress_html]" id="cachify_compress_html">
-						<?php foreach ( self::_minify_select() as $k => $v ) { ?>
-						<option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['compress_html'], $k ); ?>>
-							<?php echo esc_html( $v ) ?>
-						</option>
-						<?php } ?>
-					</select>
-				</label>
+                <select name="cachify[compress_html]" id="cachify_compress_html">
+                    <?php foreach ( self::_minify_select() as $k => $v ) { ?>
+                    <option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['compress_html'], $k ); ?>>
+                        <?php echo esc_html( $v ) ?>
+                    </option>
+                    <?php } ?>
+                </select>
 			</td>
 		</tr>
 
 		<tr>
 			<th scope="row">
-				<?php esc_html_e( 'Cache signature', 'cachify' ); ?>
+                <?php esc_html_e( 'Cache signature', 'cachify' ); ?>
 			</th>
 			<td>
-				<label for="cachify_sig_detail">
-					<input type="checkbox" name="cachify[sig_detail]" id="cachify_sig_detail" value="1" <?php checked( '1', $options['sig_detail'] ); ?> />
-					<?php esc_html_e( 'Add additional details to Cachify signature (HTML comment)', 'cachify' ); ?>
-				</label>
+                <input type="checkbox" name="cachify[sig_detail]" id="cachify_sig_detail" value="1" <?php checked( '1', $options['sig_detail'] ); ?> />
+                <label for="cachify_sig_detail"><?php esc_html_e( 'Add additional details to Cachify signature (HTML comment)', 'cachify' ); ?></label>
 			</td>
 		</tr>
 	</table>
