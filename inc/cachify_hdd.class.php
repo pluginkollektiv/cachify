@@ -14,7 +14,8 @@ final class Cachify_HDD {
 	 * @return  boolean  true/false  TRUE when installed
 	 */
 	public static function is_available() {
-		return ! empty( get_option( 'permalink_structure' ) );
+		$option = get_option( 'permalink_structure' );
+		return ! empty( $option );
 	}
 
 	/**
