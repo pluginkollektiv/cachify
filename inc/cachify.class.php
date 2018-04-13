@@ -1302,14 +1302,13 @@ final class Cachify {
 	 * @return  string        Content of the page.
 	 */
 	public static function set_cache( $data ) {
-
 		/* Empty? */
 		if ( empty( $data ) ) {
 			return '';
 		}
 
 		/**
-		 * Filters wether the buffered data should actually be cached
+		 * Filters whether the buffered data should actually be cached
 		 *
 		 * @param bool   $should_cache  Whether the data should be cached.
 		 * @param string $data          The actual data.
