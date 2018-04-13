@@ -1302,22 +1302,27 @@ final class Cachify {
 	 * @return  string        Content of the page.
 	 */
 	public static function set_cache( $data ) {
+
+		$should_cache = apply_filters( 'cachify_store_item', true, $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+
 		/* Empty? */
 		if ( empty( $data ) ) {
 			return '';
 		}
 
-		/* Save */
-		call_user_func(
-			array(
-				self::$method,
-				'store_item',
-			),
-			self::_cache_hash(),
-			self::_minify_cache( $data ),
-			self::_cache_expires(),
-			self::_signature_details()
-		);
+		/* Save? */
+		if ( $should_cache ) {
+			call_user_func(
+				array(
+					self::$method,
+					'store_item',
+				),
+				self::_cache_hash(),
+				self::_minify_cache( $data ),
+				self::_cache_expires(),
+				self::_signature_details()
+			);
+		}
 
 		return $data;
 	}
