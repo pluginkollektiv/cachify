@@ -1307,17 +1307,30 @@ final class Cachify {
 			return '';
 		}
 
-		/* Save */
-		call_user_func(
-			array(
-				self::$method,
-				'store_item',
-			),
-			self::_cache_hash(),
-			self::_minify_cache( $data ),
-			self::_cache_expires(),
-			self::_signature_details()
-		);
+		/**
+		 * Filters whether the buffered data should actually be cached
+		 *
+		 * @param bool   $should_cache  Whether the data should be cached.
+		 * @param string $data          The actual data.
+		 * @param string $method        The selected caching method.
+		 * @param string $cache_hash    The cache hash.
+		 * @param int    $cache_expires Cache validity period.
+		 */
+		$should_cache = apply_filters( 'cachify_store_item', true, $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+
+		/* Save? */
+		if ( $should_cache ) {
+			call_user_func(
+				array(
+					self::$method,
+					'store_item',
+				),
+				self::_cache_hash(),
+				self::_minify_cache( $data ),
+				self::_cache_expires(),
+				self::_signature_details()
+			);
+		}
 
 		return $data;
 	}
