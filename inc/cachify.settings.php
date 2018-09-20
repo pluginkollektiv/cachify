@@ -35,6 +35,10 @@ defined( 'ABSPATH' ) || exit;
 						<?php esc_html_e( 'Hours', 'cachify' ); ?>
 					</label>
 				<?php endif; ?>
+				
+				<br />
+				
+				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
 			</td>
 		</tr>
 
@@ -111,20 +115,4 @@ defined( 'ABSPATH' ) || exit;
 	</table>
 
 	<?php submit_button() ?>
-</form>
-
-<form method="post" action="options.php">
-	<?php settings_fields( 'cachify' ) ?>
-    <table class="form-table">
-        <tr>
-            <th scope="row">
-				<?php esc_html_e( 'Delete Caching', 'cachify' ) ?>
-            </th>
-            <td>
-                <label for="delete-cache">
-                    <button type="button" class="button-secondary">Clear Cache</button>
-                    <?php esc_html_e( 'Clear your cache to display the  current status on your website', 'cachify' ); ?>
-                </label>
-            </td>
-        </tr>
 </form>
