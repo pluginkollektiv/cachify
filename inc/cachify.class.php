@@ -1377,7 +1377,7 @@ final class Cachify {
 	 */
 	public static function add_admin_resources( $hook ) {
 		/* Hooks check */
-		if ( 'index.php' !== $hook && 'post.php' !== $hook ) {
+		if ( 'index.php' !== $hook && 'post.php' !== $hook && 'settings_page_cachify' !== $hook ) {
 			return;
 		}
 
@@ -1404,10 +1404,20 @@ final class Cachify {
 					true
 				);
 			break;
+			
+			case 'settings_page_cachify':
+				wp_enqueue_style(
+					'cachify-settings',
+					plugins_url( 'css/settings.min.css', CACHIFY_FILE ),
+					array(),
+					$plugin_data['Version']
+				);
+			break;
 
 			default:
 			break;
 		}
+		
 	}
 
 	/**
