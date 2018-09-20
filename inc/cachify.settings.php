@@ -32,7 +32,13 @@ defined( 'ABSPATH' ) || exit;
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
 				
-				<br />
+				<p class="description">
+					<?php printf(
+						/* translators: Placeholder is the icon itself as dashicon */
+						esc_html__( 'Flush the cache by clicking the button below or the %1$s icon in the admin bar.', 'rh-50' ),
+						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Flush the cachify cache', 'cachify' ) . '"</span>'
+					); ?>
+				</p>
 				
 				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
 			</td>
