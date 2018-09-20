@@ -31,6 +31,10 @@ defined( 'ABSPATH' ) || exit;
 					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
+				
+				<br />
+				
+				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
 			</td>
 		</tr>
 
