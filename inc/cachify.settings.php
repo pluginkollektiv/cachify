@@ -34,8 +34,8 @@ defined( 'ABSPATH' ) || exit;
 				
 				<p class="description">
 					<?php printf(
-						/* translators: Placeholder is the icon itself as dashicon */
-						esc_html__( 'Flush the cache by clicking the button below or the %1$s icon in the admin bar.', 'rh-50' ),
+						/* translators: Placeholder is the trash icon itself as dashicon */
+						esc_html__( 'Flush the cache by clicking the button below or the %1$s icon in the admin bar.', 'cachify' ),
 						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Flush the cachify cache', 'cachify' ) . '"</span>'
 					); ?>
 				</p>
