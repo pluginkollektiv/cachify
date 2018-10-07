@@ -499,6 +499,7 @@ final class Cachify {
 				'use_apc'		 	=> self::METHOD_DB,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
+				'show_adminbar_button_caption' => false
 			)
 		);
 	}
@@ -691,7 +692,11 @@ final class Cachify {
 		}
 
 		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
+		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
+
+		/* Get setting whether to show caption next to icon */
+		$options = self::_get_options();
+		$show_adminbar_button_caption = $options['show_adminbar_button_caption'];
 
 		/* Add menu item */
 		$wp_admin_bar->add_menu(
@@ -699,7 +704,17 @@ final class Cachify {
 				'id' 	 => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'	 => '<span class="ab-icon dashicons"></span>',
+				'title'	 => '<span class="ab-icon dashicons"></span>' . (
+											( $show_adminbar_button_caption ) ?
+												'<span class="ab-label">' .
+												_x(
+													'Flush site cache',
+													'Flush site cache caption in admin bar, next to icon, if activated in settings.',
+													'cachify'
+												) .
+												'</span>'
+											: ''
+										),
 				'meta'   => array(
 					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
 				),
@@ -1417,7 +1432,7 @@ final class Cachify {
 					true
 				);
 			break;
-			
+
 			case 'settings_page_cachify':
 				wp_enqueue_style(
 					'cachify-settings',
@@ -1430,7 +1445,7 @@ final class Cachify {
 			default:
 			break;
 		}
-		
+
 	}
 
 	/**
@@ -1640,14 +1655,15 @@ final class Cachify {
 
 		/* Return */
 		return array(
-			'only_guests'      => (int) ( ! empty( $data['only_guests'] )),
-			'compress_html'    => (int) $data['compress_html'],
-			'cache_expires'    => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
-			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
-			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
-			'use_apc'          => (int) $data['use_apc'],
-			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] )),
-			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] )),
+			'only_guests'      							=> (int) ( ! empty( $data['only_guests'] )),
+			'compress_html'   	 						=> (int) $data['compress_html'],
+			'cache_expires'    							=> (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
+			'without_ids'      							=> (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
+			'without_agents'   							=> (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
+			'use_apc'          							=> (int) $data['use_apc'],
+			'reset_on_comment' 							=> (int) ( ! empty( $data['reset_on_comment'] )),
+			'sig_detail'       							=> (int) ( ! empty( $data['sig_detail'] )),
+			'show_adminbar_button_caption' 	=> (int) ( ! empty( $data['show_adminbar_button_caption'] )),
 		);
 	}
 
