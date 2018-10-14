@@ -32,21 +32,6 @@ defined( 'ABSPATH' ) || exit;
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
 
-				<p>
-					<label for="cachify_show_adminbar_button_caption">
-						<input type="checkbox" name="cachify[show_adminbar_button_caption]" id="cachify_show_adminbar_button_caption" value="1" <?php checked( '1', $options['show_adminbar_button_caption'] ); ?> />
-						<?php printf(
-							/* translators: Placeholder is the trash icon itself as dashicon */
-							esc_html__(
-								'Show text caption next to the %1$s icon in the admin bar.',
-								'Placeholder is the trash icon itself as dashicon',
-								'cachify'
-							),
-							'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Example of icon for button to flush the cachify cache', 'cachify' ) . '"</span>'
-						); ?>
-					</label>
-				</p>
-
 				<p class="description">
 					<?php printf(
 						/* translators: Placeholder is the trash icon itself as dashicon */
@@ -60,7 +45,6 @@ defined( 'ABSPATH' ) || exit;
 				</p>
 
 				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
-
 			</td>
 		</tr>
 
