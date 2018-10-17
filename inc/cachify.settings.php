@@ -31,19 +31,15 @@ defined( 'ABSPATH' ) || exit;
 					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
-
+				
 				<p class="description">
 					<?php printf(
 						/* translators: Placeholder is the trash icon itself as dashicon */
-						esc_html_x(
-							'Flush the cache by clicking the button below or the %1$s icon in the admin bar.',
-							'Placeholder is the trash icon itself as dashicon',
-							'cachify'
-						),
-						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Example of icon for button to flush the cachify cache', 'cachify' ) . '"</span>'
+						esc_html__( 'Flush the cache by clicking the button below or the %1$s icon in the admin bar.', 'cachify' ),
+						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Flush the cachify cache', 'cachify' ) . '"</span>'
 					); ?>
 				</p>
-
+				
 				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
 			</td>
 		</tr>

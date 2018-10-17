@@ -701,9 +701,8 @@ final class Cachify {
 				'parent' => 'top-secondary',
 				'title'	 => '<span class="ab-icon dashicons"></span>' .
 										'<span class="ab-label">' .
-											_x(
+											__(
 												'Flush site cache',
-												'Flush site cache caption in admin bar, next to icon.',
 												'cachify'
 											) .
 										'</span>',
