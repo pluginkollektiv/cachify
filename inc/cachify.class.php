@@ -691,7 +691,7 @@ final class Cachify {
 		}
 
 		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0}</style>';
+		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
 
 		/* Add menu item */
 		$wp_admin_bar->add_menu(
@@ -699,7 +699,13 @@ final class Cachify {
 				'id' 	 => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'	 => '<span class="ab-icon dashicons"></span>',
+				'title'	 => '<span class="ab-icon dashicons"></span>' .
+										'<span class="ab-label">' .
+											__(
+												'Flush site cache',
+												'cachify'
+											) .
+										'</span>',
 				'meta'   => array(
 					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
 				),
@@ -1417,7 +1423,7 @@ final class Cachify {
 					true
 				);
 			break;
-			
+
 			case 'settings_page_cachify':
 				wp_enqueue_style(
 					'cachify-settings',
@@ -1430,7 +1436,7 @@ final class Cachify {
 			default:
 			break;
 		}
-		
+
 	}
 
 	/**
