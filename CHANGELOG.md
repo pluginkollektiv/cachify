@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 * Enhance - Readme FAQ, see #51, props timse201
 * Enhance - sizeable exclusion boxes + placeholder, see #53, props timse201
 * Enhance - FAQ and Support links, see #55, props timse201
+* Enhance - Add text caption to "flush cache" button
 * Security - Tabnabbing prevention, see #55, props timse201
 
 ## 2.2.4
