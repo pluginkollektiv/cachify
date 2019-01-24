@@ -72,13 +72,21 @@ register_uninstall_hook(
 	)
 );
 
+/* WP-CLI */
+add_action(
+    'init',
+    array(
+        'Cachify_CLI',
+        'add_commands'
+    )
+);
 
 /* Autoload Init */
 spl_autoload_register( 'cachify_autoload' );
 
 /* Autoload function */
 function cachify_autoload( $class ) {
-	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED' ) ) ) {
+	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ) ) ) {
 		require_once(
 			sprintf(
 				'%s/inc/%s.class.php',
