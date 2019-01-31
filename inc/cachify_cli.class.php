@@ -6,7 +6,7 @@
 final class Cachify_CLI {
 
   /**
-	 * Flush Cache
+	 * Flush Cache Callback
 	 *
 	 * @since   2.3.0
 	 * @change  2.3.0
@@ -17,31 +17,9 @@ final class Cachify_CLI {
   public static function flush_cache( $args, $assoc_args ){
 
     // set default args
-    $assoc_args = wp_parse_args( $assoc_args, array( 'all-methods' => false, 'ids' => null, 'page-url' => null ) );
+    $assoc_args = wp_parse_args( $assoc_args, array( 'all-methods' => false ) );
 
-    if( $assoc_args['ids'] ){
-
-      // convert id list to array
-      $ids = explode( ',', $assoc_args['ids'] );
-
-      foreach ( $ids as $id ) {
-        Cachify::remove_page_cache_by_post_id( $id );
-        WP_CLI::line( 'Cache flushed for ID ' . $id );
-      }
-
-    }elseif ( $assoc_args['page-url'] ) {
-
-      Cachify::remove_page_cache_by_url( $assoc_args['page-url'] );
-      WP_CLI::line( 'Cache flushed for URL ' . $assoc_args['page-url'] );
-
-    }else{
-
-      // get all methods function
-      $all_methods = boolval( $assoc_args[ 'all-methods' ] );
-
-      Cachify::flush_total_cache( $all_methods );
-
-    }
+    Cachify::flush_total_cache( $all_methods );
 
     WP_CLI::success( "Cache flushed" );
 
@@ -58,8 +36,10 @@ final class Cachify_CLI {
 	 */
   public static function get_cache_size( $args, $assoc_args ){
 
+    // set default args
     $assoc_args = wp_parse_args( $assoc_args, array( 'raw' => false ) );
 
+    // get cache size
     $cache_size = Cachify::get_cache_size();
 
     if( $assoc_args["raw"] ){
@@ -99,19 +79,7 @@ final class Cachify_CLI {
                     'name'     => 'all-methods',
                     'description'   => 'Flush all caching methods',
                     'optional' => true,
-                ),
-                array(
-                    'type'     => 'assoc',
-                    'name'     => 'ids',
-                    'description'   => 'Flush cache for specific IDs',
-                    'optional' => true,
-                ),
-                array(
-                    'type'     => 'assoc',
-                    'name'     => 'page-url',
-                    'description'   => 'Flush cache for a specific IDs',
-                    'optional' => true,
-                ),
+                )
             ),
         )
       );
@@ -126,18 +94,17 @@ final class Cachify_CLI {
           'get_cache_size',
         ),
         array(
-            'shortdesc' => 'Get the size of the cache',
+            'shortdesc' => 'Get the size of the cache in bytes',
             'synopsis'  => array(
                 array(
                     'type'     => 'flag',
                     'name'     => 'raw',
-                    'description'   => 'Raw size output',
+                    'description'   => 'Raw size output in bytes',
                     'optional' => true,
                 ),
             ),
         )
       );
-
 
     }
   }
