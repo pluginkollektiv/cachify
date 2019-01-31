@@ -60,7 +60,6 @@ final class Cachify_CLI {
    */
   public static function add_commands() {
     if ( defined( 'WP_CLI' ) && WP_CLI ) {
-      $cmd_optimize = function( $args, $assoc_args ) { self::optimize( $args, $assoc_args ); };
 
       /*
        * Add flush command
