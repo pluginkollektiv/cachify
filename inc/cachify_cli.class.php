@@ -59,52 +59,50 @@ final class Cachify_CLI {
    * @change  2.3.0
    */
   public static function add_commands() {
-    if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
-      /*
-       * Add flush command
-       */
-      WP_CLI::add_command(
-        'cachify flush',
-        array(
-          'Cachify_CLI',
-          'flush_cache',
-        ),
-        array(
-            'shortdesc' => 'Flush site cache',
-            'synopsis'  => array(
-                array(
-                    'type'     => 'flag',
-                    'name'     => 'all-methods',
-                    'description'   => 'Flush all caching methods',
-                    'optional' => true,
-                )
-            ),
-        )
-      );
+    /*
+     * Add flush command
+     */
+    WP_CLI::add_command(
+      'cachify flush',
+      array(
+        'Cachify_CLI',
+        'flush_cache',
+      ),
+      array(
+          'shortdesc' => 'Flush site cache',
+          'synopsis'  => array(
+              array(
+                  'type'     => 'flag',
+                  'name'     => 'all-methods',
+                  'description'   => 'Flush all caching methods',
+                  'optional' => true,
+              )
+          ),
+      )
+    );
 
-      /*
-       * Add cache-size command
-       */
-      WP_CLI::add_command(
-        'cachify cache-size',
-        array(
-          'Cachify_CLI',
-          'get_cache_size',
-        ),
-        array(
-            'shortdesc' => 'Get the size of the cache in bytes',
-            'synopsis'  => array(
-                array(
-                    'type'     => 'flag',
-                    'name'     => 'raw',
-                    'description'   => 'Raw size output in bytes',
-                    'optional' => true,
-                ),
-            ),
-        )
-      );
+    /*
+     * Add cache-size command
+     */
+    WP_CLI::add_command(
+      'cachify cache-size',
+      array(
+        'Cachify_CLI',
+        'get_cache_size',
+      ),
+      array(
+          'shortdesc' => 'Get the size of the cache in bytes',
+          'synopsis'  => array(
+              array(
+                  'type'     => 'flag',
+                  'name'     => 'raw',
+                  'description'   => 'Raw size output in bytes',
+                  'optional' => true,
+              ),
+          ),
+      )
+    );
 
-    }
   }
 }

@@ -74,7 +74,7 @@ register_uninstall_hook(
 
 /* WP-CLI */
 add_action(
-    'init',
+    'cli_init',
     array(
         'Cachify_CLI',
         'add_commands'
