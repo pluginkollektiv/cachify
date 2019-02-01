@@ -1316,9 +1316,11 @@ final class Cachify {
 		/**
 		 * Filters whether the buffered data should actually be cached
 		 *
+		 * @since 2.3
+		 *
 		 * @param bool   $should_cache  Whether the data should be cached.
 		 * @param string $data          The actual data.
-		 * @param string $method        The selected caching method.
+		 * @param object $method        Instance of the selected caching method.
 		 * @param string $cache_hash    The cache hash.
 		 * @param int    $cache_expires Cache validity period.
 		 */
