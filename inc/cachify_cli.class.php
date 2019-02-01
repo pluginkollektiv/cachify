@@ -19,9 +19,13 @@ final class Cachify_CLI {
     // set default args
     $assoc_args = wp_parse_args( $assoc_args, array( 'all-methods' => false ) );
 
-    Cachify::flush_total_cache( $all_methods );
+    Cachify::flush_total_cache( $assoc_args['all-methods'] );
 
-    WP_CLI::success( "Cache flushed" );
+    if ( $assoc_args['all-methods'] ) {
+        WP_CLI::success( "All Cachify caches flushed" );
+    } else {
+        WP_CLI::success( "Cachify cache flushed" );
+    }
 
   }
 
