@@ -1191,8 +1191,11 @@ final class Cachify {
 
 		/* User Agents */
 		if ( $options['without_agents'] && isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-			if ( array_filter( self::_preg_split( $options['without_agents'] ), create_function( '$a', 'return strpos($_SERVER["HTTP_USER_AGENT"], $a);' ) ) ) {
-				return true;
+			$user_agent_strings = self::_preg_split( $options['without_agents'] );
+			foreach ( $user_agent_strings as $user_agent_string ) {
+				if ( strpos( $_SERVER["HTTP_USER_AGENT"], $user_agent_string ) !== false ) {
+					return true;
+				}
 			}
 		}
 
