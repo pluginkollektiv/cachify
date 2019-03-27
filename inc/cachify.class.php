@@ -139,6 +139,30 @@ final class Cachify {
 			)
 		);
 
+		add_action(
+			'create_term',
+			array(
+				__CLASS__,
+				'flush_total_cache',
+			)
+		);
+
+		add_action(
+			'delete_term',
+			array(
+				__CLASS__,
+				'flush_total_cache',
+			)
+		);
+
+		add_action(
+			'edit_terms',
+			array(
+				__CLASS__,
+				'flush_total_cache',
+			)
+		);
+
 		/* Flush icon */
 		add_action(
 			'admin_bar_menu',
