@@ -91,75 +91,13 @@ final class Cachify {
 		);
 
 		/* Flush Hooks */
+		self::register_flush_cache_hooks();
+
 		add_action(
 			'cachify_remove_post_cache',
 			array(
 				__CLASS__,
 				'remove_page_cache_by_post_id',
-			)
-		);
-
-		add_action(
-			'cachify_flush_cache',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'_core_updated_successfully',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'switch_theme',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'before_delete_post',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'wp_trash_post',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'create_term',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'delete_term',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'edit_terms',
-			array(
-				__CLASS__,
-				'flush_total_cache',
 			)
 		);
 
@@ -1146,6 +1084,68 @@ final class Cachify {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Register all hooks to flush the total cache
+	 *
+	 * @since   2.4.0  Make the function public
+	 *
+	 * @param   void
+	 * @return  void
+	 */
+	private static function register_flush_cache_hooks(){
+
+		/* Define all default flush cache hooks */
+		$flush_cache_hooks = array(
+			array(
+				'action' => 'cachify_flush_cache',
+				'priority' => 10
+			),
+			array(
+				'action' => '_core_updated_successfully',
+				'priority' => 10
+			),
+			array(
+				'action' => 'switch_theme',
+				'priority' => 10
+			),
+			array(
+				'action' => 'before_delete_post',
+				'priority' => 10
+			),
+			array(
+				'action' => 'wp_trash_post',
+				'priority' => 10
+			),
+			array(
+				'action' => 'create_term',
+				'priority' => 10
+			),
+			array(
+				'action' => 'delete_term',
+				'priority' => 10
+			),
+			array(
+				'action' => 'edit_terms',
+				'priority' => 10
+			)
+		);
+
+		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
+
+		/* Loop all hooks and register actions */
+		foreach ($flush_cache_hooks as $hook) {
+			add_action(
+				$hook["action"],
+				array(
+					'Cachify',
+					'flush_total_cache',
+				),
+				$hook["priority"]
+			);
+		}
+
 	}
 
 	/**
