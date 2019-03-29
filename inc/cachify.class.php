@@ -1129,6 +1129,18 @@ final class Cachify {
 			array(
 				'action' => 'edit_terms',
 				'priority' => 10
+			),
+			array(
+				'action' => 'user_register',
+				'priority' => 10
+			),
+			array(
+				'action' => 'edit_user_profile_update',
+				'priority' => 10
+			),
+			array(
+				'action' => 'delete_user',
+				'priority' => 10
 			)
 		);
 
