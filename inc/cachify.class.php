@@ -91,7 +91,7 @@ final class Cachify {
 		);
 
 		/* Flush Hooks */
-		self::register_flush_cache_hooks();
+		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 
 		add_action(
 			'cachify_remove_post_cache',
