@@ -1094,7 +1094,7 @@ final class Cachify {
 	 * @param   void
 	 * @return  void
 	 */
-	private static function register_flush_cache_hooks(){
+	public static function register_flush_cache_hooks(){
 
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
@@ -1154,7 +1154,8 @@ final class Cachify {
 					'Cachify',
 					'flush_total_cache',
 				),
-				$hook["priority"]
+				$hook["priority"],
+				0
 			);
 		}
 
