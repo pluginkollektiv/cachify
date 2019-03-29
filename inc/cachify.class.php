@@ -1098,63 +1098,30 @@ final class Cachify {
 
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
-			array(
-				'action' => 'cachify_flush_cache',
-				'priority' => 10
-			),
-			array(
-				'action' => '_core_updated_successfully',
-				'priority' => 10
-			),
-			array(
-				'action' => 'switch_theme',
-				'priority' => 10
-			),
-			array(
-				'action' => 'before_delete_post',
-				'priority' => 10
-			),
-			array(
-				'action' => 'wp_trash_post',
-				'priority' => 10
-			),
-			array(
-				'action' => 'create_term',
-				'priority' => 10
-			),
-			array(
-				'action' => 'delete_term',
-				'priority' => 10
-			),
-			array(
-				'action' => 'edit_terms',
-				'priority' => 10
-			),
-			array(
-				'action' => 'user_register',
-				'priority' => 10
-			),
-			array(
-				'action' => 'edit_user_profile_update',
-				'priority' => 10
-			),
-			array(
-				'action' => 'delete_user',
-				'priority' => 10
-			)
+			'cachify_flush_cache' 				=> 10,
+			'_core_updated_successfully'	=> 10,
+			'switch_theme'								=> 10,
+			'before_delete_post'					=> 10,
+			'wp_trash_post'								=> 10,
+			'create_term'									=> 10,
+			'delete_term'									=> 10,
+			'edit_terms'									=> 10,
+			'user_register'								=> 10,
+			'edit_user_profile_update'		=> 10,
+			'delete_user'									=> 10
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
 
 		/* Loop all hooks and register actions */
-		foreach ($flush_cache_hooks as $hook) {
+		foreach ($flush_cache_hooks as $hook => $priority) {
 			add_action(
-				$hook["action"],
+				$hook,
 				array(
 					'Cachify',
 					'flush_total_cache',
 				),
-				$hook["priority"],
+				$priority,
 				0
 			);
 		}
