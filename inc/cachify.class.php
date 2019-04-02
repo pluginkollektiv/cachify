@@ -1089,7 +1089,7 @@ final class Cachify {
 	/**
 	 * Register all hooks to flush the total cache
 	 *
-	 * @since   2.4.0  Make the function public
+	 * @since   2.4.0
 	 *
 	 * @param   void
 	 * @return  void
