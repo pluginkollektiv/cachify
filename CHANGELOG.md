@@ -9,21 +9,20 @@ All notable changes to this project will be documented in this file. This projec
 * Enhance - FAQ and Support links, see #55, props timse201
 * Enhance - Add text caption to "flush cache" button
 * Security - Tabnabbing prevention, see #55, props timse201
+* New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
+* Improvement: Flush Cache when a user is created / updated / deleted
+* Code-Refactoring
 
 ## 2.2.4
 * Fixes caching for mixed HTTPS and HTTP setups
 * Fixes an issue with the icon styling in the admin toolbar
 * Ensures compatibility with the latest WordPress version
-* Ensures compatibility with the latest WordPress version
-* New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
-* Improvement: Flush Cache when a term is created / updated / deleted
-* Improvement: Flush Cache when a user is created / updated / deleted
-* Code-Refactoring
 
 ## 2.2.3
 * New: Generated a POT file
 * New: Added German formal translation
 * Updated, translated + formatted README.md
+* Updated expired link URLs in plugin and languages files
 * Updated plugin authors
 
 ## 2.2.2
