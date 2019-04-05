@@ -1094,27 +1094,27 @@ final class Cachify {
 	 * @param   void
 	 * @return  void
 	 */
-	public static function register_flush_cache_hooks(){
+	public static function register_flush_cache_hooks() {
 
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
-			'cachify_flush_cache' 				=> 10,
-			'_core_updated_successfully'	=> 10,
-			'switch_theme'								=> 10,
-			'before_delete_post'					=> 10,
-			'wp_trash_post'								=> 10,
-			'create_term'									=> 10,
-			'delete_term'									=> 10,
-			'edit_terms'									=> 10,
-			'user_register'								=> 10,
-			'edit_user_profile_update'		=> 10,
-			'delete_user'									=> 10
+			'cachify_flush_cache' => 10,
+			'_core_updated_successfully' => 10,
+			'switch_theme' => 10,
+			'before_delete_post' => 10,
+			'wp_trash_post' => 10,
+			'create_term' => 10,
+			'delete_term' => 10,
+			'edit_terms' => 10,
+			'user_register' => 10,
+			'edit_user_profile_update' => 10,
+			'delete_user' => 10
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
 
 		/* Loop all hooks and register actions */
-		foreach ($flush_cache_hooks as $hook => $priority) {
+		foreach ( $flush_cache_hooks as $hook => $priority ) {
 			add_action(
 				$hook,
 				array(
