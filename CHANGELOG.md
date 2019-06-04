@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file. This projec
 * Enhance - FAQ and Support links, see #55, props timse201
 * Enhance - Add text caption to "flush cache" button
 * Security - Tabnabbing prevention, see #55, props timse201
+* New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
+* Improvement: Flush Cache when a user is created / updated / deleted
+* Code-Refactoring
 
 ## 2.2.4
 * Fixes caching for mixed HTTPS and HTTP setups

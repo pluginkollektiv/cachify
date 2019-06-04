@@ -86,51 +86,13 @@ final class Cachify {
 		);
 
 		/* Flush Hooks */
+		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
+
 		add_action(
 			'cachify_remove_post_cache',
 			array(
 				__CLASS__,
 				'remove_page_cache_by_post_id',
-			)
-		);
-
-		add_action(
-			'cachify_flush_cache',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'_core_updated_successfully',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'switch_theme',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'before_delete_post',
-			array(
-				__CLASS__,
-				'flush_total_cache',
-			)
-		);
-
-		add_action(
-			'wp_trash_post',
-			array(
-				__CLASS__,
-				'flush_total_cache',
 			)
 		);
 
@@ -1117,6 +1079,48 @@ final class Cachify {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Register all hooks to flush the total cache
+	 *
+	 * @since   2.4.0
+	 *
+	 * @param   void
+	 * @return  void
+	 */
+	public static function register_flush_cache_hooks() {
+
+		/* Define all default flush cache hooks */
+		$flush_cache_hooks = array(
+			'cachify_flush_cache' => 10,
+			'_core_updated_successfully' => 10,
+			'switch_theme' => 10,
+			'before_delete_post' => 10,
+			'wp_trash_post' => 10,
+			'create_term' => 10,
+			'delete_term' => 10,
+			'edit_terms' => 10,
+			'user_register' => 10,
+			'edit_user_profile_update' => 10,
+			'delete_user' => 10
+		);
+
+		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
+
+		/* Loop all hooks and register actions */
+		foreach ( $flush_cache_hooks as $hook => $priority ) {
+			add_action(
+				$hook,
+				array(
+					'Cachify',
+					'flush_total_cache',
+				),
+				$priority,
+				0
+			);
+		}
+
 	}
 
 	/**
