@@ -73,11 +73,6 @@ final class Cachify {
 		/* Set defaults */
 		self::_set_default_vars();
 
-		if ( ! is_admin() && ! self::_skip_cache( true ) ) {
-			/* Check whether there are cached data to be printed. */
-			self::print_cache();
-		}
-
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
 		/* Publish hooks */
@@ -1130,13 +1125,11 @@ final class Cachify {
 	 * @since   0.2
 	 * @change  2.3.0
 	 *
-	 * @param   boolean  $base_check Check only if request vars are empty and
-	 *                               whether to skip caching for logged users.
 	 * @return  boolean              TRUE on exclusion
 	 *
 	 * @hook    boolean  cachify_skip_cache
 	 */
-	private static function _skip_cache( $base_check = false ) {
+	private static function _skip_cache() {
 
 		/* Plugin options */
 		$options = self::$options;
@@ -1154,11 +1147,6 @@ final class Cachify {
 		/* Logged in */
 		if ( $options['only_guests'] && self::_is_logged_in() ) {
 			return true;
-		}
-
-		/* If base check only has been requested, stop here. */
-		if ( $base_check ) {
-			return false;
 		}
 
 		/* No cache hook */
@@ -1347,37 +1335,7 @@ final class Cachify {
 	}
 
 	/**
-	 * Retrieve cache contents if there are any.
-	 * @since 2.3
-	 */
-	public static function print_cache() {
-
-		/* Data present in cache */
-		$cache = call_user_func(
-			array(
-				self::$method,
-				'get_item',
-			),
-			self::_cache_hash()
-		);
-
-		/* Cache hit? */
-		if ( ! empty( $cache ) ) {
-			/* Process cache */
-			call_user_func(
-				array(
-					self::$method,
-					'print_cache',
-				),
-				self::_signature_details(),
-				$cache
-			);
-		}
-	}
-
-	/**
-	 * Initialize buffering of output to get cache data (unless caching should
-	 * be skipped).
+	 * Manage the cache.
 	 *
 	 * @since   0.1
 	 * @change  2.3
@@ -1388,7 +1346,30 @@ final class Cachify {
 			return;
 		}
 
-		ob_start( 'Cachify::set_cache' );
+		/* Data present in cache */
+		$cache = call_user_func(
+			array(
+				self::$method,
+				'get_item',
+			),
+			self::_cache_hash()
+		);
+
+		/* No cache? */
+		if ( empty( $cache ) ) {
+			ob_start( 'Cachify::set_cache' );
+			return;
+		}
+
+		/* Process cache */
+		call_user_func(
+			array(
+				self::$method,
+				'print_cache',
+			),
+			self::_signature_details(),
+			$cache
+		);
 	}
 
 	/**
