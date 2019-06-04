@@ -4,39 +4,39 @@ defined( 'ABSPATH' ) || exit;
 
 $beginning = '# BEGIN CACHIFY
 &lt;IfModule mod_rewrite.c&gt;
-# ENGINE ON
-RewriteEngine on
+  # ENGINE ON
+  RewriteEngine on
 
-# set hostname directory
-RewriteCond %{HTTPS} on
-RewriteRule .* - [E=CACHIFY_HOST:https-%{HTTP_HOST}]
-RewriteCond %{HTTPS} off
-RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
+  # set hostname directory
+  RewriteCond %{HTTPS} on
+  RewriteRule .* - [E=CACHIFY_HOST:https-%{HTTP_HOST}]
+  RewriteCond %{HTTPS} off
+  RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
 
-# set subdirectory
-RewriteCond %{REQUEST_URI} /$
-RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
-RewriteCond %{REQUEST_URI} ^$
-RewriteRule .* - [E=CACHIFY_DIR:/]
+  # set subdirectory
+  RewriteCond %{REQUEST_URI} /$
+  RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
+  RewriteCond %{REQUEST_URI} ^$
+  RewriteRule .* - [E=CACHIFY_DIR:/]
 
-# gzip
-RewriteRule .* - [E=CACHIFY_SUFFIX:]
-&lt;IfModule mod_mime.c&gt;
-RewriteCond %{HTTP:Accept-Encoding} gzip
-RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
-AddType text/html .gz
-AddEncoding gzip .gz
-&lt;/IfModule&gt;
+  # gzip
+  RewriteRule .* - [E=CACHIFY_SUFFIX:]
+  &lt;IfModule mod_mime.c&gt;
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
+    AddType text/html .gz
+    AddEncoding gzip .gz
+  &lt;/IfModule&gt;
 
-# Main Rules
-RewriteCond %{REQUEST_METHOD} !=POST
-RewriteCond %{QUERY_STRING} =""
-RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
-RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
-RewriteCond ';
+  # Main Rules
+  RewriteCond %{REQUEST_METHOD} !=POST
+  RewriteCond %{QUERY_STRING} =""
+  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
+  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond ';
 
 $middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
-RewriteRule ^(.*) ';
+  RewriteRule ^(.*) ';
 
 $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
 &lt;/IfModule&gt;
@@ -67,9 +67,9 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 					</li>
 					<li>
 						<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
-						&lt;IfModule mod_cache.c&gt;<br />
-						CacheDisable /<br />
-						&lt;/IfModule&gt;
+						<pre>&lt;IfModule mod_cache.c&gt;
+  CacheDisable /
+&lt;/IfModule&gt;</pre>
 					</li>
 				</ul>
 			</td>
@@ -77,7 +77,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 	</table>
 
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre><?php echo sprintf( '%s%s%s%s%s',
+		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s%s%s',
 			$beginning,
 			WP_CONTENT_DIR,
 			$middle,

@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $beginning = '&lt;Files index.php&gt;
-	php_value auto_prepend_file ';
+  php_value auto_prepend_file ';
 
 $ending = '/cachify/apc/proxy.php
 &lt;/Files&gt;';
@@ -24,7 +24,7 @@ $ending = '/cachify/apc/proxy.php
 	</table>
 
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre><?php echo sprintf( '%s%s%s',
+		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s',
 			$beginning,
 			WP_PLUGIN_DIR,
 		$ending ); ?></pre>

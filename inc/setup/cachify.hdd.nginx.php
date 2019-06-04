@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 	<table class="form-table">
 		<tr>
 			<th>
-				<?php esc_html_e( 'nginxconf HDD setup', 'cachify' ); ?>
+				<?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?>
 			</th>
 			<td>
 				<label for="cachify_setup">
@@ -22,14 +22,18 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<ul style="list-style-type:circle">
 					<li>
-						<?php esc_html_e( 'For domains with FQDN, the variable ${http_host} must be used instead of ${host}.', 'cachify' ); ?>
+						<?php echo sprintf(
+							esc_html__( 'For domains with FQDN, the variable %s must be used instead of %s.', 'cachify' ),
+							'<code>${http_host}</code>',
+							'<code>${host}</code>'
+						); ?>
 					</li>
 				</ul>
 			</td>
 		</tr>
 	</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre>
+	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
 ## GZIP
 gzip_static on;
 
@@ -38,31 +42,33 @@ charset utf-8;
 
 ## INDEX LOCATION
 location / {
-	if ( $query_string ) {
-		return 405;
-	}
-	if ( $request_method = POST ) {
-		return 405;
-	}
-	if ( $request_uri ~ /wp-admin/ ) {
-		return 405;
-	}
-	if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
-		return 405;
-	}
+  if ( $query_string ) {
+    return 405;
+  }
+  if ( $request_method = POST ) {
+    return 405;
+  }
+  if ( $request_uri ~ /wp-admin/ ) {
+    return 405;
+  }
+  if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
+    return 405;
+  }
 
-	error_page 405 = @nocache;
+  error_page 405 = @nocache;
 
-	try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
+  try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
 }
 
 ## NOCACHE LOCATION
 location @nocache {
-	try_files $uri $uri/ /index.php?$args;
+  try_files $uri $uri/ /index.php?$args;
 }
 
 ## PROTECT CACHE
 location ~ /wp-content/cache {
-	internal;
+  internal;
 }
 </pre></div>
+
+<small>(<?php esc_html_e( 'You might need to adjust the location directives to your needs.', 'cachify' ); ?>)</small>
