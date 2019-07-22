@@ -391,6 +391,12 @@ final class Cachify_HDD {
 			return true;
 		}
 
+		// If we are on the root blog in a subdirectory multisite we check if the current dir is the root dir
+		$root_site_dir = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . DOMAIN_CURRENT_SITE . DIRECTORY_SEPARATOR;
+		if ( $root_site_dir === $file )  {
+			return false;
+		}
+
 		// If we are on the root blog in a subdirectory multisite, we check, if the current file
 		// is part of another blog.
 		global $wpdb;
