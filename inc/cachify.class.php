@@ -176,6 +176,22 @@ final class Cachify {
 			);
 
 			add_action(
+				'admin_head',
+				array(
+					__CLASS__,
+					'admin_dashboard_styles',
+				)
+			);
+
+			add_action(
+				'doing_dark_mode',
+				array(
+					__CLASS__,
+					'admin_dashboard_dark_mode_styles'
+				)
+			);
+
+			add_action(
 				'transition_comment_status',
 				array(
 					__CLASS__,
@@ -1427,6 +1443,28 @@ final class Cachify {
 			break;
 		}
 
+	}
+
+	/**
+	 * Fixing some admin dashboard styles
+	 *
+	 * @since 2.3.1
+	 */
+	public static function admin_dashboard_styles() {
+		$wp_version = get_bloginfo( 'version' );
+
+		if ( version_compare( $wp_version, '5.3', '<' ) ) {
+			echo '<style>#dashboard_right_now .cachify-icon use { fill: #82878c; }</style>';
+		}
+	}
+
+	/**
+	 * Fixing some admin dashboard styles
+	 *
+	 * @since 2.3.1
+	 */
+	public static function admin_dashboard_dark_mode_styles() {
+		echo '<style>#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }</style>';
 	}
 
 	/**
