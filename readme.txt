@@ -132,6 +132,7 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 To improve Cachify and make use of new core functions, we decided to drop support for WordPress 4.3 and older. Please make sure your WordPress is always up to date.
 
 ## Screenshots ##
-1. Cachify settings
-2. Cachify Dashboard Widget
-3. Discard page/post cache or total cache if page/post is updated.
+1. Cachify Dashboard Widget
+2. Cachify settings
+3. Flush Cache button in admin bar
+4. Discard page/post cache or total cache if page/post is updated.
