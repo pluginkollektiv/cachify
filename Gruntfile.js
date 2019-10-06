@@ -20,19 +20,10 @@ module.exports = function (grunt) {
 				ext: '.min.css',
 				src: ['*.css', '!*.min.css']
 			}
-		},
-		uglify: {
-			plugin: {
-				expand: true,
-				ext: '.min.js',
-				cwd: '<%= config.scripts.src %>',
-				dest: '<%= config.scripts.src %>',
-				src: ['*.js', '!*.min.js', '!prism.js']
-			}
 		}
 	};
-	
+
 	require('load-grunt-tasks')(grunt);
 	grunt.initConfig(configObject);
-	grunt.registerTask('default', ['cssmin:plugin','uglify:plugin']);
+	grunt.registerTask('default', ['cssmin:plugin']);
 };
