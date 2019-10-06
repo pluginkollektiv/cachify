@@ -135,4 +135,4 @@ To improve Cachify and make use of new core functions, we decided to drop suppor
 1. Cachify Dashboard Widget
 2. Cachify settings
 3. Flush Cache button in admin bar
-4. Discard page/post cache or total cache if page/post is updated.
+4. Discard page/post cache or total cache if page/post is updated (in Classic Editor)
