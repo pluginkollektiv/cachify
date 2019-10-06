@@ -470,6 +470,7 @@ final class Cachify {
 				'without_ids'	 	=> '',
 				'without_agents' 	=> '',
 				'use_apc'		 	=> self::METHOD_DB,
+				'reset_on_post'     => 1,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
 			)
@@ -898,7 +899,7 @@ final class Cachify {
 	 * Removes the post type cache on post updates
 	 *
 	 * @since   2.0.3
-	 * @change  2.2.2
+	 * @change  2.3.0
 	 *
 	 * @param   integer $post_id  Post ID.
 	 * @param   object  $post     Post object.
@@ -911,16 +912,6 @@ final class Cachify {
 
 		/* Post status check */
 		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
-			return;
-		}
-
-		/* Check for post var AND flush */
-		if ( ! isset( $_POST['_cachify_remove_post_type_cache_on_update'] ) ) {
-			return self::flush_total_cache();
-		}
-
-		/* Check nonce */
-		if ( ! isset( $_POST[ '_cachify__status_nonce_' . $post_id ] ) || ! wp_verify_nonce( $_POST[ '_cachify__status_nonce_' . $post_id ], CACHIFY_BASE ) ) {
 			return;
 		}
 
@@ -940,7 +931,7 @@ final class Cachify {
 		);
 
 		/* Remove cache OR flush */
-		if ( $remove_post_type_cache ) {
+		if ( 1 !== self::$options['reset_on_post'] ) {
 			self::remove_page_cache_by_post_id( $post_id );
 		} else {
 			self::flush_total_cache();
@@ -1680,6 +1671,7 @@ final class Cachify {
 			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
 			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
 			'use_apc'          => (int) $data['use_apc'],
+			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
 			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] )),
 			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] )),
 		);

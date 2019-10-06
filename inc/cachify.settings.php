@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || exit;
 					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
-				
+
 				<p class="description">
 					<?php printf(
 						/* translators: Placeholder is the trash icon itself as dashicon */
@@ -39,7 +39,7 @@ defined( 'ABSPATH' ) || exit;
 						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Flush the cachify cache', 'cachify' ) . '"</span>'
 					); ?>
 				</p>
-				
+
 				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
 			</td>
 		</tr>
@@ -57,10 +57,23 @@ defined( 'ABSPATH' ) || exit;
 
 					<br />
 
+					<label for="cachify_reset_on_post">
+						<input type="checkbox" name="cachify[reset_on_post]" id="cachify_reset_on_post" value="1" <?php checked( '1', $options['reset_on_post'] ); ?> />
+						<?php esc_html_e( 'Flush the cache at modified posts', 'cachify' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'If selected, the site cache will be flushed, otherwise only the modified post is removed from the cache.', 'cachify' ); ?>
+					</p>
+
+					<br>
+
 					<label for="cachify_reset_on_comment">
 						<input type="checkbox" name="cachify[reset_on_comment]" id="cachify_reset_on_comment" value="1" <?php checked( '1', $options['reset_on_comment'] ); ?> />
 						<?php esc_html_e( 'Flush the cache at new comments', 'cachify' ); ?>
 					</label>
+					<p class="description">
+						<?php esc_html_e( 'If selected, the site cache will be flushed, otherwise only the corresponding post is removed from the cache.', 'cachify' ); ?>
+					</p>
 				</fieldset>
 			</td>
 		</tr>
