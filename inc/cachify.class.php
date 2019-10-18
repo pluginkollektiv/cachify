@@ -1448,7 +1448,7 @@ final class Cachify {
 	/**
 	 * Fixing some admin dashboard styles
 	 *
-	 * @since 2.3.1
+	 * @since 2.3.0
 	 */
 	public static function admin_dashboard_styles() {
 		$wp_version = get_bloginfo( 'version' );
@@ -1461,7 +1461,7 @@ final class Cachify {
 	/**
 	 * Fixing some admin dashboard styles
 	 *
-	 * @since 2.3.1
+	 * @since 2.3.0
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		echo '<style>#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }</style>';
