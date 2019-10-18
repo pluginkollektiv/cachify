@@ -217,14 +217,6 @@ final class Cachify {
 				)
 			);
 
-			add_action(
-				'post_submitbox_misc_actions',
-				array(
-					__CLASS__,
-					'print_flush_dropdown',
-				)
-			);
-
 			add_filter(
 				'plugin_row_meta',
 				array(
@@ -470,6 +462,7 @@ final class Cachify {
 				'without_ids'	 	=> '',
 				'without_agents' 	=> '',
 				'use_apc'		 	=> self::METHOD_DB,
+				'reset_on_post'     => 1,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
 			)
@@ -898,7 +891,7 @@ final class Cachify {
 	 * Removes the post type cache on post updates
 	 *
 	 * @since   2.0.3
-	 * @change  2.2.2
+	 * @change  2.3.0
 	 *
 	 * @param   integer $post_id  Post ID.
 	 * @param   object  $post     Post object.
@@ -911,16 +904,6 @@ final class Cachify {
 
 		/* Post status check */
 		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
-			return;
-		}
-
-		/* Check for post var AND flush */
-		if ( ! isset( $_POST['_cachify_remove_post_type_cache_on_update'] ) ) {
-			return self::flush_total_cache();
-		}
-
-		/* Check nonce */
-		if ( ! isset( $_POST[ '_cachify__status_nonce_' . $post_id ] ) || ! wp_verify_nonce( $_POST[ '_cachify__status_nonce_' . $post_id ], CACHIFY_BASE ) ) {
 			return;
 		}
 
@@ -940,7 +923,7 @@ final class Cachify {
 		);
 
 		/* Remove cache OR flush */
-		if ( $remove_post_type_cache ) {
+		if ( 1 !== self::$options['reset_on_post'] ) {
 			self::remove_page_cache_by_post_id( $post_id );
 		} else {
 			self::flush_total_cache();
@@ -1396,13 +1379,13 @@ final class Cachify {
 	 * Register CSS
 	 *
 	 * @since   1.0
-	 * @change  2.1.3
+	 * @change  2.3.0
 	 *
 	 * @param   string $hook  Current hook.
 	 */
 	public static function add_admin_resources( $hook ) {
 		/* Hooks check */
-		if ( 'index.php' !== $hook && 'post.php' !== $hook && 'settings_page_cachify' !== $hook ) {
+		if ( 'index.php' !== $hook && 'settings_page_cachify' !== $hook ) {
 			return;
 		}
 
@@ -1417,16 +1400,6 @@ final class Cachify {
 					plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
 					array(),
 					$plugin_data['Version']
-				);
-			break;
-
-			case 'post.php':
-				wp_enqueue_script(
-					'cachify-post',
-					plugins_url( 'js/post.min.js', CACHIFY_FILE ),
-					array( 'jquery' ),
-					$plugin_data['Version'],
-					true
 				);
 			break;
 
@@ -1465,81 +1438,6 @@ final class Cachify {
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		echo '<style>#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }</style>';
-	}
-
-	/**
-	 * Display a combo select on post publish box
-	 *
-	 * @since   2.1.3
-	 * @change  2.2.2
-	 */
-	public static function print_flush_dropdown() {
-		/* Post page only */
-		if ( empty( $GLOBALS['pagenow'] ) || 'post.php' !== $GLOBALS['pagenow'] ) {
-			return;
-		}
-
-		/* Published posts only */
-		if ( empty( $GLOBALS['post'] ) || ! is_object( $GLOBALS['post'] ) || 'publish' !== $GLOBALS['post']->post_status ) {
-			return;
-		}
-
-		/* Check user role */
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			return;
-		}
-
-		/* Security */
-		wp_nonce_field( CACHIFY_BASE, '_cachify__status_nonce_' . $GLOBALS['post']->ID );
-
-		/* Already saved? */
-		$current_action = (int) get_user_meta(
-			get_current_user_id(),
-			'_cachify_remove_post_type_cache_on_update',
-			true
-		);
-
-		/* Init vars */
-		$dropdown_options = '';
-		$available_options = array(
-			esc_html__( 'Total cache', 'cachify' ),
-			esc_html__( 'Page cache', 'cachify' ),
-		);
-
-		/* Select options */
-		foreach ( $available_options as $key => $value ) {
-			$dropdown_options .= sprintf(
-				'<option value="%1$d" %3$s>%2$s</option>',
-				$key,
-				$value,
-				selected( $key, $current_action, false )
-			);
-		}
-
-		/* Output */
-		echo sprintf(
-			'<div class="misc-pub-section" style="border-top:1px solid #eee">
-				<label for="cachify_status">
-					%1$s: <span id="output-cachify-status">%2$s</span>
-				</label>
-				<a href="#" class="edit-cachify-status hide-if-no-js">%3$s</a>
-
-				<div class="hide-if-js">
-					<select name="_cachify_remove_post_type_cache_on_update" id="cachify_status">
-						%4$s
-					</select>
-
-					<a href="#" class="save-cachify-status hide-if-no-js button">%5$s</a>
-	 				<a href="#" class="cancel-cachify-status hide-if-no-js button-cancel">%6$s</a>
-	 			</div>
-			</div>',
-			esc_html__( 'Remove', 'cachify' ),
-			$available_options[ $current_action ],
-			esc_html__( 'Edit', 'cachify' ),
-			$dropdown_options,
-			esc_html__( 'OK', 'cachify' ),
-			esc_html__( 'Cancel', 'cachify' )
-		);
 	}
 
 	/**
@@ -1680,6 +1578,7 @@ final class Cachify {
 			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
 			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
 			'use_apc'          => (int) $data['use_apc'],
+			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
 			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] )),
 			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] )),
 		);
