@@ -70,6 +70,7 @@ defined( 'ABSPATH' ) || exit;
 					<label for="cachify_reset_on_comment">
 						<input type="checkbox" name="cachify[reset_on_comment]" id="cachify_reset_on_comment" value="1" <?php checked( '1', $options['reset_on_comment'] ); ?> />
 						<?php esc_html_e( 'Flush the cache at new comments', 'cachify' ); ?>
+						<?php esc_html_e( '(Only works for comments which comes from the front-end, not added from the back-end)', 'cachify' ); ?>
 					</label>
 					<p class="description">
 						<?php esc_html_e( 'If selected, the site cache will be flushed, otherwise only the corresponding post is removed from the cache.', 'cachify' ); ?>
