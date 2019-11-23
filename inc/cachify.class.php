@@ -1043,12 +1043,13 @@ final class Cachify {
 	 * Check for mobile devices
 	 *
 	 * @since   0.9.1
-	 * @change  2.2.2
+	 * @change  2.3.0
 	 *
 	 * @return  boolean  TRUE if mobile
 	 */
 	private static function _is_mobile() {
-		return ( strpos( TEMPLATEPATH, 'wptouch' ) || strpos( TEMPLATEPATH, 'carrington' ) || strpos( TEMPLATEPATH, 'jetpack' ) || strpos( TEMPLATEPATH, 'handheld' ) );
+		$templatedir = get_template_directory();
+		return ( strpos( $templatedir, 'wptouch' ) || strpos( $templatedir, 'carrington' ) || strpos( $templatedir, 'jetpack' ) || strpos( $templatedir, 'handheld' ) );
 	}
 
 	/**
