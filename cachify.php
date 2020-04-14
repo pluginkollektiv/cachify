@@ -3,11 +3,11 @@
 Plugin Name: Cachify
 Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.
 Author:      pluginkollektiv
-Author URI:  http://pluginkollektiv.org
-Plugin URI:  https://wordpress.org/plugins/cachify/
+Author URI:  https://pluginkollektiv.org
+Plugin URI:  https://cachify.pluginkollektiv.org/
 License:     GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Version:     2.3.0-beta.1
+Version:     2.3.0
 Text Domain: cachify
 Domain Path: /lang
 */
