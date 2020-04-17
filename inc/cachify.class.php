@@ -912,16 +912,6 @@ final class Cachify {
 			return;
 		}
 
-		/* Save as var */
-		$remove_post_type_cache = (int) $_POST['_cachify_remove_post_type_cache_on_update'];
-
-		/* Save as user meta */
-		update_user_meta(
-			get_current_user_id(),
-			'_cachify_remove_post_type_cache_on_update',
-			$remove_post_type_cache
-		);
-
 		/* Remove cache OR flush */
 		if ( 1 !== self::$options['reset_on_post'] ) {
 			self::remove_page_cache_by_post_id( $post_id );
