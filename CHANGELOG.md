@@ -1,18 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.3.0]
-* New: WP-CLI integration, see #165, props derweili
+## 2.3.0
+* New: WP-CLI integration (#165, props derweili)
 * New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
 * New: Flush cache when a user is created / updated / deleted
-* New: Flush cache when a term is created / updated / deleted, see #169, props derweili
-* New: Cache behavior after post modification is now configurable in plugin settings
-* Enhance: Cache exceptions/User-Agents translation, see #52, props timse201
-* Enhance: Readme FAQ, see #51, props timse201
-* Enhance: sizeable exclusion boxes + placeholder, see #53, props timse201
-* Enhance: FAQ and Support links, see #55, props timse201
+* New: Flush cache when a term is created / updated / deleted (#169, props derweili)
+* New: Cache behavior after post modification is now configurable in plugin settings (#176)
+* Enhance: Cache exceptions/User-Agents translation (#52, props timse201)
+* Enhance: Readme FAQ (#51, props timse201)
+* Enhance: sizeable exclusion boxes + placeholder (#53, props timse201)
+* Enhance: FAQ and Support links (#55, props timse201)
 * Enhance: Add text caption to "flush cache" button
-* Security: Tabnabbing prevention, see #55, props timse201
+* Enhance: Icon font converted to SVG (#64)
+* Enhance: Improved HDD cache invalidation for hierarchical post types (#71, props Syberspace)
+* Enhance: Unified and shortened HTML signature across all caching methods (#108) (#109)
+* Security: Tabnabbing prevention (#55, props timse201)
+* Maintenance: Tested up to WordPress 5.4
 
 ## 2.2.4
 * Fixes caching for mixed HTTPS and HTTP setups
