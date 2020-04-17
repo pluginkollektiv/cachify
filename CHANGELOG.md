@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.1]
+* Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice
+
 ## [2.3.0]
 * New: WP-CLI integration, see #165, props derweili
 * New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
