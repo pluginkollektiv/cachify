@@ -52,4 +52,4 @@ A complete documentation is available in the [online handbook](https://cachify.p
 
 
 ## Changelog ##
-[Changelog](./CHANGELOG.md).
+[Changelog](./CHANGELOG.md)
