@@ -24,5 +24,14 @@
   "require": {
     "php": ">=5.2.0",
     "composer/installers": "~1.0"
+  },
+  "require-dev": {
+    "matthiasmullie/minify": "^1.3"
+  },
+  "scripts": {
+    "minify": [
+      "minifycss css/dashboard.css > css/dashboard.min.css",
+      "minifycss css/settings.css > css/settings.min.css"
+    ]
   }
 }
