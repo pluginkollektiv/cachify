@@ -93,7 +93,7 @@ defined( 'ABSPATH' ) || exit;
 
 					<label for="cachify_without_agents">
 						<input type="text" name="cachify[without_agents]" id="cachify_without_agents" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_agents'] ) ?>" />
-						<?php esc_html_e( 'Browser User-Agents', 'cachify' ); ?>
+						<?php esc_html_e( 'Browser User Agents', 'cachify' ); ?>
 					</label>
 				</fieldset>
 			</td>
