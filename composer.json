@@ -29,6 +29,15 @@
     "matthiasmullie/minify": "^1.3"
   },
   "scripts": {
+    "post-install-cmd": [
+      "@build"
+    ],
+    "post-update-cmd": [
+      "@build"
+    ],
+    "build": [
+      "@minify"
+    ],
     "lint-css": [
       "npx stylelint css/dashboard.css",
       "npx stylelint css/settings.css"
