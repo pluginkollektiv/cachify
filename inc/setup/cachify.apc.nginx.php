@@ -1,4 +1,12 @@
 <?php
+/**
+ * Cachify: APC nginx documentation
+ *
+ * This file contains setup instructions for APC backend with nginx.
+ *
+ * @package   Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
@@ -16,26 +24,37 @@ $ending = '/cachify/apc/proxy.php</strong>;
   }
 }';
 
+/*
+ * Inline PHP inside PRE-tags clashes with line breaks.
+ *
+ * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen
+ * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd
+ * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterOpen
+ */
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-				<?php esc_html_e( 'nginx APC setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your nginx PHP configuration', 'cachify' ); ?>
-				</label>
-			</td>
-		</tr>
-	</table>
+<table class="form-table">
+	<tr>
+		<th>
+			<?php esc_html_e( 'nginx APC setup', 'cachify' ); ?>
+		</th>
+		<td>
+			<label for="cachify_setup">
+				<?php esc_html_e( 'Please add the following lines to your nginx PHP configuration', 'cachify' ); ?>
+			</label>
+		</td>
+	</tr>
+</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s',
+<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
+	<pre style="white-space: pre-wrap"><?php
+		echo sprintf(
+			'%s%s%s',
 			$beginning,
 			WP_PLUGIN_DIR,
-		$ending ); ?></pre>
-	</div>
+			$ending
+		);
+		?></pre>
+</div>
 
-	<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>
+<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>

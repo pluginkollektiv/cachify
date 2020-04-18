@@ -1,39 +1,51 @@
 <?php
+/**
+ * Cachify: HDD .htaccess documentation
+ *
+ * This file contains setup instructions for HDD backend with nginx.
+ *
+ * @package   Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-				<?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?>
-				</label>
-			</td>
-		</tr>
+<table class="form-table">
+	<tr>
+		<th>
+			<?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?>
+		</th>
+		<td>
+			<label for="cachify_setup">
+				<?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?>
+			</label>
+		</td>
+	</tr>
 
-		<tr>
-			<th>
-				<?php esc_html_e( 'Notes', 'cachify' ); ?>
-			</th>
-			<td>
-				<ul style="list-style-type:circle">
-					<li>
-						<?php echo sprintf(
-							esc_html__( 'For domains with FQDN, the variable %s must be used instead of %s.', 'cachify' ),
-							'<code>${http_host}</code>',
-							'<code>${host}</code>'
-						); ?>
-					</li>
-				</ul>
-			</td>
-		</tr>
-	</table>
+	<tr>
+		<th>
+			<?php esc_html_e( 'Notes', 'cachify' ); ?>
+		</th>
+		<td>
+			<ul style="list-style-type:circle">
+				<li>
+					<?php
+					echo sprintf(
+						esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
+						'<code>${http_host}</code>',
+						'<code>${host}</code>'
+					);
+					?>
+				</li>
+			</ul>
+		</td>
+	</tr>
+</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
+<?php /* phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed */ ?>
+
+<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
 ## GZIP
 gzip_static on;
 
@@ -69,6 +81,7 @@ location @nocache {
 location ~ /wp-content/cache {
   internal;
 }
-</pre></div>
+</pre>
+</div>
 
 <small>(<?php esc_html_e( 'You might need to adjust the location directives to your needs.', 'cachify' ); ?>)</small>

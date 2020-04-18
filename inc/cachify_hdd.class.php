@@ -1,30 +1,36 @@
 <?php
+/**
+ * Cachify: Cachify HDD backend
+ *
+ * This file contains the HDD caching backend.
+ *
+ * @package   Cachify
+ */
 
 /**
-* Cachify_HDD
-*/
+ * Cachify_HDD
+ */
 final class Cachify_HDD {
 
 	/**
 	 * Availability check
 	 *
+	 * @return  boolean  true/false  TRUE when installed
 	 * @since   2.0.7
 	 * @change  2.0.7
-	 *
-	 * @return  boolean  true/false  TRUE when installed
 	 */
 	public static function is_available() {
 		$option = get_option( 'permalink_structure' );
+
 		return ! empty( $option );
 	}
 
 	/**
 	 * Caching method as string
 	 *
+	 * @return  string  Caching method
 	 * @since   2.1.2
 	 * @change  2.1.2
-	 *
-	 * @return  string  Caching method
 	 */
 	public static function stringify_method() {
 		return 'HDD';
@@ -33,18 +39,19 @@ final class Cachify_HDD {
 	/**
 	 * Store item in cache
 	 *
+	 * @param string  $hash       Hash  of the entry [ignored].
+	 * @param string  $data       Content of the entry.
+	 * @param integer $lifetime   Lifetime of the entry [ignored].
+	 * @param bool    $sig_detail Show details in signature.
+	 *
 	 * @since   2.0
 	 * @change  2.3.0
-	 *
-	 * @param   string  $hash        Hash  of the entry [ignored].
-	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry [ignored].
-	 * @param   bool    $sig_detail  Show details in signature.
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
+
 			return;
 		}
 
@@ -57,10 +64,9 @@ final class Cachify_HDD {
 	/**
 	 * Read item from cache
 	 *
+	 * @return  boolean  True if cache is present.
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @return  boolean  True if cache is present.
 	 */
 	public static function get_item() {
 		return is_readable(
@@ -71,11 +77,11 @@ final class Cachify_HDD {
 	/**
 	 * Delete item from cache
 	 *
+	 * @param string $hash Hash of the entry [ignored].
+	 * @param string $url  URL of the entry.
+	 *
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @param   string $hash  Hash of the entry [ignored].
-	 * @param   string $url   URL of the entry.
 	 */
 	public static function delete_item( $hash, $url ) {
 		self::_clear_dir(
@@ -104,8 +110,8 @@ final class Cachify_HDD {
 	 */
 	public static function print_cache() {
 		$filename = self::_file_html();
-		$size = is_readable( $filename ) ? readfile( $filename ) : false;
-		if ( ! empty ( $size ) ) {
+		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
+		if ( ! empty( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
 		}
@@ -114,10 +120,9 @@ final class Cachify_HDD {
 	/**
 	 * Get the cache size
 	 *
+	 * @return  integer  Directory size
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @return  integer  Directory size
 	 */
 	public static function get_stats() {
 		return self::_dir_size( CACHIFY_CACHE_DIR );
@@ -126,11 +131,11 @@ final class Cachify_HDD {
 	/**
 	 * Generate signature
 	 *
+	 * @param bool $detail Show details in signature.
+	 *
+	 * @return  string        Signature string
 	 * @since   2.0
 	 * @change  2.3.0
-	 *
-	 * @param   bool $detail  Show details in signature.
-	 * @return  string        Signature string
 	 */
 	private static function _cache_signature( $detail ) {
 		return sprintf(
@@ -147,10 +152,10 @@ final class Cachify_HDD {
 	/**
 	 * Initialize caching process
 	 *
+	 * @param string $data Cache content.
+	 *
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @param   string $data  Cache content.
 	 */
 	private static function _create_files( $data ) {
 		$file_path = self::_file_path();
@@ -158,6 +163,7 @@ final class Cachify_HDD {
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
 			trigger_error( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING );
+
 			return;
 		}
 
@@ -169,16 +175,17 @@ final class Cachify_HDD {
 	/**
 	 * Create cache file
 	 *
+	 * @param string $file Path to cache file.
+	 * @param string $data Cache content.
+	 *
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @param   string $file  Path to cache file.
-	 * @param   string $data  Cache content.
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
 		if ( ! $handle = @fopen( $file, 'wb' ) ) {
 			trigger_error( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING );
+
 			return;
 		}
 
@@ -188,7 +195,7 @@ final class Cachify_HDD {
 		clearstatcache();
 
 		/* Permissions */
-		$stat = @stat( dirname( $file ) );
+		$stat  = @stat( dirname( $file ) );
 		$perms = $stat['mode'] & 0007777;
 		$perms = $perms & 0000666;
 		@chmod( $file, $perms );
@@ -198,11 +205,11 @@ final class Cachify_HDD {
 	/**
 	 * Clear directory
 	 *
+	 * @param string  $dir       Directory path.
+	 * @param boolean $recursive Clear subdirectories.
+	 *
 	 * @since   2.0
 	 * @change  2.0.5
-	 *
-	 * @param   string  $dir        Directory path.
-	 * @param   boolean $recursive  Clear subdirectories?
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
 		/* Remote training slash */
@@ -253,11 +260,11 @@ final class Cachify_HDD {
 	/**
 	 * Get directory size
 	 *
+	 * @param string $dir Directory path.
+	 *
+	 * @return  mixed         Directory size
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @param   string $dir   Directory path.
-	 * @return  mixed         Directory size
 	 */
 	public static function _dir_size( $dir = '.' ) {
 		/* Is directory? */
@@ -298,11 +305,11 @@ final class Cachify_HDD {
 	/**
 	 * Path to cache file
 	 *
+	 * @param string $path Request URI or permalink [optional].
+	 *
+	 * @return  string        Path to cache file
 	 * @since   2.0
 	 * @change  2.0
-	 *
-	 * @param   string $path  Request URI or permalink [optional].
-	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
 		$prefix = is_ssl() ? 'https-' : '';
@@ -328,11 +335,11 @@ final class Cachify_HDD {
 	/**
 	 * Path to HTML file
 	 *
+	 * @param string $file_path File path [optional].
+	 *
+	 * @return  string              Path to HTML file
 	 * @since   2.0
 	 * @change  2.3.0
-	 *
-	 * @param   string $file_path   File path [optional].
-	 * @return  string              Path to HTML file
 	 */
 	private static function _file_html( $file_path = '' ) {
 		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html';
@@ -341,14 +348,14 @@ final class Cachify_HDD {
 	/**
 	 * Path to GZIP file
 	 *
+	 * @param string $file_path File path [optional].
+	 *
+	 * @return  string              Path to GZIP file
 	 * @since   2.0
 	 * @change  2.3.0
-	 *
-	 * @param   string $file_path   File path [optional].
-	 * @return  string              Path to GZIP file
 	 */
 	private static function _file_gzip( $file_path = '' ) {
-		return ( empty( $file_path ) ? self::_file_path() : $file_path )  . 'index.html.gz';
+		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html.gz';
 	}
 
 	/**
@@ -378,29 +385,28 @@ final class Cachify_HDD {
 			$file = trailingslashit( $file );
 		}
 
-		$ssl_prefix = is_ssl() ? 'https-' : '';
+		$ssl_prefix   = is_ssl() ? 'https-' : '';
 		$current_blog = get_blog_details( get_current_blog_id() );
-		$blog_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
+		$blog_path    = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
 
 		if ( 0 !== strpos( $file, $blog_path ) ) {
 			return false;
 		}
 
-		// We are on a subdirectory installation and the current blog is in a subdirectory
+		// We are on a subdirectory installation and the current blog is in a subdirectory.
 		if ( '/' !== $current_blog->path ) {
 			return true;
 		}
 
-		// If we are on the root blog in a subdirectory multisite we check if the current dir is the root dir
+		// If we are on the root blog in a subdirectory multisite we check if the current dir is the root dir.
 		$root_site_dir = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . DOMAIN_CURRENT_SITE . DIRECTORY_SEPARATOR;
-		if ( $root_site_dir === $file )  {
+		if ( $root_site_dir === $file ) {
 			return false;
 		}
 
-		// If we are on the root blog in a subdirectory multisite, we check, if the current file
-		// is part of another blog.
+		// If we are on the root blog in a subdirectory multisite, we check, if the current file is part of another blog.
 		global $wpdb;
-		$sql = $wpdb->prepare(
+		$sql     = $wpdb->prepare(
 			'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
 			$current_blog->domain,
 			$current_blog->blog_id

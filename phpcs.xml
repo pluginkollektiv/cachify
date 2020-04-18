@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="Coding standard">
+	<description>Coding standard for WordPress plugins</description>
+
+	<!-- Pass some flags to PHPCS:
+		 p flag: Show progress of the run.
+		 s flag: Show sniff codes in all reports.
+		 v flag: Print verbose output.
+		 n flag: Do not print warnings.
+	-->
+	<arg value="psvn"/>
+
+	<!-- use colors in output -->
+	<arg name="colors"/>
+
+	<!-- ignore vendor files-->
+	<file>apc</file>
+	<file>inc</file>
+	<file>cachify.php</file>
+
+	<!-- WordPress coding standards -->
+	<config name="minimum_supported_wp_version" value="4.7" />
+	<rule ref="WordPress">
+	</rule>
+
+	<!-- Include sniffs for PHP cross-version compatibility. -->
+	<config name="testVersion" value="5.2-"/>
+	<rule ref="PHPCompatibility"/>
+</ruleset>

@@ -1,8 +1,15 @@
 <?php
+/**
+ * Cachify: Cachify APC backend
+ *
+ * This file contains the APC caching backend.
+ *
+ * @package   Cachify
+ */
 
 /**
-* Cachify_APC
-*/
+ * Cachify_APC
+ */
 final class Cachify_APC {
 
 	/**
@@ -43,7 +50,7 @@ final class Cachify_APC {
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 

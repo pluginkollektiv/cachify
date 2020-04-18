@@ -1,4 +1,12 @@
 <?php
+/**
+ * Cachify: Cachify settings footer
+ *
+ * This file contains the settings footer.
+ *
+ * @package   Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>

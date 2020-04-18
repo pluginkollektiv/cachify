@@ -1,4 +1,9 @@
 <?php
+/**
+ * Cachify: APC Cache Proxy
+ *
+ * @package   Cachify
+ */
 
 if ( ! empty( $_COOKIE ) ) {
 	foreach ( $_COOKIE as $k => $v ) {
@@ -12,9 +17,8 @@ if ( ! empty( $_COOKIE ) ) {
 /**
  * Determines if SSL is used.
  *
- * @see is_ssl() (wp-includes/load.php).
- *
  * @return bool True if SSL, otherwise false.
+ * @see is_ssl() (wp-includes/load.php).
  */
 function cachify_is_ssl() {
 	if ( isset( $_SERVER['HTTPS'] ) ) {
