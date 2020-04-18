@@ -1,5 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "stylelint": "^13",
+    "stylelint-config-wordpress": "^16"
   }
 }
