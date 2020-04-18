@@ -476,7 +476,7 @@ final class Cachify {
 	public static function robots_txt() {
 		/* HDD only */
 		if ( self::METHOD_HDD === $options['use_apc'] ) {
-			echo "Disallow: */cache/cachify/";
+			echo 'Disallow: */cache/cachify/';
 		}
 	}
 
