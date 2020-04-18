@@ -86,7 +86,7 @@ defined( 'ABSPATH' ) || exit;
 				<fieldset>
 					<label for="cachify_without_ids">
 						<input type="text" name="cachify[without_ids]" id="cachify_without_ids" placeholder="<?php esc_attr_e( 'e.g. 1, 2, 3', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_ids'] ) ?>" />
-						<?php esc_html_e( 'Post/Pages-IDs', 'cachify' ); ?>
+						<?php esc_html_e( 'Post/Page IDs', 'cachify' ); ?>
 					</label>
 
 					<br />
