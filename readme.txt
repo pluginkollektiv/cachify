@@ -27,22 +27,22 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Extendability via hooks/filters.
 
 ### Support ###
-* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify)
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify/)
 * We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
 ### Contribute ###
 * Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/cachify).
 * Pull requests for documented bugs are highly appreciated.
-* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
-* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify).
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify/) first.
+* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify/).
 
 ### Credits ###
-* Author: [Sergej Müller](https://sergejmueller.github.io/)
-* Maintainers: [pluginkollektiv](http://pluginkollektiv.org)
+* Author: [Sergej Müller](https://sergejmueller.github.io)
+* Maintainers: [pluginkollektiv](https://pluginkollektiv.org)
 
 
 ## Installation ##
-* If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
+* If you don’t know how to install a plugin for WordPress, [here’s how](https://wordpress.org/support/article/managing-plugins/#installing-plugins).
 
 ### Requirements ###
 * PHP 5.2.4 or greater
@@ -60,7 +60,7 @@ The cache expiration can not be considered due to technical reasons. If the cach
 This error message may occur after commissioning the caching plug-in. The hint appears because there are no cache files on the HDD for output. This is probably due to the fact that Cachify could not store files in the cache folder. Please check the write-permissions for the cache folder (found in the WordPress directory *wp-content*) and set them if necessary.
 
 ### My Website looks in some parts broken after activating Cachify! ###
-Please make sure there is no issue that caused by the Cache minify feature. Just deactivate it or use HTML only. If the issue still exist please feel free to report it at the [support forums](https://wordpress.org/support/plugin/cachify). With this feature any unnecessary characters such as breaks and HTML comments are removed from the source code.
+Please make sure there is no issue that caused by the Cache minify feature. Just deactivate it or use HTML only. If the issue still exist please feel free to report it at the [support forums](https://wordpress.org/support/plugin/cachify/). With this feature any unnecessary characters such as breaks and HTML comments are removed from the source code.
 
 ### Cachify HDD: Character encoding does not work correctly ###
 If you use Cachify to store the cache on HDD there is no PHP to run. In the case of misconfigured servers, this can lead to incorrect display of the special characters on web pages. The error can be corrected by an extension of the system file .htaccess: *AddDefaultCharset UTF-8*
@@ -94,7 +94,7 @@ Compared to APC (Alternative PHP Cache), PHP OPCache is not able to contain cont
 To ensure that Google and other search engines do not index the static contents of the cache folder (otherwise there could be duplicate content), the robots.txt file which is located in the main directory of a WordPress installation should be expanded by disabling the path to the cache file (disallow ). This issue should only happen if you use a *static robots.txt* or you changed the *wp-content* location. And so might look a robots.txt:
 
 `User-agent: *
-Disallow: /wp-content/cache/cachify/
+Disallow: */cache/cachify/
 Allow: /`
 
 A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
