@@ -95,9 +95,9 @@ function cachify_autoload( $class ) {
 	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ) ) ) {
 		require_once(
 			sprintf(
-				'%s/inc/%s.class.php',
+				'%s/inc/class-%s.php',
 				CACHIFY_DIR,
-				strtolower( $class )
+				strtolower( str_replace( '_', '-', $class ) )
 			)
 		);
 	}
