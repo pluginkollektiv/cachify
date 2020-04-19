@@ -248,7 +248,10 @@ final class Cachify {
 
 			add_action(
 				'do_robots',
-				'robots_txt'
+				array(
+					__CLASS__,
+					'robots_txt',
+				)
 			);
 		}// End if().
 	}
@@ -470,12 +473,12 @@ final class Cachify {
 	 * Modify robots.txt
 	 *
 	 * @since   1.0
-	 * @change  2.3.1
+	 * @change  2.4.0
 	 *
 	 */
 	public static function robots_txt() {
 		/* HDD only */
-		if ( self::METHOD_HDD === $options['use_apc'] ) {
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			echo 'Disallow: */cache/cachify/';
 		}
 	}
