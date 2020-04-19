@@ -9,20 +9,6 @@
 
 /* Quit */
 defined( 'ABSPATH' ) || exit;
-
-$beginning = '&lt;Files index.php&gt;
-  php_value auto_prepend_file ';
-
-$ending = '/cachify/apc/proxy.php
-&lt;/Files&gt;';
-
-/*
- * Inline PHP inside PRE-tags clashes with line breaks.
- *
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterOpen
- */
 ?>
 
 <table class="form-table">
@@ -39,12 +25,9 @@ $ending = '/cachify/apc/proxy.php
 </table>
 
 <div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-	<pre style="white-space: pre-wrap"><?php
-		echo sprintf(
-			'%s%s%s',
-			$beginning,
-			WP_PLUGIN_DIR,
-			$ending
-		);
-		?></pre>
+	<pre style="white-space: pre-wrap">
+&lt;Files index.php&gt;
+  php_value auto_prepend_file <?php echo esc_html( WP_PLUGIN_DIR ); ?>/cachify/apc/proxy.php
+&lt;/Files&gt;
+</pre>
 </div>

@@ -10,53 +10,7 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
-$beginning = '# BEGIN CACHIFY
-&lt;IfModule mod_rewrite.c&gt;
-  # ENGINE ON
-  RewriteEngine on
-
-  # set hostname directory
-  RewriteCond %{HTTPS} on
-  RewriteRule .* - [E=CACHIFY_HOST:https-%{HTTP_HOST}]
-  RewriteCond %{HTTPS} off
-  RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
-
-  # set subdirectory
-  RewriteCond %{REQUEST_URI} /$
-  RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
-  RewriteCond %{REQUEST_URI} ^$
-  RewriteRule .* - [E=CACHIFY_DIR:/]
-
-  # gzip
-  RewriteRule .* - [E=CACHIFY_SUFFIX:]
-  &lt;IfModule mod_mime.c&gt;
-    RewriteCond %{HTTP:Accept-Encoding} gzip
-    RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
-    AddType text/html .gz
-    AddEncoding gzip .gz
-  &lt;/IfModule&gt;
-
-  # Main Rules
-  RewriteCond %{REQUEST_METHOD} !=POST
-  RewriteCond %{QUERY_STRING} =""
-  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
-  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
-  RewriteCond ';
-
-$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
-  RewriteRule ^(.*) ';
-
-$ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
-&lt;/IfModule&gt;
-# END CACHIFY';
-
-/*
- * Inline PHP inside PRE-tags clashes with line breaks.
- *
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd
- * phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterOpen
- */
+// phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed -- Disabled for alignment in PRE block.
 ?>
 
 <table class="form-table">
@@ -94,14 +48,41 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 </table>
 
 <div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-	<pre style="white-space: pre-wrap"><?php
-		echo sprintf(
-			'%s%s%s%s%s',
-			$beginning,
-			WP_CONTENT_DIR,
-			$middle,
-			wp_make_link_relative( content_url() ),
-			$ending
-		);
-		?></pre>
+	<pre style="white-space: pre-wrap">
+# BEGIN CACHIFY
+&lt;IfModule mod_rewrite.c&gt;
+  # ENGINE ON
+  RewriteEngine on
+
+  # set hostname directory
+  RewriteCond %{HTTPS} on
+  RewriteRule .* - [E=CACHIFY_HOST:https-%{HTTP_HOST}]
+  RewriteCond %{HTTPS} off
+  RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
+
+  # set subdirectory
+  RewriteCond %{REQUEST_URI} /$
+  RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
+  RewriteCond %{REQUEST_URI} ^$
+  RewriteRule .* - [E=CACHIFY_DIR:/]
+
+  # gzip
+  RewriteRule .* - [E=CACHIFY_SUFFIX:]
+  &lt;IfModule mod_mime.c&gt;
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
+    AddType text/html .gz
+    AddEncoding gzip .gz
+  &lt;/IfModule&gt;
+
+  # Main Rules
+  RewriteCond %{REQUEST_METHOD} !=POST
+  RewriteCond %{QUERY_STRING} =""
+  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
+  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond <?php echo esc_html( WP_CONTENT_DIR ); ?>/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
+  RewriteRule ^(.*) <?php echo esc_html( wp_make_link_relative( content_url() ) ); ?>/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+&lt;/IfModule&gt;
+# END CACHIFY
+</pre>
 </div>

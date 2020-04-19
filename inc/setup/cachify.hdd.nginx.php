@@ -32,6 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				<li>
 					<?php
 					echo sprintf(
+						// translators: Placeholders contain placeholder strings ${http_post} and ${host}.
 						esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
 						'<code>${http_host}</code>',
 						'<code>${host}</code>'

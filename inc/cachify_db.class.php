@@ -123,6 +123,8 @@ final class Cachify_DB {
 			return;
 		}
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		/* Content */
 		echo $cache['data'];
 
@@ -130,6 +132,8 @@ final class Cachify_DB {
 		if ( isset( $cache['meta'] ) ) {
 			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
+
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		/* Quit */
 		exit;
@@ -178,17 +182,21 @@ final class Cachify_DB {
 					'd.m.Y H:i:s',
 					$meta['time']
 				),
-				sprintf(
-					'Without Cachify: %d DB queries, %s seconds, %s',
-					$meta['queries'],
-					$meta['timer'],
-					$meta['memory']
+				esc_html(
+					sprintf(
+						'Without Cachify: %d DB queries, %s seconds, %s',
+						$meta['queries'],
+						$meta['timer'],
+						$meta['memory']
+					)
 				),
-				sprintf(
-					'With Cachify: %d DB queries, %s seconds, %s',
-					self::_page_queries(),
-					self::_page_timer(),
-					self::_page_memory()
+				esc_html(
+					sprintf(
+						'With Cachify: %d DB queries, %s seconds, %s',
+						self::_page_queries(),
+						self::_page_timer(),
+						self::_page_memory()
+					)
 				)
 			);
 		} else {

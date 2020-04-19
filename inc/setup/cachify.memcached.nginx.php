@@ -32,6 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				<li>
 					<?php
 					echo sprintf(
+					// translators: Placeholders contain placeholder strings ${http_post} and ${host}.
 						esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
 						'<code>${http_host}</code>',
 						'<code>${host}</code>'
@@ -41,6 +42,7 @@ defined( 'ABSPATH' ) || exit;
 				<li>
 					<?php
 					echo sprintf(
+						// translators: Placeholders nginx configuration lines.
 						esc_html__( 'If you have errors please try to change %1$s to %2$s This forces IPv4 because some servers that allow IPv4 and IPv6 are configured to bind memcached to IPv4 only.', 'cachify' ),
 						'<code>memcached_pass localhost:11211;</code>',
 						'<code>memcached_pass 127.0.0.1:11211;</code>'
@@ -52,7 +54,7 @@ defined( 'ABSPATH' ) || exit;
 	</tr>
 </table>
 
-<?php /* phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed */ ?>
+<?php /* phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed -- Disabled for alignment in PRE block. */ ?>
 
 <div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
 ## GZIP
