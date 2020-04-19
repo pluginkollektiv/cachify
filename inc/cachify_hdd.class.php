@@ -407,12 +407,13 @@ final class Cachify_HDD {
 
 		// If we are on the root blog in a subdirectory multisite, we check, if the current file is part of another blog.
 		global $wpdb;
-		$sql     = $wpdb->prepare(
-			'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
-			$current_blog->domain,
-			$current_blog->blog_id
+		$results = $wpdb->get_col(
+			$wpdb->prepare(
+				'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
+				$current_blog->domain,
+				$current_blog->blog_id
+			)
 		);
-		$results = $wpdb->get_col( $sql );
 		foreach ( $results as $site ) {
 			$forbidden_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $site;
 			if ( 0 === strpos( $file, $forbidden_path ) ) {
