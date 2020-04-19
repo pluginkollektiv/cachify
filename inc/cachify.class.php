@@ -621,7 +621,8 @@ final class Cachify {
 	 * @change  2.0.6
 	 */
 	public static function get_cache_size() {
-		if ( ! $size = get_transient( 'cachify_cache_size' ) ) {
+		$size = get_transient( 'cachify_cache_size' );
+		if ( ! $size ) {
 			/* Read */
 			$size = (int) call_user_func(
 				array(
@@ -849,8 +850,6 @@ final class Cachify {
 	/**
 	 * Generate publish hook for custom post types
 	 *
-	 * @param void
-	 *
 	 * @return  void
 	 * @since   2.1.7  Make the function public
 	 * @since   2.0.3
@@ -942,7 +941,8 @@ final class Cachify {
 	 */
 	public static function remove_page_cache_by_post_id( $post_id ) {
 		/* Value check */
-		if ( ! $post_id = (int) $post_id ) {
+		$post_id = (int) $post_id;
+		if ( ! $post_id ) {
 			return;
 		}
 
@@ -962,7 +962,8 @@ final class Cachify {
 	 */
 	public static function remove_page_cache_by_url( $url ) {
 		/* Value check */
-		if ( ! $url = (string) $url ) {
+		$url = (string) $url;
+		if ( ! $url ) {
 			return;
 		}
 
@@ -994,7 +995,7 @@ final class Cachify {
 	 * @since   2.3.0
 	 */
 	private static function _signature_details() {
-		return self::$options['sig_detail'] === 1;
+		return 1 === self::$options['sig_detail'];
 	}
 
 	/**
@@ -1459,8 +1460,6 @@ final class Cachify {
 
 	/**
 	 * Available caching methods
-	 *
-	 * @param array $methods Array of all available methods.
 	 *
 	 * @return array           Array of actually available methods.
 	 * @since  2.0.0

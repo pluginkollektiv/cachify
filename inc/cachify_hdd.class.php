@@ -183,7 +183,8 @@ final class Cachify_HDD {
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
-		if ( ! $handle = @fopen( $file, 'wb' ) ) {
+		$handle = @fopen( $file, 'wb' );
+		if ( ! $handle ) {
 			trigger_error( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING );
 
 			return;
@@ -361,7 +362,7 @@ final class Cachify_HDD {
 	/**
 	 * Does the user has the right to delete this file?
 	 *
-	 * @param string $file
+	 * @param string $file File path to check.
 	 *
 	 * @return bool
 	 */

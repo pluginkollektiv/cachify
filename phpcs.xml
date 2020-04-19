@@ -19,7 +19,7 @@
 	<file>cachify.php</file>
 
 	<!-- WordPress coding standards -->
-	<config name="minimum_supported_wp_version" value="4.7" />
+	<config name="minimum_supported_wp_version" value="4.4" />
 	<rule ref="WordPress">
 	</rule>
 
