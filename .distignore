@@ -1,0 +1,19 @@
+# Directories
+/.git
+/.github
+/.wordpress-org
+/node_modules
+/vendor
+
+# Files
+/.distignore
+/.editorconfig
+/.gitattributes
+/.gitignore
+/.stylelintrc.json
+/composer.json
+/composer.lock
+/composer.json
+/package.json
+/package-lock.json
+/README.md

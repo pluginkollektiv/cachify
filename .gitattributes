@@ -5,6 +5,7 @@
 /vendor export-ignore
 
 # Files
+/.distignore
 /.editorconfig export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
