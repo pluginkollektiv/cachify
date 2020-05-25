@@ -46,7 +46,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 
 ## Frequently Asked Questions ##
-Please have a look [in the FAQ pages](https://cachify.pluginkollektiv.org/documentation/#faq).
+Please have a look [in the FAQ pages](https://cachify.pluginkollektiv.org/documentation/faq/).
 
 A complete documentation is available in the [online handbook](https://cachify.pluginkollektiv.org/documentation/).
 
