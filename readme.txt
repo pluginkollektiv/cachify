@@ -91,7 +91,7 @@ Compared to APC (Alternative PHP Cache), PHP OPCache is not able to contain cont
 * Error pages
 
 ### The cache folder is indexed by search engines! ###
-To ensure that Google and other search engines do not index the static contents of the cache folder (otherwise there could be duplicate content), the robots.txt file which is located in the main directory of a WordPress installation should be expanded by disabling the path to the cache file (disallow ). This issue should only happen if you use a *static robots.txt* or you changed the *wp-content* location. And so might look a robots.txt:
+To ensure that Google and other search engines do not index the static contents of the cache folder (otherwise there could be duplicate content), the robots.txt file which is located in the main directory of a WordPress installation should be expanded by disabling the path to the cache file (disallow). This issue should only happen if you use a *static robots.txt* or you changed the *wp-content* location. And so might look a robots.txt:
 
 `User-agent: *
 Disallow: */cache/cachify/
