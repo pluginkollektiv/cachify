@@ -5,7 +5,7 @@
 * Requires at least: 4.4
 * Tested up to:      5.6
 * Requires PHP:      5.2.4
-* Stable tag:        2.3.0
+* Stable tag:        2.3.1
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,12 +102,12 @@ A complete documentation is available in the [GitHub repository Wiki](https://gi
 
 ## Changelog ##
 
-## 2.3.1 ##
+### 2.3.1 ###
 * Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice (#187) (#188)
 * Fix: correct minor spelling mistakes (#193, props timse201)
 * Fix: update support links (#194, props timse201)
 
-## 2.3.0 ##
+### 2.3.0 ###
 * New: WP-CLI integration (#165, props derweili)
 * New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
 * New: Flush cache when a user is created / updated / deleted
