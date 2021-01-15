@@ -16,7 +16,6 @@ final class Cachify_MEMCACHED {
 	 * @since  2.0.7
 	 * @var    object
 	 */
-
 	private static $_memcached;
 
 	/**
@@ -46,15 +45,15 @@ final class Cachify_MEMCACHED {
 	/**
 	 * Store item in cache
 	 *
-	 * @since   2.0.7
-	 * @change  2.3.0
-	 *
 	 * @param   string  $hash       Hash of the entry [ignored].
 	 * @param   string  $data       Content of the entry.
 	 * @param   integer $lifetime   Lifetime of the entry.
-	 * @param   bool    $sigDetail  Show details in signature.
+	 * @param   bool    $sig_detail  Show details in signature.
+	 *
+	 * @since   2.0.7
+	 * @change  2.3.0
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -69,7 +68,7 @@ final class Cachify_MEMCACHED {
 		/* Add item */
 		self::$_memcached->set(
 			self::_file_path(),
-			$data . self::_cache_signature( $sigDetail ),
+			$data . self::_cache_signature( $sig_detail ),
 			$lifetime
 		);
 	}

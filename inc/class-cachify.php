@@ -1614,7 +1614,7 @@ final class Cachify {
 				include $cachify_tabs[ $current_tab ]['page'];
 
 				/* Include common footer */
-				include 'cachify.settings_footer.php';
+				include 'cachify.settings-footer.php';
 			?>
 		</div>
 		<?php

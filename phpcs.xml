@@ -34,15 +34,6 @@
     <rule ref="WordPress.DB.PreparedSQL.NotPrepared">
         <exclude-pattern>*</exclude-pattern>
     </rule>
-    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
     <rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
         <exclude-pattern>*</exclude-pattern>
     </rule>
