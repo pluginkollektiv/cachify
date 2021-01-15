@@ -247,7 +247,7 @@ final class Cachify {
 			);
 
 			add_action(
-				'robots_txt',
+				'do_robots',
 				array(
 					__CLASS__,
 					'robots_txt',
@@ -473,28 +473,14 @@ final class Cachify {
 	 * Modify robots.txt
 	 *
 	 * @since   1.0
-	 * @change  2.1.9
+	 * @change  2.4.0
 	 *
-	 * @param   string $data  Original content of dynamic robots.txt.
-	 * @return  string        Modified content of robots.txt.
 	 */
-	public static function robots_txt( $data ) {
+	public static function robots_txt() {
 		/* HDD only */
-		if ( self::METHOD_HDD !== self::$options['use_apc'] ) {
-			return $data;
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			echo 'Disallow: */cache/cachify/';
 		}
-
-		/* Parse site URL */
-		$url_parts = wp_parse_url( site_url() );
-
-		/* Output */
-		$data .= sprintf(
-			'%2$sDisallow: %1$s/wp-content/cache/cachify/%2$s',
-			( empty( $url_parts['path'] ) ? '' : $url_parts['path'] ),
-			PHP_EOL
-		);
-
-		return $data;
 	}
 
 	/**
