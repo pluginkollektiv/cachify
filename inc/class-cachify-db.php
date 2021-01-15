@@ -123,10 +123,11 @@ final class Cachify_DB {
 		}
 
 		/* Content */
-		echo $cache['data'];
+		echo $cache['data']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
 

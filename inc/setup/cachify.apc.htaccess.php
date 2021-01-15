@@ -34,9 +34,9 @@ $ending = '/cachify/apc/proxy.php
 		<?php
 		echo sprintf(
 			'%s%s%s',
-			$beginning,
-			WP_PLUGIN_DIR,
-			$ending
+			esc_html( $beginning ),
+			esc_html( WP_PLUGIN_DIR ),
+			esc_html( $ending )
 		);
 		?>
 		</pre>

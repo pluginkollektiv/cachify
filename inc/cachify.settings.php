@@ -48,7 +48,15 @@ defined( 'ABSPATH' ) || exit;
 					?>
 				</p>
 
-				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' ); ?></a></p>
+				<?php
+					$flush_cache_url = wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' );
+				?>
+
+				<p>
+					<a class="button button-flush" href="<?php echo esc_url( $flush_cache_url ); ?>">
+						<?php esc_html_e( 'Flush cache now', 'cachify' ); ?>
+					</a>
+				</p>
 			</td>
 		</tr>
 

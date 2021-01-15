@@ -624,7 +624,8 @@ final class Cachify {
 	 * @return  integer    Cache size in bytes.
 	 */
 	public static function get_cache_size() {
-		if ( ! $size = get_transient( 'cachify_cache_size' ) ) {
+		$size = get_transient( 'cachify_cache_size' );
+		if ( ! $size ) {
 			/* Read */
 			$size = (int) call_user_func(
 				array(
@@ -932,15 +933,12 @@ final class Cachify {
 	 * @param   integer $post_id  Post ID.
 	 */
 	public static function remove_page_cache_by_post_id( $post_id ) {
-		/* Value check */
-		if ( ! $post_id = (int) $post_id ) {
+		$post_id = (int) $post_id;
+		if ( ! $post_id ) {
 			return;
 		}
 
-		/* Remove page by url */
-		self::remove_page_cache_by_url(
-			get_permalink( $post_id )
-		);
+		self::remove_page_cache_by_url( get_permalink( $post_id ) );
 	}
 
 	/**
@@ -952,8 +950,8 @@ final class Cachify {
 	 * @param  string $url  Page URL.
 	 */
 	public static function remove_page_cache_by_url( $url ) {
-		/* Value check */
-		if ( ! $url = (string) $url ) {
+		$url = (string) $url;
+		if ( ! $url ) {
 			return;
 		}
 
@@ -1596,13 +1594,15 @@ final class Cachify {
 				foreach ( $cachify_tabs as $tab_key => $tab_data ) {
 					printf(
 						'<a class="nav-tab %s" href="%s">%s</a>',
-						$tab_key === $current_tab ? 'nav-tab-active' : '',
-						add_query_arg(
-							array(
-								'page' => 'cachify',
-								'cachify_tab' => $tab_key,
-							),
-							admin_url( 'options-general.php' )
+						esc_attr( $tab_key === $current_tab ? 'nav-tab-active' : '' ),
+						esc_url(
+							add_query_arg(
+								array(
+									'page' => 'cachify',
+									'cachify_tab' => $tab_key,
+								),
+								admin_url( 'options-general.php' )
+							)
 						),
 						esc_html( $tab_data['name'] )
 					);

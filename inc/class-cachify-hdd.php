@@ -162,7 +162,7 @@ final class Cachify_HDD {
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
-			trigger_error( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING );
+			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
 			return;
 		}
 
@@ -182,8 +182,9 @@ final class Cachify_HDD {
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
-		if ( ! $handle = @fopen( $file, 'wb' ) ) {
-			trigger_error( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING );
+		$handle = @fopen( $file, 'wb' );
+		if ( ! $handle ) {
+			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
 			return;
 		}
 
@@ -401,15 +402,15 @@ final class Cachify_HDD {
 			return false;
 		}
 
-		// If we are on the root blog in a subdirectory multisite, we check, if the current file
-		// is part of another blog.
+		// If we are on the root blog in a subdirectory multisite, we check, if the current file is part of another blog.
 		global $wpdb;
-		$sql = $wpdb->prepare(
-			'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
-			$current_blog->domain,
-			$current_blog->blog_id
+		$results = $wpdb->get_col(
+			$wpdb->prepare(
+				'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
+				$current_blog->domain,
+				$current_blog->blog_id
+			)
 		);
-		$results = $wpdb->get_col( $sql );
 		foreach ( $results as $site ) {
 			$forbidden_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $site;
 			if ( 0 === strpos( $file, $forbidden_path ) ) {
