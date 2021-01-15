@@ -1,8 +1,13 @@
 <?php
+/**
+ * Class for Memcached based caching.
+ *
+ * @package Cachify
+ */
 
 /**
-* Cachify_MEMCACHED
-*/
+ * Cachify_MEMCACHED
+ */
 final class Cachify_MEMCACHED {
 
 	/**
@@ -52,7 +57,7 @@ final class Cachify_MEMCACHED {
 	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 

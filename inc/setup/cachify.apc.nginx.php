@@ -1,4 +1,10 @@
 <?php
+/**
+ * Setup for APC on nginx server.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
@@ -32,10 +38,16 @@ $ending = '/cachify/apc/proxy.php</strong>;
 	</table>
 
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s',
+		<pre style="white-space: pre-wrap">
+		<?php
+		echo sprintf(
+			'%s%s%s',
 			$beginning,
 			WP_PLUGIN_DIR,
-		$ending ); ?></pre>
+			$ending
+		);
+		?>
+		</pre>
 	</div>
 
 	<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Proxy for APC based caching.
+ *
+ * @package Cachify
+ */
 
 if ( ! empty( $_COOKIE ) ) {
 	foreach ( $_COOKIE as $k => $v ) {

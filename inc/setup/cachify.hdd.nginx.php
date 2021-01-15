@@ -1,4 +1,10 @@
 <?php
+/**
+ * Setup for HDD on nginx server.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>
@@ -22,11 +28,14 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<ul style="list-style-type:circle">
 					<li>
-						<?php echo sprintf(
-							esc_html__( 'For domains with FQDN, the variable %s must be used instead of %s.', 'cachify' ),
+						<?php
+						echo sprintf(
+							/* translators: variable names*/
+							esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
 							'<code>${http_host}</code>',
 							'<code>${host}</code>'
-						); ?>
+						);
+						?>
 					</li>
 				</ul>
 			</td>
@@ -43,16 +52,16 @@ charset utf-8;
 ## INDEX LOCATION
 location / {
   if ( $query_string ) {
-    return 405;
+	return 405;
   }
   if ( $request_method = POST ) {
-    return 405;
+	return 405;
   }
   if ( $request_uri ~ /wp-admin/ ) {
-    return 405;
+	return 405;
   }
   if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
-    return 405;
+	return 405;
   }
 
   error_page 405 = @nocache;
