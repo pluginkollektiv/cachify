@@ -38,6 +38,22 @@
     "build": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
       "minifycss css/settings.css > css/settings.min.css"
+    ],
+    "cs": [
+      "@lint-php"
+    ],
+    "csfix": [
+      "phpcbf --standard=phpcs.xml"
+    ],
+    "lint-all": [
+      "@lint-php",
+      "@lint-css"
+    ],
+    "lint-css": [
+      "npx stylelint css/dashboard.css css/settings.css"
+    ],
+    "lint-php": [
+      "phpcs --standard=phpcs.xml -s"
     ]
   }
 }
