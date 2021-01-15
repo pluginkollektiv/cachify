@@ -313,14 +313,16 @@ final class Cachify_HDD {
 	private static function _file_path( $path = null ) {
 		$prefix = is_ssl() ? 'https-' : '';
 
-		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 		$path = sprintf(
 			'%s%s%s%s%s',
 			CACHIFY_CACHE_DIR,
 			DIRECTORY_SEPARATOR,
 			$prefix,
-			strtolower( $_SERVER['HTTP_HOST'] ),
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			strtolower( wp_unslash( $_SERVER['HTTP_HOST'] ) ),
 			$path_parts['path']
 		);
 

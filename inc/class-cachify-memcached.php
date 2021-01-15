@@ -27,7 +27,9 @@ final class Cachify_MEMCACHED {
 	 * @return  boolean  true/false  TRUE when installed
 	 */
 	public static function is_available() {
-		return class_exists( 'Memcached' ) && isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( $_SERVER['SERVER_SOFTWARE'] ), 'nginx' ) !== false;
+		return class_exists( 'Memcached' )
+		       // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			   && isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
 	}
 
 	/**
@@ -205,12 +207,14 @@ final class Cachify_MEMCACHED {
 	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
-		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 		return trailingslashit(
 			sprintf(
 				'%s%s',
-				$_SERVER['HTTP_HOST'],
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				wp_unslash( $_SERVER['HTTP_HOST'] ),
 				$path_parts['path']
 			)
 		);

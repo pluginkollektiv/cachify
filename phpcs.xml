@@ -28,19 +28,6 @@
         </properties>
     </rule>
 
-    <rule ref="WordPress.Security.NonceVerification.Missing">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
-
     <!-- Include sniffs for PHP cross-version compatibility. -->
     <config name="testVersion" value="5.2-"/>
     <rule ref="PHPCompatibilityWP"/>

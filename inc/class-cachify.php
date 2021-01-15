@@ -701,7 +701,7 @@ final class Cachify {
 		}
 
 		/* Check nonce */
-		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], '_cachify__flush_nonce' ) ) {
+		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), '_cachify__flush_nonce' ) ) {
 			return;
 		}
 
@@ -1000,9 +1000,15 @@ final class Cachify {
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
 		$url_parts = wp_parse_url( $url );
-		return md5(
-			empty( $url ) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . $url_parts['host'] . $url_parts['path'] )
-		) . '.cachify';
+
+		if ( empty( $url ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			$hash_key = $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
+		} else {
+			$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+		}
+
+		return md5( $hash_key ) . '.cachify';
 	}
 
 	/**
@@ -1027,7 +1033,8 @@ final class Cachify {
 	 * @return  boolean  TRUE if index
 	 */
 	private static function _is_index() {
-		return basename( $_SERVER['SCRIPT_NAME'] ) === 'index.php';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		return basename( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) === 'index.php';
 	}
 
 	/**
@@ -1078,7 +1085,6 @@ final class Cachify {
 	 * @since   2.4.0
 	 */
 	public static function register_flush_cache_hooks() {
-
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
 			'cachify_flush_cache' => 10,
@@ -1127,7 +1133,10 @@ final class Cachify {
 		$options = self::$options;
 
 		/* Request vars */
-		if ( ! empty( $_POST ) || ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) ) {
+		if ( ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return true;
+		}
+		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 
@@ -1173,7 +1182,8 @@ final class Cachify {
 		if ( $options['without_agents'] && isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 			$user_agent_strings = self::_preg_split( $options['without_agents'] );
 			foreach ( $user_agent_strings as $user_agent_string ) {
-				if ( strpos( $_SERVER['HTTP_USER_AGENT'], $user_agent_string ) !== false ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				if ( strpos( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ), $user_agent_string ) !== false ) {
 					return true;
 				}
 			}
@@ -1542,7 +1552,7 @@ final class Cachify {
 	public static function validate_options( $data ) {
 		/* Empty data? */
 		if ( empty( $data ) ) {
-			return;
+			return array();
 		}
 
 		/* Flush cache */
@@ -1581,14 +1591,16 @@ final class Cachify {
 	public static function options_page() {
 		$options = self::_get_options();
 		$cachify_tabs = self::_get_tabs( $options );
-		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] ) ? $_GET['cachify_tab'] : 'settings';
+		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
+			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
+			: 'settings';
 		?>
 
 		<div class="wrap" id="cachify_settings">
 			<h1>Cachify</h1>
 
 			<?php
-				/* Add a navbar if necessary */
+			// Add a navbar if necessary.
 			if ( count( $cachify_tabs ) > 1 ) {
 				echo '<h2 class="nav-tab-wrapper">';
 				foreach ( $cachify_tabs as $tab_key => $tab_data ) {
