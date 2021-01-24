@@ -701,7 +701,7 @@ final class Cachify {
 		}
 
 		/* Check nonce */
-		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), '_cachify__flush_nonce' ) ) {
+		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), '_cachify__flush_nonce' ) ) {
 			return;
 		}
 
