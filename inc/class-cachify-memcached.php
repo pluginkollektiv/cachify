@@ -1,8 +1,13 @@
 <?php
+/**
+ * Class for Memcached based caching.
+ *
+ * @package Cachify
+ */
 
 /**
-* Cachify_MEMCACHED
-*/
+ * Cachify_MEMCACHED
+ */
 final class Cachify_MEMCACHED {
 
 	/**
@@ -11,7 +16,6 @@ final class Cachify_MEMCACHED {
 	 * @since  2.0.7
 	 * @var    object
 	 */
-
 	private static $_memcached;
 
 	/**
@@ -23,7 +27,9 @@ final class Cachify_MEMCACHED {
 	 * @return  boolean  true/false  TRUE when installed
 	 */
 	public static function is_available() {
-		return class_exists( 'Memcached' ) && isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( $_SERVER['SERVER_SOFTWARE'] ), 'nginx' ) !== false;
+		return class_exists( 'Memcached' )
+		       // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			   && isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
 	}
 
 	/**
@@ -41,18 +47,18 @@ final class Cachify_MEMCACHED {
 	/**
 	 * Store item in cache
 	 *
-	 * @since   2.0.7
-	 * @change  2.3.0
-	 *
 	 * @param   string  $hash       Hash of the entry [ignored].
 	 * @param   string  $data       Content of the entry.
 	 * @param   integer $lifetime   Lifetime of the entry.
-	 * @param   bool    $sigDetail  Show details in signature.
+	 * @param   bool    $sig_detail  Show details in signature.
+	 *
+	 * @since   2.0.7
+	 * @change  2.3.0
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sigDetail ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 
@@ -64,7 +70,7 @@ final class Cachify_MEMCACHED {
 		/* Add item */
 		self::$_memcached->set(
 			self::_file_path(),
-			$data . self::_cache_signature( $sigDetail ),
+			$data . self::_cache_signature( $sig_detail ),
 			$lifetime
 		);
 	}
@@ -201,12 +207,14 @@ final class Cachify_MEMCACHED {
 	 * @return  string        Path to cache file
 	 */
 	private static function _file_path( $path = null ) {
-		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 		return trailingslashit(
 			sprintf(
 				'%s%s',
-				$_SERVER['HTTP_HOST'],
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				wp_unslash( $_SERVER['HTTP_HOST'] ),
 				$path_parts['path']
 			)
 		);

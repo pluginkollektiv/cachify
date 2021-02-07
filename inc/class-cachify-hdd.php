@@ -1,8 +1,13 @@
 <?php
+/**
+ * Class for HDD based caching.
+ *
+ * @package Cachify
+ */
 
 /**
-* Cachify_HDD
-*/
+ * Cachify_HDD
+ */
 final class Cachify_HDD {
 
 	/**
@@ -44,7 +49,7 @@ final class Cachify_HDD {
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 
@@ -105,7 +110,7 @@ final class Cachify_HDD {
 	public static function print_cache() {
 		$filename = self::_file_html();
 		$size = is_readable( $filename ) ? readfile( $filename ) : false;
-		if ( ! empty ( $size ) ) {
+		if ( ! empty( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
 		}
@@ -157,7 +162,7 @@ final class Cachify_HDD {
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
-			trigger_error( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING );
+			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
 			return;
 		}
 
@@ -177,8 +182,9 @@ final class Cachify_HDD {
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
-		if ( ! $handle = @fopen( $file, 'wb' ) ) {
-			trigger_error( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING );
+		$handle = @fopen( $file, 'wb' );
+		if ( ! $handle ) {
+			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
 			return;
 		}
 
@@ -202,7 +208,7 @@ final class Cachify_HDD {
 	 * @change  2.0.5
 	 *
 	 * @param   string  $dir        Directory path.
-	 * @param   boolean $recursive  Clear subdirectories?
+	 * @param   boolean $recursive  true for clearing subdirectories as well.
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
 		/* Remote training slash */
@@ -307,14 +313,16 @@ final class Cachify_HDD {
 	private static function _file_path( $path = null ) {
 		$prefix = is_ssl() ? 'https-' : '';
 
-		$path_parts = wp_parse_url( $path ? $path : $_SERVER['REQUEST_URI'] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 		$path = sprintf(
 			'%s%s%s%s%s',
 			CACHIFY_CACHE_DIR,
 			DIRECTORY_SEPARATOR,
 			$prefix,
-			strtolower( $_SERVER['HTTP_HOST'] ),
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			strtolower( wp_unslash( $_SERVER['HTTP_HOST'] ) ),
 			$path_parts['path']
 		);
 
@@ -348,18 +356,17 @@ final class Cachify_HDD {
 	 * @return  string              Path to GZIP file
 	 */
 	private static function _file_gzip( $file_path = '' ) {
-		return ( empty( $file_path ) ? self::_file_path() : $file_path )  . 'index.html.gz';
+		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html.gz';
 	}
 
 	/**
 	 * Does the user has the right to delete this file?
 	 *
-	 * @param string $file
+	 * @param string $file the file name.
 	 *
 	 * @return bool
 	 */
 	private static function _user_can_delete( $file ) {
-
 		if ( ! is_file( $file ) && ! is_dir( $file ) ) {
 			return false;
 		}
@@ -386,26 +393,26 @@ final class Cachify_HDD {
 			return false;
 		}
 
-		// We are on a subdirectory installation and the current blog is in a subdirectory
+		// We are on a subdirectory installation and the current blog is in a subdirectory.
 		if ( '/' !== $current_blog->path ) {
 			return true;
 		}
 
-		// If we are on the root blog in a subdirectory multisite we check if the current dir is the root dir
+		// If we are on the root blog in a subdirectory multisite, we check if the current dir is the root dir.
 		$root_site_dir = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . DOMAIN_CURRENT_SITE . DIRECTORY_SEPARATOR;
-		if ( $root_site_dir === $file )  {
+		if ( $root_site_dir === $file ) {
 			return false;
 		}
 
-		// If we are on the root blog in a subdirectory multisite, we check, if the current file
-		// is part of another blog.
+		// If we are on the root blog in a subdirectory multisite, we check, if the current file is part of another blog.
 		global $wpdb;
-		$sql = $wpdb->prepare(
-			'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
-			$current_blog->domain,
-			$current_blog->blog_id
+		$results = $wpdb->get_col(
+			$wpdb->prepare(
+				'select path from ' . $wpdb->base_prefix . 'blogs where domain = %s && blog_id != %d',
+				$current_blog->domain,
+				$current_blog->blog_id
+			)
 		);
-		$results = $wpdb->get_col( $sql );
 		foreach ( $results as $site ) {
 			$forbidden_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $site;
 			if ( 0 === strpos( $file, $forbidden_path ) ) {

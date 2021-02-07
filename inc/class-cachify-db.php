@@ -1,8 +1,13 @@
 <?php
+/**
+ * Class for database based caching.
+ *
+ * @package Cachify
+ */
 
 /**
-* Cachify_DB
-*/
+ * Cachify_DB
+ */
 final class Cachify_DB {
 
 	/**
@@ -42,7 +47,7 @@ final class Cachify_DB {
 	public static function store_item( $hash, $data, $lifetime ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 
@@ -53,9 +58,9 @@ final class Cachify_DB {
 				'data' => $data,
 				'meta' => array(
 					'queries' => self::_page_queries(),
-					'timer'	  => self::_page_timer(),
+					'timer'   => self::_page_timer(),
 					'memory'  => self::_page_memory(),
-					'time'	  => current_time( 'timestamp' ),
+					'time'    => current_time( 'timestamp' ),
 				),
 			),
 			$lifetime
@@ -118,10 +123,11 @@ final class Cachify_DB {
 		}
 
 		/* Content */
-		echo $cache['data'];
+		echo $cache['data']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
 

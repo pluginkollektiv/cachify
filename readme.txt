@@ -2,9 +2,10 @@
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
-* Stable tag:        2.3.0
 * Requires at least: 4.4
 * Tested up to:      5.4
+* Requires PHP:      5.2.4
+* Stable tag:        2.3.0
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 

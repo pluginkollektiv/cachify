@@ -1,16 +1,17 @@
 <?php
-/*
-Plugin Name: Cachify
-Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.
-Author:      pluginkollektiv
-Author URI:  https://pluginkollektiv.org
-Plugin URI:  https://cachify.pluginkollektiv.org/
-License:     GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Version:     2.3.0
-Text Domain: cachify
-Domain Path: /lang
-*/
+/**
+ * Plugin Name: Cachify
+ * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.
+ * Author:      pluginkollektiv
+ * Author URI:  https://pluginkollektiv.org
+ * Plugin URI:  https://cachify.pluginkollektiv.org
+ * License:     GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Version:     2.3.0
+ * Text Domain: cachify
+ *
+ * @package Cachify
+ */
 
 /*
 Copyright (C)  2011-2015 Sergej Müller
@@ -74,24 +75,28 @@ register_uninstall_hook(
 
 /* WP-CLI */
 add_action(
-    'cli_init',
-    array(
-        'Cachify_CLI',
-        'add_commands'
-    )
+	'cli_init',
+	array(
+		'Cachify_CLI',
+		'add_commands',
+	)
 );
 
 /* Autoload Init */
 spl_autoload_register( 'cachify_autoload' );
 
-/* Autoload function */
+/**
+ * Autoload the class.
+ *
+ * @param string $class the class name.
+ */
 function cachify_autoload( $class ) {
 	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ) ) ) {
 		require_once(
 			sprintf(
-				'%s/inc/%s.class.php',
+				'%s/inc/class-%s.php',
 				CACHIFY_DIR,
-				strtolower( $class )
+				strtolower( str_replace( '_', '-', $class ) )
 			)
 		);
 	}
