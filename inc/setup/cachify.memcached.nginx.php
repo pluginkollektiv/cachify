@@ -1,4 +1,10 @@
 <?php
+/**
+ * Setup for Memcached.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>
@@ -22,18 +28,24 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<ul style="list-style-type:circle">
 					<li>
-						<?php echo sprintf(
-							esc_html__( 'For domains with FQDN, the variable %s must be used instead of %s.', 'cachify' ),
+						<?php
+						echo sprintf(
+							/* translators: variable names*/
+							esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
 							'<code>${http_host}</code>',
 							'<code>${host}</code>'
-						); ?>
+						);
+						?>
 					</li>
 					<li>
-						<?php echo sprintf(
+						<?php
+						echo sprintf(
+							/* translators: code */
 							esc_html__( 'If you have errors please try to change %1$s to %2$s This forces IPv4 because some servers that allow IPv4 and IPv6 are configured to bind memcached to IPv4 only.', 'cachify' ),
 							'<code>memcached_pass localhost:11211;</code>',
 							'<code>memcached_pass 127.0.0.1:11211;</code>'
-						); ?>
+						);
+						?>
 					</li>
 				</ul>
 			</td>
@@ -52,16 +64,16 @@ location / {
   error_page 404 405 = @nocache;
 
   if ( $query_string ) {
-    return 405;
+	return 405;
   }
   if ( $request_method = POST ) {
-    return 405;
+	return 405;
   }
   if ( $request_uri ~ "/wp-" ) {
-    return 405;
+	return 405;
   }
   if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
-    return 405;
+	return 405;
   }
 
   default_type text/html;

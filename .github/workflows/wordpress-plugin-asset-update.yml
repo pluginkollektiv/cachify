@@ -2,16 +2,17 @@ name: Plugin asset/readme update
 on:
   push:
     branches:
-    - master
+      - stable
 jobs:
-  master:
-    name: Push to master
+  stable:
+    name: Push to stable
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: WordPress.org plugin asset/readme update
-      uses: 10up/action-wordpress-plugin-asset-update@master
-      env:
-        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-        README_NAME: README.md
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
+      - name: WordPress.org plugin asset/readme update
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          README_NAME: readme.txt

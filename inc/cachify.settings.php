@@ -1,10 +1,16 @@
 <?php
+/**
+ * Settings page.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>
 
 <form method="post" action="options.php">
-	<?php settings_fields( 'cachify' ) ?>
+	<?php settings_fields( 'cachify' ); ?>
 	<table class="form-table">
 		<tr>
 			<th scope="row">
@@ -13,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<select name="cachify[use_apc]" id="cachify_cache_method">
 					<?php foreach ( self::_method_select() as $k => $v ) { ?>
-						<option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['use_apc'], $k ); ?>><?php echo esc_html( $v ) ?></option>
+						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $options['use_apc'], $k ); ?>><?php echo esc_html( $v ); ?></option>
 					<?php } ?>
 				</select>
 			</td>
@@ -21,26 +27,37 @@ defined( 'ABSPATH' ) || exit;
 
 		<tr>
 			<th scope="row">
-				<label for="cachify_cache_expires"><?php esc_html_e( 'Cache expiration', 'cachify' ) ?></label>
+				<label for="cachify_cache_expires"><?php esc_html_e( 'Cache expiration', 'cachify' ); ?></label>
 			</th>
 			<td>
 				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
-					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" /> Hours
+					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" />
+					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 					<p class="description"><?php esc_html_e( 'HDD cache will only expire as you update posts or flush it yourself.', 'cachify' ); ?></p>
 				<?php else : ?>
-					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ) ?>" class="small-text" />
+					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ); ?>" class="small-text" />
 					<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php endif; ?>
 
 				<p class="description">
-					<?php printf(
+					<?php
+					printf(
 						/* translators: Placeholder is the trash icon itself as dashicon */
 						esc_html__( 'Flush the cache by clicking the button below or the %1$s icon in the admin bar.', 'cachify' ),
 						'<span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">"' . esc_html__( 'Flush the cachify cache', 'cachify' ) . '"</span>'
-					); ?>
+					);
+					?>
 				</p>
 
-				<p><a class="button button-flush" href="<?php echo wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ); ?>"><?php esc_html_e( 'Flush cache now', 'cachify' )  ?></a></p>
+				<?php
+					$flush_cache_url = wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' );
+				?>
+
+				<p>
+					<a class="button button-flush" href="<?php echo esc_url( $flush_cache_url ); ?>">
+						<?php esc_html_e( 'Flush cache now', 'cachify' ); ?>
+					</a>
+				</p>
 			</td>
 		</tr>
 
@@ -85,14 +102,14 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<fieldset>
 					<label for="cachify_without_ids">
-						<input type="text" name="cachify[without_ids]" id="cachify_without_ids" placeholder="<?php esc_attr_e( 'e.g. 1, 2, 3', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_ids'] ) ?>" />
+						<input type="text" name="cachify[without_ids]" id="cachify_without_ids" placeholder="<?php esc_attr_e( 'e.g. 1, 2, 3', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_ids'] ); ?>" />
 						<?php esc_html_e( 'Post/Page IDs', 'cachify' ); ?>
 					</label>
 
 					<br />
 
 					<label for="cachify_without_agents">
-						<input type="text" name="cachify[without_agents]" id="cachify_without_agents" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_agents'] ) ?>" />
+						<input type="text" name="cachify[without_agents]" id="cachify_without_agents" placeholder="<?php esc_attr_e( 'e.g. MSIE 6, Opera', 'cachify' ); ?>" value="<?php echo esc_attr( $options['without_agents'] ); ?>" />
 						<?php esc_html_e( 'Browser User Agents', 'cachify' ); ?>
 					</label>
 				</fieldset>
@@ -106,8 +123,8 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<select name="cachify[compress_html]" id="cachify_compress_html">
 					<?php foreach ( self::_minify_select() as $k => $v ) { ?>
-					<option value="<?php echo esc_attr( $k ) ?>" <?php selected( $options['compress_html'], $k ); ?>>
-						<?php echo esc_html( $v ) ?>
+					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $options['compress_html'], $k ); ?>>
+						<?php echo esc_html( $v ); ?>
 					</option>
 					<?php } ?>
 				</select>
@@ -125,5 +142,5 @@ defined( 'ABSPATH' ) || exit;
 		</tr>
 	</table>
 
-	<?php submit_button() ?>
+	<?php submit_button(); ?>
 </form>

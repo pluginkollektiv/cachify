@@ -2,9 +2,10 @@
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
-* Stable tag:        2.3.0
 * Requires at least: 4.4
-* Tested up to:      5.4
+* Tested up to:      5.7
+* Requires PHP:      5.2.4
+* Stable tag:        2.3.1
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +102,28 @@ A complete documentation is available in the [GitHub repository Wiki](https://gi
 
 ## Changelog ##
 
+### 2.3.1 ###
+* Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice (#187) (#188)
+* Fix: correct minor spelling mistakes (#193, props timse201)
+* Fix: update support links (#194, props timse201)
+
+### 2.3.0 ###
+* New: WP-CLI integration (#165, props derweili)
+* New: `cachify_flush_cache_hooks` filter added to modify all hooks that flush the cache
+* New: Flush cache when a user is created / updated / deleted
+* New: Flush cache when a term is created / updated / deleted (#169, props derweili)
+* New: Cache behavior after post modification is now configurable in plugin settings (#176)
+* Enhance: Cache exceptions/User-Agents translation (#52, props timse201)
+* Enhance: Readme FAQ (#51, props timse201)
+* Enhance: sizeable exclusion boxes + placeholder (#53, props timse201)
+* Enhance: FAQ and Support links (#55, props timse201)
+* Enhance: Add text caption to "flush cache" button
+* Enhance: Icon font converted to SVG (#64)
+* Enhance: Improved HDD cache invalidation for hierarchical post types (#71, props Syberspace)
+* Enhance: Unified and shortened HTML signature across all caching methods (#108) (#109)
+* Security: Tabnabbing prevention (#55, props timse201)
+* Maintenance: Tested up to WordPress 5.4
+
 ### 2.2.4 ###
 * Fixes caching for mixed HTTPS and HTTP setups
 * Fixes an issue with the icon styling in the admin toolbar
@@ -127,6 +150,9 @@ A complete documentation is available in the [GitHub repository Wiki](https://gi
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
 
 ## Upgrade Notice ##
+
+### 2.3.1 ###
+This is a minor bug fix release that prevents PHP warnings introduced in 2.3.0. It is recommended for all users.
 
 ### 2.3.0 ###
 To improve Cachify and make use of new core functions, we decided to drop support for WordPress 4.3 and older. Please make sure your WordPress is always up to date.

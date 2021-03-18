@@ -1,4 +1,10 @@
 <?php
+/**
+ * Setup for APC on Apache server.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
@@ -24,8 +30,14 @@ $ending = '/cachify/apc/proxy.php
 	</table>
 
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s',
-			$beginning,
-			WP_PLUGIN_DIR,
-		$ending ); ?></pre>
+		<pre style="white-space: pre-wrap">
+		<?php
+		echo sprintf(
+			'%s%s%s',
+			esc_html( $beginning ),
+			esc_html( WP_PLUGIN_DIR ),
+			esc_html( $ending )
+		);
+		?>
+		</pre>
 	</div>

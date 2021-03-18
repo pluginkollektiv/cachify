@@ -1,4 +1,10 @@
 <?php
+/**
+ * Footer line of the settings page.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 ?>

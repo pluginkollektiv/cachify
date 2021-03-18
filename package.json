@@ -1,15 +1,7 @@
 {
-  "name": "cachify",
-  "version": "2.3.0",
-  "description": "Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.",
-  "author": "Pluginkollektiv",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pluginkollektiv/cachify/"
-  },
+  "private": true,
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-cssmin": "^1.0.1",
-    "load-grunt-tasks": "^3.4.1"
+    "stylelint": "^13.9.0",
+    "@wordpress/stylelint-config": "^19.0.1"
   }
 }
