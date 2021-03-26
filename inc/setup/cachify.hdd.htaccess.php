@@ -80,7 +80,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html%{ENV:CACH
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
 		<pre style="white-space: pre-wrap">
 			<?php
-			echo sprintf(
+			printf(
 				'%s%s%s%s%s',
 				esc_html( $beginning ),
 				esc_html( WP_CONTENT_DIR ),
