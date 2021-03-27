@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 				<ul style="list-style-type:circle">
 					<li>
 						<?php
-						echo sprintf(
+						printf(
 							/* translators: variable names*/
 							esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
 							'<code>${http_host}</code>',
