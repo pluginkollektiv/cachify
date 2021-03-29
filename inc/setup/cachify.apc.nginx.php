@@ -40,7 +40,7 @@ $ending = '/cachify/apc/proxy.php</strong>;
 	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
 		<pre style="white-space: pre-wrap">
 		<?php
-		echo sprintf(
+		printf(
 			'%s%s%s',
 			esc_html( $beginning ),
 			esc_html( WP_PLUGIN_DIR ),
