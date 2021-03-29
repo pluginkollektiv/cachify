@@ -782,7 +782,7 @@ final class Cachify {
 			return false;
 		}
 
-		echo sprintf(
+		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			esc_html__( 'Cachify cache is flushed.', 'cachify' )
 		);
