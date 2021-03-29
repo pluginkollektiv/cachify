@@ -98,7 +98,7 @@ To ensure that Google and other search engines do not index the static contents 
 Disallow: */cache/cachify/
 Allow: /`
 
-A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
+A complete documentation is available in the [online handbook](https://cachify.pluginkollektiv.org/documentation/).
 
 ## Changelog ##
 
