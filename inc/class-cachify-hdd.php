@@ -140,7 +140,7 @@ final class Cachify_HDD {
 	private static function _cache_signature( $detail ) {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
-			'Cachify | http://cachify.de',
+			'Cachify | https://cachify.pluginkollektiv.org',
 			( $detail ? 'HDD Cache' : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
