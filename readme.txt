@@ -63,9 +63,6 @@ This error message may occur after commissioning the caching plug-in. The hint a
 ### My Website looks in some parts broken after activating Cachify! ###
 Please make sure there is no issue that caused by the Cache minify feature. Just deactivate it or use HTML only. If the issue still exist please feel free to report it at the [support forums](https://wordpress.org/support/plugin/cachify/). With this feature any unnecessary characters such as breaks and HTML comments are removed from the source code.
 
-### Cachify HDD: Character encoding does not work correctly ###
-If you use Cachify to store the cache on HDD there is no PHP to run. In the case of misconfigured servers, this can lead to incorrect display of the special characters on web pages. The error can be corrected by an extension of the system file .htaccess: *AddDefaultCharset UTF-8*
-
 ### Cachify with CDN support? ###
 Currently the caching plugin for WordPress has no connection to a CDN provider. Although the Buzzword CDN (Content Delivery Network) is praised as a performance factor, CDN makes little sense for WordPress websites with a national audience. In this case, a home host could provide the requested files faster than a worldwide CDN service provider because the next node could be far away.
 
