@@ -77,6 +77,10 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
   CacheDisable /
 &lt;/IfModule&gt;</pre>
 					</li>
+					<li>
+						<?php esc_html_e( 'In case of special character errors, you can add the following to the .htaccess file:', 'cachify' ); ?><br />
+						<pre>AddDefaultCharset UTF-8</pre>
+					</li>
 				</ul>
 			</td>
 		</tr>
