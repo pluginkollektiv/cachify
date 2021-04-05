@@ -58,7 +58,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 The cache expiration can not be considered due to technical reasons. If the cache stock has to be emptied at certain time intervals, then it is recommended to call a prepared PHP file by a cronjob.
 
 ### PHP Fatal error: Cannot use output buffering in output buffering display handlers in Unknown on line 0 ###
-This error message may occur after commissioning the caching plug-in. The hint appears because there are no cache files on the HDD for output. This is probably due to the fact that Cachify could not store files in the cache folder. Please check the write-permissions for the cache folder (found in the WordPress directory *wp-content*) and set them if necessary.
+This error message may occur after commissioning the caching plugin. The hint appears because there are no cache files on the HDD for output. This is probably due to the fact that Cachify could not store files in the cache folder. Please check the write-permissions for the cache folder (found in the WordPress directory *wp-content*) and set them if necessary.
 
 ### My Website looks in some parts broken after activating Cachify! ###
 Please make sure there is no issue that caused by the Cache minify feature. Just deactivate it or use HTML only. If the issue still exist please feel free to report it at the [support forums](https://wordpress.org/support/plugin/cachify/). With this feature any unnecessary characters such as breaks and HTML comments are removed from the source code.
@@ -70,7 +70,7 @@ If you use Cachify to store the cache on HDD there is no PHP to run. In the case
 Currently the caching plugin for WordPress has no connection to a CDN provider. Although the Buzzword CDN (Content Delivery Network) is praised as a performance factor, CDN makes little sense for WordPress websites with a national audience. In this case, a home host could provide the requested files faster than a worldwide CDN service provider because the next node could be far away.
 
 ### PHP OPcache as a caching method? ###
-Compared to APC (Alternative PHP Cache), PHP OPCache is not able to contain content with custom keys and values. Because of this Cachify can not consider the PHP OPCache as a caching method.
+Compared to APC (Alternative PHP Cache), PHP OPcache is not able to contain content with custom keys and values. Because of this Cachify can not consider the PHP OPcache as a caching method.
 
 ### When does Cachify automaticaly flush its cache? ###
 * After publishing new posts
@@ -98,7 +98,7 @@ To ensure that Google and other search engines do not index the static contents 
 Disallow: */cache/cachify/
 Allow: /`
 
-A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/cachify/wiki).
+A complete documentation is available in the [online handbook](https://cachify.pluginkollektiv.org/documentation/).
 
 ## Changelog ##
 
