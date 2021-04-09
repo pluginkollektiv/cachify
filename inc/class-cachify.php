@@ -421,6 +421,18 @@ final class Cachify {
 	}
 
 	/**
+	 * Register the language file
+	 *
+	 * @since   2.1.3
+	 * @change  2.1.3
+	 */
+	public static function register_textdomain() {
+		load_plugin_textdomain(
+			'cachify'
+		);
+	}
+
+	/**
 	 * Set default options
 	 *
 	 * @since   2.0
@@ -1506,20 +1518,6 @@ final class Cachify {
 			self::MINIFY_DISABLED  => esc_html__( 'No minify', 'cachify' ),
 			self::MINIFY_HTML_ONLY => esc_html__( 'HTML', 'cachify' ),
 			self::MINIFY_HTML_JS   => esc_html__( 'HTML + Inline JavaScript', 'cachify' ),
-		);
-	}
-
-	/**
-	 * Register the language file
-	 *
-	 * @since   2.1.3
-	 * @change  2.1.3
-	 */
-	public static function register_textdomain() {
-		load_plugin_textdomain(
-			'cachify',
-			false,
-			CACHIFY_DIR . '/lang'
 		);
 	}
 
