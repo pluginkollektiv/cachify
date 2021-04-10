@@ -37,8 +37,7 @@ $ending = '/cachify/apc/proxy.php</strong>;
 		</tr>
 	</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap">
+	<textarea rows="13" class="large-text code" name="code" id="cachify-code" readonly>
 		<?php
 		printf(
 			'%s%s%s',
@@ -47,7 +46,6 @@ $ending = '/cachify/apc/proxy.php</strong>;
 			esc_html( $ending )
 		);
 		?>
-		</pre>
-	</div>
+	</textarea>
 
 	<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>
