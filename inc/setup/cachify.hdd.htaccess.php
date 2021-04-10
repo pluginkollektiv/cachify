@@ -82,17 +82,15 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 		</tr>
 	</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap">
-			<?php
-			printf(
-				'%s%s%s%s%s',
-				esc_html( $beginning ),
-				esc_html( WP_CONTENT_DIR ),
-				esc_html( $middle ),
-				esc_html( wp_make_link_relative( content_url() ) ),
-				esc_html( $ending )
-			);
-			?>
-		</pre>
-	</div>
+	<textarea rows="16" class="large-text code" name="code" id="cachify-code" readonly>
+		<?php
+		printf(
+			'%s%s%s%s%s',
+			esc_html( $beginning ),
+			esc_html( WP_CONTENT_DIR ),
+			esc_html( $middle ),
+			esc_html( wp_make_link_relative( content_url() ) ),
+			esc_html( $ending )
+		);
+		?>
+	</textarea>
