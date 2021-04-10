@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || exit;
 		</tr>
 	</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
+	<textarea rows="16" class="large-text code" name="code" id="cachify-code" readonly>
 ## GZIP
 gzip_static on;
 
@@ -86,6 +86,6 @@ location / {
 location @nocache {
   try_files $uri $uri/ /index.php?$args;
 }
-</pre></div>
+</textarea>
 
 <small>(<?php esc_html_e( 'You might need to adjust the location directives to your needs.', 'cachify' ); ?>)</small>
