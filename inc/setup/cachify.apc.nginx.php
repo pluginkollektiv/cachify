@@ -37,7 +37,7 @@ $ending = '/cachify/apc/proxy.php</strong>;
 		</tr>
 	</table>
 
-	<textarea rows="13" class="large-text code" name="code" id="cachify-code" readonly>
+	<textarea rows="13" class="large-text code cachify-code" name="code" readonly>
 		<?php
 		printf(
 			'%s%s%s',
