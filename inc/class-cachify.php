@@ -424,12 +424,10 @@ final class Cachify {
 	 * Register the language file
 	 *
 	 * @since   2.1.3
-	 * @change  2.1.3
+	 * @change  2.3.2
 	 */
 	public static function register_textdomain() {
-		load_plugin_textdomain(
-			'cachify'
-		);
+		load_plugin_textdomain( 'cachify' );
 	}
 
 	/**
