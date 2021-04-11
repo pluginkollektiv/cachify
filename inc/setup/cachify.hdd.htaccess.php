@@ -82,7 +82,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 		</tr>
 	</table>
 
-	<textarea rows="16" class="large-text code" name="code" id="cachify-code" readonly>
+	<textarea rows="16" class="large-text code cachify-code" name="code" readonly>
 		<?php
 		printf(
 			'%s%s%s%s%s',
