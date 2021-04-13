@@ -55,53 +55,50 @@ final class Cachify_CLI {
 
 		WP_CLI::line( $message );
 	}
-
-	/**
-	 * Register CLI Commands
-	 *
-	 * @since   2.3.0
-	 * @change  2.3.0
-	 */
-	public static function add_commands() {
-		// Add flush command.
-		WP_CLI::add_command(
-			'cachify flush',
-			array(
-				'Cachify_CLI',
-				'flush_cache',
-			),
-			array(
-				'shortdesc' => 'Flush site cache',
-				'synopsis'  => array(
-					array(
-						'type'     => 'flag',
-						'name'     => 'all-methods',
-						'description'   => 'Flush all caching methods',
-						'optional' => true,
-					),
-				),
-			)
-		);
-
-		// Add cache-size command.
-		WP_CLI::add_command(
-			'cachify cache-size',
-			array(
-				'Cachify_CLI',
-				'get_cache_size',
-			),
-			array(
-				'shortdesc' => 'Get the size of the cache in bytes',
-				'synopsis'  => array(
-					array(
-						'type'     => 'flag',
-						'name'     => 'raw',
-						'description'   => 'Raw size output in bytes',
-						'optional' => true,
-					),
-				),
-			)
-		);
-
-	}
 }
+
+/**
+ * Register CLI Commands
+ *
+ * @since   2.3.0
+ * @change  2.3.0
+ */
+// Add flush command.
+WP_CLI::add_command(
+	'cachify flush',
+	array(
+		'Cachify_CLI',
+		'flush_cache',
+	),
+	array(
+		'shortdesc' => 'Flush site cache',
+		'synopsis'  => array(
+			array(
+				'type'     => 'flag',
+				'name'     => 'all-methods',
+				'description'   => 'Flush all caching methods',
+				'optional' => true,
+			),
+		),
+	)
+);
+
+// Add cache-size command.
+WP_CLI::add_command(
+	'cachify cache-size',
+	array(
+		'Cachify_CLI',
+		'get_cache_size',
+	),
+	array(
+		'shortdesc' => 'Get the size of the cache in bytes',
+		'synopsis'  => array(
+			array(
+				'type'     => 'flag',
+				'name'     => 'raw',
+				'description'   => 'Raw size output in bytes',
+				'optional' => true,
+			),
+		),
+	)
+);
