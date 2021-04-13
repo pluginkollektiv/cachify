@@ -82,7 +82,7 @@ add_action(
 	)
 );
 
-/* Autoload Init */
+/* Register autoload */
 spl_autoload_register( 'cachify_autoload' );
 
 /**
@@ -91,13 +91,16 @@ spl_autoload_register( 'cachify_autoload' );
  * @param string $class the class name.
  */
 function cachify_autoload( $class ) {
-	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ) ) ) {
-		require_once(
-			sprintf(
+	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED' ), true ) ) {
+		require_once sprintf(
 				'%s/inc/class-%s.php',
 				CACHIFY_DIR,
 				strtolower( str_replace( '_', '-', $class ) )
-			)
 		);
 	}
+}
+
+// Load WP-CLI
+if ( defined( 'WP_CLI' ) && WP_CLI && class_exists( 'WP_CLI' ) ) {
+    require_once CACHIFY_DIR . '/inc/class-cachify-cli.php';
 }
