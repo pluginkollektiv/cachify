@@ -73,15 +73,6 @@ register_uninstall_hook(
 	)
 );
 
-/* WP-CLI */
-add_action(
-	'cli_init',
-	array(
-		'Cachify_CLI',
-		'add_commands',
-	)
-);
-
 /* Register autoload */
 spl_autoload_register( 'cachify_autoload' );
 
