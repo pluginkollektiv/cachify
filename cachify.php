@@ -91,7 +91,7 @@ function cachify_autoload( $class ) {
 	}
 }
 
-// Load WP-CLI
+/* Load WP-CLI */
 if ( defined( 'WP_CLI' ) && WP_CLI && class_exists( 'WP_CLI' ) ) {
     require_once CACHIFY_DIR . '/inc/class-cachify-cli.php';
 }
