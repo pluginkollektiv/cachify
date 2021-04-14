@@ -63,7 +63,7 @@ final class Cachify_CLI {
  * @since   2.3.0
  * @change  2.3.0
  */
-// Add flush command.
+/* Add flush command */
 WP_CLI::add_command(
 	'cachify flush',
 	array(
@@ -83,7 +83,7 @@ WP_CLI::add_command(
 	)
 );
 
-// Add cache-size command.
+/* Add cache-size command */
 WP_CLI::add_command(
 	'cachify cache-size',
 	array(
