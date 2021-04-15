@@ -809,13 +809,19 @@ final class Cachify {
 	 *
 	 * @param   integer $id  Comment ID.
 	 */
-	public static function edit_comment( $id ) {
-		if ( self::$options['reset_on_comment'] ) {
-			self::flush_total_cache();
-		} else {
-			self::remove_page_cache_by_post_id(
-				get_comment( $id )->comment_post_ID
-			);
+	public static function edit_comment( $id, $comment ) {
+
+		$approved = (int) $comment['comment_approved'];
+
+		/* Approved comment? */
+		if ( $approved === 1 ) {
+			if ( self::$options['reset_on_comment'] ) {
+				self::flush_total_cache();
+			} else {
+				self::remove_page_cache_by_post_id(
+					get_comment( $id )->comment_post_ID
+				);
+			}
 		}
 	}
 
@@ -831,7 +837,7 @@ final class Cachify {
 	 */
 	public static function pre_comment( $approved, $comment ) {
 		/* Approved comment? */
-		if ( 1 === $approved ) {
+		if ( $approved === 1 ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
