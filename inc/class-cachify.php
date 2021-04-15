@@ -94,14 +94,10 @@ final class Cachify {
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-
-		add_action(
-			'cachify_remove_post_cache',
-			array(
-				__CLASS__,
-				'remove_page_cache_by_post_id',
-			)
-		);
+		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
+		add_action( 'comment_post', array( __CLASS__, 'new_comment' ), 99, 2 );
+		add_action( 'edit_comment', array( __CLASS__, 'comment_edit' ), 10, 2 );
+		add_action( 'transition_comment_status', array( __CLASS__, 'comment_status' ), 10, 3 );
 
 		/* Flush icon */
 		add_action(
@@ -119,17 +115,6 @@ final class Cachify {
 				__CLASS__,
 				'process_flush_request',
 			)
-		);
-
-		/* Flush (post) cache if comment is made from frontend or backend */
-		add_action(
-			'pre_comment_approved',
-			array(
-				__CLASS__,
-				'pre_comment',
-			),
-			99,
-			2
 		);
 
 		/* Backend */
@@ -195,24 +180,6 @@ final class Cachify {
 				array(
 					__CLASS__,
 					'admin_dashboard_dark_mode_styles',
-				)
-			);
-
-			add_action(
-				'transition_comment_status',
-				array(
-					__CLASS__,
-					'touch_comment',
-				),
-				10,
-				3
-			);
-
-			add_action(
-				'edit_comment',
-				array(
-					__CLASS__,
-					'edit_comment',
 				)
 			);
 
@@ -809,7 +776,7 @@ final class Cachify {
 	 *
 	 * @param   integer $id  Comment ID.
 	 */
-	public static function edit_comment( $id, $comment ) {
+	public static function comment_edit( $id, $comment ) {
 
 		$approved = (int) $comment['comment_approved'];
 
@@ -835,17 +802,15 @@ final class Cachify {
 	 * @param   array $comment   Array of properties.
 	 * @return  mixed            Comment status.
 	 */
-	public static function pre_comment( $approved, $comment ) {
+	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
 		if ( $approved === 1 ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
-				self::remove_page_cache_by_post_id( $comment['comment_post_ID'] );
+				self::remove_page_cache_by_post_id( get_comment( $id )->comment_post_ID );
 			}
 		}
-
-		return $approved;
 	}
 
 	/**
@@ -858,8 +823,8 @@ final class Cachify {
 	 * @param   string $old_status  Old status.
 	 * @param   object $comment     The comment.
 	 */
-	public static function touch_comment( $new_status, $old_status, $comment ) {
-		if ( $new_status !== $old_status ) {
+	public static function comment_status( $new_status, $old_status, $comment ) {
+		if ( $old_status === 'approved' || $new_status === 'approved' ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
