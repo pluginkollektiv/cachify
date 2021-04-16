@@ -1079,8 +1079,6 @@ final class Cachify {
 			'create_term' => 10,
 			'delete_term' => 10,
 			'edit_terms' => 10,
-			'user_register' => 10,
-			'edit_user_profile_update' => 10,
 			'delete_user' => 10,
 		);
 
