@@ -774,7 +774,8 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
-	 * @param   integer $id  Comment ID.
+	 * @param   integer	$id			Comment ID
+	 * @param   array	$comment	Comment data
 	 */
 	public static function comment_edit( $id, $comment ) {
 
@@ -798,9 +799,8 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
-	 * @param   mixed $approved  Comment status.
-	 * @param   array $comment   Array of properties.
-	 * @return  mixed            Comment status.
+	 * @param	integer			$id			Comment ID
+	 * @param	integer|string	$approved	Comment status
 	 */
 	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
