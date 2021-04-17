@@ -32,7 +32,7 @@ $beginning = '# BEGIN CACHIFY
   RewriteCond %{REQUEST_URI} /$
   RewriteCond %{REQUEST_METHOD} !=POST
   RewriteCond %{QUERY_STRING} ^$
-  RewriteCond %{REQUEST_URI} !^\/(wp\-admin|wp\-content\/cache)\/.*
+  RewriteCond %{REQUEST_URI} !^\/(wp\-admin|wp\-content)\/.*
   RewriteCond %{HTTP_COOKIE} !(wp\-postpass|wordpress_logged_in|comment_author)_
   RewriteCond ';
 
