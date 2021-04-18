@@ -894,7 +894,7 @@ final class Cachify {
 	}
 
 	/**
-	 * Clear cache when any post type has been created, updated, or trashed
+	 * Clear cache when any post type has been created or updated
 	 *
 	 * @since
 	 * @change
