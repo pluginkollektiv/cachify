@@ -82,16 +82,6 @@ final class Cachify {
 
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
-		/* Publish hooks */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_publish_hooks',
-			),
-			99
-		);
-
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
