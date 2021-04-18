@@ -863,70 +863,65 @@ final class Cachify {
 	}
 
 	/**
-	 * Generate publish hook for custom post types
+	 * Removes the post type cache if saved, updated or trashed
 	 *
-	 * @since   2.1.7  Make the function public
-	 * @since   2.0.3
+	 * @since
+	 * @change
 	 *
-	 * @return  void
+	 * @param	integer	$id	Post ID
 	 */
-	public static function register_publish_hooks() {
-		/* Available post types */
-		$post_types = get_post_types(
-			array(
-				'public' => true,
-			)
-		);
 
-		/* Empty data? */
-		if ( empty( $post_types ) ) {
-			return;
-		}
+	public static function save_update_trash_post( $id ) {
 
-		/* Loop the post types */
-		foreach ( $post_types as $post_type ) {
-			add_action(
-				'publish_' . $post_type,
-				array(
-					__CLASS__,
-					'publish_post_types',
-				),
-				10,
-				2
-			);
-			add_action(
-				'publish_future_' . $post_type,
-				array(
-					__CLASS__,
-					'flush_total_cache',
-				)
-			);
+		$status = get_post_status( $id );
+
+		/* Post type published? */
+		if ( $status === 'publish' ) {
+			self::flush_cache_for_posts( $id );
 		}
 	}
 
 	/**
-	 * Removes the post type cache on post updates
+	 * Removes the post type cache before an existing post type is updated in the db
 	 *
-	 * @since   2.0.3
-	 * @change  2.3.0
+	 * @since
+	 * @change
 	 *
-	 * @param   integer $post_id  Post ID.
-	 * @param   object  $post     Post object.
+	 * @param	integer	$id		Post ID
+	 * @param	array	$data	Post data
 	 */
-	public static function publish_post_types( $post_id, $post ) {
-		/* No post_id? */
-		if ( empty( $post_id ) || empty( $post ) ) {
-			return;
-		}
 
-		/* Post status check */
-		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
-			return;
-		}
+	public static function post_update( $id, $data ) {
 
-		/* Check user role */
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			return;
+		$new_status = $data['post_status'];
+		$old_status = get_post_status( $id );
+
+		/* Was it published and is it not trashed now? */
+		if ( $new_status !== 'trash' && $old_status === 'publish' ) {
+			self::flush_cache_for_posts( $id );
+		}
+	}
+
+	/**
+	 * Clear cache when any post type has been created, updated, or trashed
+	 *
+	 * @since
+	 * @change
+	 *
+	 * @param	integer|object	$data  Post ID or post
+	 */
+
+	public static function flush_cache_for_posts( $data ) {
+
+		if ( is_int( $post ) ) {
+			$post_id = $data;
+			$data = get_post( $post_id );
+
+			if ( ! is_object( $data ) ) {
+				return;
+			}
+		} elseif ( is_object( $data ) ) {
+			$post_id = $data->ID;
 		}
 
 		/* Remove cache OR flush */
