@@ -2,7 +2,7 @@
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
-* Requires at least: 4.4
+* Requires at least: 4.6
 * Tested up to:      5.7
 * Requires PHP:      5.2.4
 * Stable tag:        2.3.1
@@ -47,7 +47,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ### Requirements ###
 * PHP 5.2.4 or greater
-* WordPress 3.8 or greater
+* WordPress 4.6 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
 
