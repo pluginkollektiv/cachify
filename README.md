@@ -40,7 +40,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 ### Requirements ###
 * PHP 5.2.4 or greater
-* WordPress 4.4 or greater
+* WordPress 4.6 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
 
