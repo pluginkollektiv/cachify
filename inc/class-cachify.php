@@ -85,9 +85,14 @@ final class Cachify {
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
-		add_action( 'wp_trash_post', array( __CLASS__, 'save_update_trash_post' ) );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
+
+		/* Flush Hooks - third party */
+        add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_product_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_variation_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
 
 		/* Flush icon */
 		add_action(
@@ -919,6 +924,25 @@ final class Cachify {
 	}
 
 	/**
+	 * WooCommerce stock hooks
+	 *
+	 * @since
+	 *
+	 * @param	integer|object	$product	Product ID or product
+	 */
+
+	public static function flush_woocommerce( $product ) {
+
+		if ( is_int( $product ) ) {
+			$id = $product;
+		} else {
+			$id = $product->get_id();
+	}
+
+		self::flush_cache_for_posts( $id );
+	}
+
+	/**
 	 * Removes a page (id) from cache
 	 *
 	 * @since   2.0.3
@@ -1092,6 +1116,8 @@ final class Cachify {
 			'user_register' => 10,
 			'edit_user_profile_update' => 10,
 			'delete_user' => 10,
+			/* third party */
+			'autoptimize_action_cachepurged' => 10,
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
