@@ -94,14 +94,10 @@ final class Cachify {
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-
-		add_action(
-			'cachify_remove_post_cache',
-			array(
-				__CLASS__,
-				'remove_page_cache_by_post_id',
-			)
-		);
+		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'wp_trash_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
+		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
 		/* Flush icon */
 		add_action(
