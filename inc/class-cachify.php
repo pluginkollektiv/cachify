@@ -782,7 +782,7 @@ final class Cachify {
 		$approved = (int) $comment['comment_approved'];
 
 		/* Approved comment? */
-		if ( $approved === 1 ) {
+		if ( 1 === $approved ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
@@ -804,7 +804,7 @@ final class Cachify {
 	 */
 	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
-		if ( $approved === 1 ) {
+		if ( 1 === $approved ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
