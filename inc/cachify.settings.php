@@ -54,7 +54,7 @@ defined( 'ABSPATH' ) || exit;
 				?>
 
 				<p>
-					<a class="button button-flush" href="<?php echo esc_url( $flush_cache_url ); ?>">
+					<a class="button button-secondary" href="<?php echo esc_url( $flush_cache_url ); ?>">
 						<?php esc_html_e( 'Flush cache now', 'cachify' ); ?>
 					</a>
 				</p>
