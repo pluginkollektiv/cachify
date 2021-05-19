@@ -1334,6 +1334,18 @@ final class Cachify {
 
 		/* Save? */
 		if ( $should_cache ) {
+			/**
+			 * Filters the buffered data itself
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param string $data          The actual data.
+			 * @param object $method        Instance of the selected caching method.
+			 * @param string $cache_hash    The cache hash.
+			 * @param int    $cache_expires Cache validity period.
+			 */
+			$data = apply_filters( 'cachify_buffer', $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+
 			call_user_func(
 				array(
 					self::$method,
