@@ -1222,7 +1222,7 @@ final class Cachify {
 			return $data;
 		}
 
-		/* Avoid slow rendering */
+		/* Avoid slow rendering - HTML character limit */
 		if ( strlen( $data ) > 700000 ) {
 			return $data;
 		}
@@ -1233,6 +1233,7 @@ final class Cachify {
 			array(
 				'textarea',
 				'pre',
+				'code',
 			)
 		);
 
