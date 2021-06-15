@@ -82,26 +82,17 @@ final class Cachify {
 
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
-		/* Publish hooks */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_publish_hooks',
-			),
-			99
-		);
-
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
+		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
+		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
-		add_action(
-			'cachify_remove_post_cache',
-			array(
-				__CLASS__,
-				'remove_page_cache_by_post_id',
-			)
-		);
+		/* Flush Hooks - third party */
+        add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_product_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
+        add_action( 'woocommerce_variation_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
 
 		/* Flush icon */
 		add_action(
@@ -863,70 +854,65 @@ final class Cachify {
 	}
 
 	/**
-	 * Generate publish hook for custom post types
+	 * Removes the post type cache if saved or updated
 	 *
-	 * @since   2.1.7  Make the function public
-	 * @since   2.0.3
+	 * @since
+	 * @change
 	 *
-	 * @return  void
+	 * @param	integer	$id	Post ID
 	 */
-	public static function register_publish_hooks() {
-		/* Available post types */
-		$post_types = get_post_types(
-			array(
-				'public' => true,
-			)
-		);
 
-		/* Empty data? */
-		if ( empty( $post_types ) ) {
-			return;
-		}
+	public static function save_update_trash_post( $id ) {
 
-		/* Loop the post types */
-		foreach ( $post_types as $post_type ) {
-			add_action(
-				'publish_' . $post_type,
-				array(
-					__CLASS__,
-					'publish_post_types',
-				),
-				10,
-				2
-			);
-			add_action(
-				'publish_future_' . $post_type,
-				array(
-					__CLASS__,
-					'flush_total_cache',
-				)
-			);
+		$status = get_post_status( $id );
+
+		/* Post type published? */
+		if ( $status === 'publish' ) {
+			self::flush_cache_for_posts( $id );
 		}
 	}
 
 	/**
-	 * Removes the post type cache on post updates
+	 * Removes the post type cache before an existing post type is updated in the db
 	 *
-	 * @since   2.0.3
-	 * @change  2.3.0
+	 * @since
+	 * @change
 	 *
-	 * @param   integer $post_id  Post ID.
-	 * @param   object  $post     Post object.
+	 * @param	integer	$id		Post ID
+	 * @param	array	$data	Post data
 	 */
-	public static function publish_post_types( $post_id, $post ) {
-		/* No post_id? */
-		if ( empty( $post_id ) || empty( $post ) ) {
-			return;
-		}
 
-		/* Post status check */
-		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
-			return;
-		}
+	public static function post_update( $id, $data ) {
 
-		/* Check user role */
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			return;
+		$new_status = $data['post_status'];
+		$old_status = get_post_status( $id );
+
+		/* Was it published and is it not trashed now? */
+		if ( $new_status !== 'trash' && $old_status === 'publish' ) {
+			self::flush_cache_for_posts( $id );
+		}
+	}
+
+	/**
+	 * Clear cache when any post type has been created or updated
+	 *
+	 * @since
+	 * @change
+	 *
+	 * @param	integer|object	$data  Post ID or post
+	 */
+
+	public static function flush_cache_for_posts( $data ) {
+
+		if ( is_int( $post ) ) {
+			$post_id = $data;
+			$data = get_post( $post_id );
+
+			if ( ! is_object( $data ) ) {
+				return;
+			}
+		} elseif ( is_object( $data ) ) {
+			$post_id = $data->ID;
 		}
 
 		/* Remove cache OR flush */
@@ -935,6 +921,25 @@ final class Cachify {
 		} else {
 			self::flush_total_cache();
 		}
+	}
+
+	/**
+	 * WooCommerce stock hooks
+	 *
+	 * @since
+	 *
+	 * @param	integer|object	$product	Product ID or product
+	 */
+
+	public static function flush_woocommerce( $product ) {
+
+		if ( is_int( $product ) ) {
+			$id = $product;
+		} else {
+			$id = $product->get_id();
+	}
+
+		self::flush_cache_for_posts( $id );
 	}
 
 	/**
@@ -1111,6 +1116,8 @@ final class Cachify {
 			'user_register' => 10,
 			'edit_user_profile_update' => 10,
 			'delete_user' => 10,
+			/* third party */
+			'autoptimize_action_cachepurged' => 10,
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
