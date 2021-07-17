@@ -17,5 +17,5 @@ jobs:
       - name: Code style checks for PHP and CSS
         run: |
           composer install
-          npm ci
+          npm install
           composer lint-all
