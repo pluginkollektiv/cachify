@@ -3,7 +3,7 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, compression, minify, speed
 * Requires at least: 4.4
-* Tested up to:      5.7
+* Tested up to:      5.8
 * Requires PHP:      5.2.4
 * Stable tag:        2.3.2
 * License:           GPLv2 or later
@@ -110,6 +110,7 @@ A complete documentation is available in the [online handbook](https://cachify.p
 * Maintenance: Update documentation links (#211, #212, props timse201)
 * Maintenance: Update documentation links (#213, props timse201)
 * Maintenance: More precise tags in README file (#216, props timse201)
+* Maintenance: Tested up to WordPress 5.8
 
 ### 2.3.1 ###
 * Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice (#187) (#188)

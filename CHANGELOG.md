@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 * Maintenance: Update documentation links (#211, #212, props timse201)
 * Maintenance: Update documentation links (#213, props timse201)
 * Maintenance: More precise tags in README file (#216, props timse201)
+* Maintenance: Tested up to WordPress 5.8
 
 ## 2.3.1
 * Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice (#187) (#188)
