@@ -23,12 +23,8 @@ if ( ! empty( $_COOKIE ) ) {
  */
 function cachify_is_ssl() {
 	if ( isset( $_SERVER['HTTPS'] ) ) {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( 'on' === strtolower( wp_unslash( $_SERVER['HTTPS'] ) ) ) {
-			return true;
-		}
-
-		if ( '1' === $_SERVER['HTTPS'] ) {
+		$https = filter_input( INPUT_SERVER, 'HTTPS', FILTER_SANITIZE_STRING );
+		if ( 'on' === strtolower( $https ) || '1' === $https ) {
 			return true;
 		}
 	} elseif ( isset( $_SERVER['SERVER_PORT'] ) && ( '443' === $_SERVER['SERVER_PORT'] ) ) {
@@ -44,11 +40,13 @@ if (
 	&& ( strpos( filter_input( INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_STRING ), '/wp-admin/' ) === false )
 	&& ( strpos( filter_input( INPUT_SERVER, 'HTTP_ACCEPT_ENCODING', FILTER_SANITIZE_STRING ), 'gzip' ) !== false )
 ) {
-	$prefix = cachify_is_ssl() ? 'https-' : '';
 	$cache = apc_fetch(
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		md5( $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] ) )
-		. '.cachify'
+		md5(
+			( cachify_is_ssl() ? 'https-' : '' ) .
+			filter_input( INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING ) .
+			filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL )
+		) .
+		'.cachify'
 	);
 	if ( $cache ) {
 		ini_set( 'zlib.output_compression', 'Off' );
