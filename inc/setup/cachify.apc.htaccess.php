@@ -29,8 +29,7 @@ $ending = '/cachify/apc/proxy.php
 		</tr>
 	</table>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap">
+	<textarea rows="5" class="large-text code cachify-code" name="code" readonly>
 		<?php
 		printf(
 			'%s%s%s',
@@ -39,5 +38,4 @@ $ending = '/cachify/apc/proxy.php
 			esc_html( $ending )
 		);
 		?>
-		</pre>
-	</div>
+	</textarea>
