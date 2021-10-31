@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+
+* Enhance: adjust styling for setup instructions (#215, props timse201)
+
+
 ## 2.3.2
 * Fix: enforce WordPress environment for caching modules (#221, props timse201)
 * Fix: Remove unnecessary build artifacts from plugin deployment (#226)
