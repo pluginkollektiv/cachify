@@ -5,6 +5,9 @@
  * @package Cachify
  */
 
+/* Quit */
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cachify
  */
@@ -418,6 +421,16 @@ final class Cachify {
 		global $wpdb;
 
 		return $wpdb->get_col( "SELECT blog_id FROM `$wpdb->blogs`" );
+	}
+
+	/**
+	 * Register the language file
+	 *
+	 * @since   2.1.3
+	 * @change  2.3.2
+	 */
+	public static function register_textdomain() {
+		load_plugin_textdomain( 'cachify' );
 	}
 
 	/**
@@ -1506,20 +1519,6 @@ final class Cachify {
 			self::MINIFY_DISABLED  => esc_html__( 'No minify', 'cachify' ),
 			self::MINIFY_HTML_ONLY => esc_html__( 'HTML', 'cachify' ),
 			self::MINIFY_HTML_JS   => esc_html__( 'HTML + Inline JavaScript', 'cachify' ),
-		);
-	}
-
-	/**
-	 * Register the language file
-	 *
-	 * @since   2.1.3
-	 * @change  2.1.3
-	 */
-	public static function register_textdomain() {
-		load_plugin_textdomain(
-			'cachify',
-			false,
-			CACHIFY_DIR . '/lang'
 		);
 	}
 
