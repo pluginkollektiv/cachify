@@ -303,18 +303,18 @@ final class Cachify {
 	 * Plugin installation on new WPMS site.
 	 *
 	 * @since   1.0
-	 * @change  2.3.4
+	 * @change  2.4.0
 	 *
-	 * @param WP_Site $new_site New Site object.
+	 * @param int|WP_Site $new_site New Site object.
 	 */
-	public static function install_later( WP_Site $new_site ) {
+	public static function install_later( $new_site ) {
 		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $new_site->blog_id );
+		switch_to_blog( is_int( $new_site ) ? $new_site : $new_site->blog_id );
 
 		/* Install */
 		self::_install_backend();
@@ -374,9 +374,9 @@ final class Cachify {
 	 * Uninstalling of the plugin for WPMS site.
 	 *
 	 * @since   1.0
-	 * @change  1.0
+	 * @change  2.4.0
 	 *
-	 * @param WP_Site $old_site Old Site object.
+	 * @param int|WP_Site $old_site Old Site object.
 	 */
 	public static function uninstall_later( $old_site ) {
 		/* No network plugin */
@@ -385,7 +385,7 @@ final class Cachify {
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $old_site->blog_id );
+		switch_to_blog( is_int( $new_site ) ? $new_site : $new_site->blog_id );
 
 		/* Install */
 		self::_uninstall_backend();
