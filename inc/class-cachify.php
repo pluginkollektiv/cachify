@@ -92,8 +92,11 @@ final class Cachify {
 			99
 		);
 
-		/* Flush Hooks */
+		/* Flush Full Cache Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
+
+        /* Remove Post Cache Hooks */
+        add_action( 'init', array( __CLASS__, 'register_remove_post_cache_hooks' ), 10, 0 );
 
 		add_action(
 			'cachify_remove_post_cache',
@@ -941,13 +944,13 @@ final class Cachify {
 	 * Removes a page (id) from cache
 	 *
 	 * @since   2.0.3
-	 * @change  2.1.3
+	 * @change  2.4.0
 	 *
 	 * @param   integer $post_id  Post ID.
 	 */
 	public static function remove_page_cache_by_post_id( $post_id ) {
 		$post_id = (int) $post_id;
-		if ( ! $post_id ) {
+		if ( ! $post_id || ! in_array( get_post_status( $post_id ), array( 'publish', 'future' ), true ) ) {
 			return;
 		}
 
@@ -1103,8 +1106,6 @@ final class Cachify {
 			'cachify_flush_cache' => 10,
 			'_core_updated_successfully' => 10,
 			'switch_theme' => 10,
-			'before_delete_post' => 10,
-			'wp_trash_post' => 10,
 			'create_term' => 10,
 			'delete_term' => 10,
 			'edit_terms' => 10,
@@ -1130,7 +1131,36 @@ final class Cachify {
 
 	}
 
-	/**
+    /**
+     * Register all hooks to flush a singular post cache
+     *
+     * @since   2.4.0
+     */
+    public static function register_remove_post_cache_hooks() {
+        /* Define all default post cache flushing hooks, $post_id as first argument is mandatory. */
+        $remove_post_cache_hooks = array(
+            'before_delete_post' => 10,
+            'wp_trash_post' => 10,
+        );
+
+        $remove_post_cache_hook = apply_filters( 'cachify_remove_post_cache_hooks', $remove_post_cache_hooks );
+
+        /* Loop all hooks and register actions */
+        foreach ( $remove_post_cache_hook as $hook => $priority ) {
+            add_action(
+                $hook,
+                array(
+                    'Cachify',
+                    'remove_page_cache_by_post_id',
+                ),
+                $priority,
+                1
+            );
+        }
+
+    }
+
+    /**
 	 * Define exclusions for caching
 	 *
 	 * @since   0.2
