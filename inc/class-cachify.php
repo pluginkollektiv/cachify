@@ -135,7 +135,7 @@ final class Cachify {
 		/* Backend */
 		if ( is_admin() ) {
 			add_action(
-				'wpmu_new_blog',
+				'wp_initialize_site',
 				array(
 					__CLASS__,
 					'install_later',
@@ -143,7 +143,7 @@ final class Cachify {
 			);
 
 			add_action(
-				'delete_blog',
+				'wp_delete_site',
 				array(
 					__CLASS__,
 					'uninstall_later',
@@ -300,21 +300,21 @@ final class Cachify {
 	}
 
 	/**
-	 * Plugin installation on new MU blog.
+	 * Plugin installation on new WPMS site.
 	 *
 	 * @since   1.0
-	 * @change  1.0
+	 * @change  2.3.4
 	 *
-	 * @param integer $id  Blog ID.
+	 * @param WP_Site $new_site New Site object.
 	 */
-	public static function install_later( $id ) {
+	public static function install_later( WP_Site $new_site ) {
 		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $id );
+		switch_to_blog( $new_site->blog_id );
 
 		/* Install */
 		self::_install_backend();
@@ -371,21 +371,21 @@ final class Cachify {
 	}
 
 	/**
-	 * Uninstalling of the plugin for MU and network.
+	 * Uninstalling of the plugin for WPMS site.
 	 *
 	 * @since   1.0
 	 * @change  1.0
 	 *
-	 * @param integer $id  Blog ID.
+	 * @param WP_Site $old_site Old Site object.
 	 */
-	public static function uninstall_later( $id ) {
+	public static function uninstall_later( $old_site ) {
 		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $id );
+		switch_to_blog( $old_site->blog_id );
 
 		/* Install */
 		self::_uninstall_backend();
