@@ -1006,6 +1006,7 @@ final class Cachify {
 	 *
 	 * @since   0.1
 	 * @change  2.0
+	 * @change  2.4.0 Fix issue with port in URL.
 	 *
 	 * @param   string $url  URL to hash [optional].
 	 * @return  string       Cachify hash value.
