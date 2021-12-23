@@ -1415,15 +1415,6 @@ final class Cachify {
 				);
 				break;
 
-			case 'settings_page_cachify':
-				wp_enqueue_style(
-					'cachify-settings',
-					plugins_url( 'css/settings.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
-				break;
-
 			default:
 				break;
 		}

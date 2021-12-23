@@ -40,8 +40,7 @@
       "@build"
     ],
     "build": [
-      "minifycss css/dashboard.css > css/dashboard.min.css",
-      "minifycss css/settings.css > css/settings.min.css"
+      "minifycss css/dashboard.css > css/dashboard.min.css"
     ],
     "cs": [
       "@lint-php"
@@ -54,7 +53,7 @@
       "@lint-css"
     ],
     "lint-css": [
-      "npx stylelint css/dashboard.css css/settings.css"
+      "npx stylelint css/dashboard.css"
     ],
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"
