@@ -50,7 +50,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcac
 * WordPress 3.8 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
-* Redis (either via phpredis module, or predis package)
+* Redis (optional, via the phpredis module)
 
 
 ## Frequently Asked Questions ##

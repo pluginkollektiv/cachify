@@ -43,7 +43,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcac
 * WordPress 4.4 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
-* Redis (either via phpredis module, or predis package)
+* Redis (optional, via the phpredis module)
 
 
 ## Frequently Asked Questions ##
@@ -54,6 +54,3 @@ A complete documentation is available in the [online handbook](https://cachify.p
 
 ## Changelog ##
 [Changelog](./CHANGELOG.md)
-
-## Build Plugin ##
-    zip -r  cachify.zip cachify/* -x "cachify/vendor/*" -x "cachify/composer.*" -x "cachify/package.json" -x "cachify/README.md" -x "cachify/phpcs.xml"
