@@ -1563,7 +1563,7 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( $data['use_apc'] == self::METHOD_REDIS ) {
+		if ( self::METHOD_REDIS == $data['use_apc'] ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',

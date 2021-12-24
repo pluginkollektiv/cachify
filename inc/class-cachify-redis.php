@@ -234,17 +234,17 @@ final class Cachify_REDIS {
 		}
 
 		/* Have object and it thinks it's connected to a server */
-		if (is_object( self::$_redis ) && self::$_redis->isConnected() ) {
+		if ( is_object( self::$_redis ) && self::$_redis->isConnected() ) {
 			return true;
 		}
 
 		/* Init */
-		self::$_redis = new \Redis();
+		self::$_redis = new Redis();
 
 		/* Set options & connect */
 		try {
 			self::$_redis->connect( getenv( 'REDIS_HOST' ), intval( getenv( 'REDIS_PORT' ) ) );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			return false;
 		}
 
