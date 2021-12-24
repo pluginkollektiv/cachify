@@ -1,7 +1,7 @@
 # Cachify #
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
-* Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, compression, minify, speed
+* Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, redis, compression, minify, speed
 * Requires at least: 4.4
 * Tested up to:      5.8
 * Requires PHP:      5.2.4
@@ -9,14 +9,14 @@
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
-Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
+Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcached for storing your blog pages. Make WordPress faster!
 
 ## Description ##
-*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx) or — thanks to APC (Alternative PHP Cache) — directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
+*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx), Redis or — thanks to APC (Alternative PHP Cache) — directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
 
 ### Features ###
 * Works with custom post types.
-* Caching methods: DB, HDD, APC and Memcached.
+* Caching methods: DB, HDD, APC, Redis and Memcached.
 * “Flush Cache” button in the WordPress toolbar.
 * Ready for WordPress Multisite.
 * Optional compression of HTML markup.
@@ -50,6 +50,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * WordPress 3.8 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
+* Redis (either via phpredis module, or predis package)
 
 
 ## Frequently Asked Questions ##

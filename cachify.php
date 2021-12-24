@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Cachify
- * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.
+ * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached, Redis or APC.
  * Author:      pluginkollektiv
  * Author URI:  https://pluginkollektiv.org
  * Plugin URI:  https://cachify.pluginkollektiv.org
@@ -91,7 +91,7 @@ spl_autoload_register( 'cachify_autoload' );
  * @param string $class the class name.
  */
 function cachify_autoload( $class ) {
-	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ), true ) ) {
+	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_REDIS', 'Cachify_CLI' ), true ) ) {
 		require_once sprintf(
 			'%s/inc/class-%s.php',
 			CACHIFY_DIR,
