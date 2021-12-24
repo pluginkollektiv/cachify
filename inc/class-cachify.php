@@ -1563,7 +1563,14 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
+		if ( $data['use_apc'] == self::METHOD_REDIS ) {
+			add_settings_error(
+				'cachify_method_tip',
+				'cachify_method_tip',
+				esc_html__( 'The server environment variables (e.g. REDIS_HOST) need to be adjusted. Please have a look at the setup tab.', 'cachify' ),
+				'notice-warning'
+			);
+		} elseif ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
