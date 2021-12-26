@@ -6,7 +6,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcac
 
 ### Features ###
 * Works with custom post types.
-* Caching methods: DB, HDD, APC and Memcached.
+* Caching methods: DB, HDD, APC, Redis and Memcached.
 * “Flush Cache” button in the WordPress toolbar.
 * Ready for WordPress Multisite.
 * Optional compression of HTML markup.
