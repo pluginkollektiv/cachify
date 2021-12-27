@@ -144,8 +144,9 @@ final class Cachify_REDIS {
 	 * @since   2.0
 	 * @change  2.3
 	 */
-	public static function print_cache() {
-		return;
+	public static function print_cache($sig, $cache) {
+		echo($cache);
+		exit;
 	}
 
 	/**
