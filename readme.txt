@@ -1,11 +1,11 @@
 # Cachify #
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
-* Tags:              acceleration, apc, cache, caching, compress, database cache, db-cache, disk cache, disk caching, google, hdd, html compression, memcached, minify, minimize, optimize, page cache, performance, quick cache, speed
+* Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, compression, minify, speed
 * Requires at least: 4.4
-* Tested up to:      5.7
+* Tested up to:      5.8
 * Requires PHP:      5.2.4
-* Stable tag:        2.3.1
+* Stable tag:        2.3.2
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,16 @@ A complete documentation is available in the [online handbook](https://cachify.p
 
 ## Changelog ##
 
+### 2.3.2 ###
+* Fix: enforce WordPress environment for caching modules (#221, props timse201)
+* Fix: Remove unnecessary build artifacts from plugin deployment (#226)
+* Fix: Fix input sanitization for APC proxy (#240) (#241)
+* Maintenance: Remove unused language folder (#214, props timse201)
+* Maintenance: Update documentation links (#211, #212, props timse201)
+* Maintenance: Update documentation links (#213, props timse201)
+* Maintenance: More precise tags in README file (#216, props timse201)
+* Maintenance: Tested up to WordPress 5.8
+
 ### 2.3.1 ###
 * Fix: clean up unused parameter evaluation after publishing a post to prevent PHP notice (#187) (#188)
 * Fix: correct minor spelling mistakes (#193, props timse201)
@@ -150,6 +160,9 @@ A complete documentation is available in the [online handbook](https://cachify.p
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
 
 ## Upgrade Notice ##
+
+### 2.3.2 ###
+This is a minor maintenance release. It is recommended for all users.
 
 ### 2.3.1 ###
 This is a minor bug fix release that prevents PHP warnings introduced in 2.3.0. It is recommended for all users.

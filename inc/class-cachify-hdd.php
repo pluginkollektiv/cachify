@@ -5,6 +5,9 @@
  * @package Cachify
  */
 
+/* Quit */
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cachify_HDD
  */
