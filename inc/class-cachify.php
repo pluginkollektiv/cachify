@@ -774,11 +774,23 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
+	 * @param   integer $id  Comment ID.
+	 *
+	 * @deprecated 2.4 Use comment_edit($id, $comment) instead.
+	 */
+	public static function edit_comment( $id ) {
+		self::comment_edit( $id, array( 'comment_approved' => 1 ) );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @since 2.4 Replacement for edit_comment($id) with additional comment parameter.
+	 *
 	 * @param integer $id      Comment ID.
 	 * @param array   $comment Comment data.
 	 */
 	public static function comment_edit( $id, $comment ) {
-
 		$approved = (int) $comment['comment_approved'];
 
 		/* Approved comment? */
@@ -799,7 +811,27 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
-	 * @param integer        $id       Comment ID.
+	 * @param mixed $approved Comment status.
+	 * @param array $comment  Array of properties.
+	 *
+	 * @return mixed Comment status.
+	 *
+	 * @deprecated 2.4 Use new_comment($id, $approved) instead.
+	 */
+	public static function pre_comment( $approved, $comment ) {
+		self::new_comment( $comment['comment_ID'], $approved );
+
+		return $approved;
+	}
+
+	/**
+	 * Remove page from cache or flush on new comment
+	 *
+	 * @since 0.1.0
+	 * @since 2.1.2
+	 * @since 2.4 Renamed with ID parameter instead of comment array.
+	 *
+	 * @param integer|string $id       Comment ID.
 	 * @param integer|string $approved Comment status.
 	 */
 	public static function new_comment( $id, $approved ) {
@@ -819,9 +851,26 @@ final class Cachify {
 	 * @since   0.1
 	 * @change  2.1.2
 	 *
-	 * @param string $new_status New status.
-	 * @param string $old_status Old status.
-	 * @param object $comment    The comment.
+	 * @param   string $new_status  New status.
+	 * @param   string $old_status  Old status.
+	 * @param   object $comment     The comment.
+	 *
+	 * @deprecated 2.4 Use comment_status($new_status, $old_status, $comment) instead.
+	 */
+	public static function touch_comment( $new_status, $old_status, $comment ) {
+		self::comment_status( $new_status, $old_status, $comment );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @since 0.1
+	 * @since 2.1.2
+	 * @since 2.4 Renamed from touch_comment().
+	 *
+	 * @param string     $new_status New status.
+	 * @param string     $old_status Old status.
+	 * @param WP_Comment $comment    The comment.
 	 */
 	public static function comment_status( $new_status, $old_status, $comment ) {
 		if ( 'approved' === $old_status || 'approved' === $new_status ) {
