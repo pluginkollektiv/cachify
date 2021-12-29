@@ -220,7 +220,12 @@ final class Cachify_REDIS {
 
 		/* Set options & connect */
 		try {
-			self::$_redis->connect( getenv( 'REDIS_HOST' ), intval( getenv( 'REDIS_PORT' ) ) );
+			self::$_redis->connect(
+				(string) apply_filters(
+					'cachify_redis_servers',
+					'redis://localhost:6379'
+				)
+			);
 		} catch ( Exception $e ) {
 			return false;
 		}
