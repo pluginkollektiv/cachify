@@ -141,11 +141,11 @@ final class Cachify_REDIS {
 	/**
 	 * Print the cache
 	 *
-	 * @since   2.0
-	 * @change  2.3
+	 * @param bool   $sig_detail  Show details in signature.
+	 * @param string $cache       Cached content.
 	 */
-	public static function print_cache($sig, $cache) {
-		echo($cache);
+	public static function print_cache ($sig_detail, $cache) {
+		echo $cache;
 		exit;
 	}
 
