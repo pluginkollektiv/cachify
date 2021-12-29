@@ -9,23 +9,21 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Cachify_REDIS
+ * Cachify_REDIS class
+ *
+ * @since 2.4
  */
 final class Cachify_REDIS {
 
 	/**
 	 * Redis-Object
 	 *
-	 * @since  2.0.7
-	 * @var    object
+	 * @var Redis|null
 	 */
 	private static $_redis;
 
 	/**
 	 * Availability check
-	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
 	 *
 	 * @return  boolean  true/false  TRUE when installed
 	 */
@@ -40,9 +38,6 @@ final class Cachify_REDIS {
 	/**
 	 * Caching method as string
 	 *
-	 * @since   2.1.2
-	 * @change  2.1.2
-	 *
 	 * @return  string  Caching method
 	 */
 	public static function stringify_method() {
@@ -51,9 +46,6 @@ final class Cachify_REDIS {
 
 	/**
 	 * Store item in cache
-	 *
-	 * @since   2.0
-	 * @change  2.3.0
 	 *
 	 * @param   string  $hash        Hash  of the entry [ignored].
 	 * @param   string  $data        Content of the entry.
@@ -83,9 +75,6 @@ final class Cachify_REDIS {
 	/**
 	 * Read item from cache
 	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
-	 *
 	 * @param   string $hash  Hash of the entry.
 	 * @return  mixed         Content of the entry
 	 */
@@ -103,9 +92,6 @@ final class Cachify_REDIS {
 
 	/**
 	 * Delete item from cache
-	 *
-	 * @since   2.0
-	 * @change  2.0
 	 *
 	 * @param   string $hash  Hash of the entry [ignored].
 	 * @param   string $url   URL of the entry.
@@ -125,8 +111,7 @@ final class Cachify_REDIS {
 	/**
 	 * Clear the cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @return void
 	 */
 	public static function clear_cache() {
 		/* Server connect */
@@ -151,9 +136,6 @@ final class Cachify_REDIS {
 
 	/**
 	 * Get the cache size
-	 *
-	 * @since   2.0
-	 * @change  2.0
 	 *
 	 * @return  integer  Directory size
 	 */
@@ -182,9 +164,6 @@ final class Cachify_REDIS {
 	/**
 	 * Generate signature
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
-	 *
 	 * @param   bool $detail  Show details in signature.
 	 * @return  string        Signature string
 	 */
@@ -202,9 +181,6 @@ final class Cachify_REDIS {
 
 	/**
 	 * Path of cache file
-	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
 	 *
 	 * @param   string $path  Request URI or permalink [optional].
 	 * @return  string        Path to cache file
