@@ -14,30 +14,17 @@ $beginning = '&lt;Files index.php&gt;
 $ending = '/cachify/apc/proxy.php
 &lt;/Files&gt;';
 
+// phpcs:disable Squiz.PHP.EmbeddedPhp
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-			<?php esc_html_e( '.htaccess APC setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?>
-				</label>
-			</td>
-		</tr>
-	</table>
+<h2><?php esc_html_e( '.htaccess APC setup', 'cachify' ); ?></h2>
+<p><?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?></p>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap">
-		<?php
-		printf(
-			'%s%s%s',
-			esc_html( $beginning ),
-			esc_html( WP_PLUGIN_DIR ),
-			esc_html( $ending )
-		);
-		?>
-		</pre>
-	</div>
+<textarea rows="5" class="large-text code cachify-code" name="code" readonly><?php
+	printf(
+		'%s%s%s',
+		esc_html( $beginning ),
+		esc_html( WP_PLUGIN_DIR ),
+		esc_html( $ending )
+	);
+	?></textarea>

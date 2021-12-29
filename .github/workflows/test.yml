@@ -1,5 +1,5 @@
 name: Coding Standards
-on: push
+on: [push, pull_request]
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -17,5 +17,5 @@ jobs:
       - name: Code style checks for PHP and CSS
         run: |
           composer install
-          npm ci
+          npm install
           composer lint-all
