@@ -145,7 +145,7 @@ final class Cachify_REDIS {
 	 * @param string $cache       Cached content.
 	 */
 	public static function print_cache ($sig_detail, $cache) {
-		echo $cache;
+		echo $cache;    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
 	}
 
