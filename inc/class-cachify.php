@@ -489,9 +489,9 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
-	 * @since   1.0
-	 * @change  2.4.0
-	 *
+	 * @since 1.0
+	 * @since 2.1.9
+	 * @since 2.4   Removed $data parameter and return value.
 	 */
 	public static function robots_txt() {
 		/* HDD only */
