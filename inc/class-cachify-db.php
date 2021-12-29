@@ -5,6 +5,9 @@
  * @package Cachify
  */
 
+/* Quit */
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cachify_DB
  */
@@ -172,7 +175,7 @@ final class Cachify_DB {
 		if ( $detail ) {
 			return sprintf(
 				"\n\n<!-- %s\n%s @ %s\n%s\n%s\n-->",
-				'Cachify | http://cachify.de',
+				'Cachify | https://cachify.pluginkollektiv.org',
 				'DB Cache',
 				date_i18n(
 					'd.m.Y H:i:s',
@@ -194,7 +197,7 @@ final class Cachify_DB {
 		} else {
 			return sprintf(
 				"\n\n<!-- %s\n%s @ %s -->",
-				'Cachify | http://cachify.de',
+				'Cachify | https://cachify.pluginkollektiv.org',
 				__( 'Generated', 'cachify' ),
 				date_i18n(
 					'd.m.Y H:i:s',

@@ -5,6 +5,9 @@
  * @package Cachify
  */
 
+/* Quit */
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cachify
  */
@@ -421,6 +424,16 @@ final class Cachify {
 	}
 
 	/**
+	 * Register the language file
+	 *
+	 * @since   2.1.3
+	 * @change  2.3.2
+	 */
+	public static function register_textdomain() {
+		load_plugin_textdomain( 'cachify' );
+	}
+
+	/**
 	 * Set default options
 	 *
 	 * @since   2.0
@@ -782,7 +795,7 @@ final class Cachify {
 			return false;
 		}
 
-		echo sprintf(
+		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			esc_html__( 'Cachify cache is flushed.', 'cachify' )
 		);
@@ -1402,15 +1415,6 @@ final class Cachify {
 				);
 				break;
 
-			case 'settings_page_cachify':
-				wp_enqueue_style(
-					'cachify-settings',
-					plugins_url( 'css/settings.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
-				break;
-
 			default:
 				break;
 		}
@@ -1506,20 +1510,6 @@ final class Cachify {
 			self::MINIFY_DISABLED  => esc_html__( 'No minify', 'cachify' ),
 			self::MINIFY_HTML_ONLY => esc_html__( 'HTML', 'cachify' ),
 			self::MINIFY_HTML_JS   => esc_html__( 'HTML + Inline JavaScript', 'cachify' ),
-		);
-	}
-
-	/**
-	 * Register the language file
-	 *
-	 * @since   2.1.3
-	 * @change  2.1.3
-	 */
-	public static function register_textdomain() {
-		load_plugin_textdomain(
-			'cachify',
-			false,
-			CACHIFY_DIR . '/lang'
 		);
 	}
 

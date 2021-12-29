@@ -5,6 +5,9 @@
  * @package Cachify
  */
 
+/* Quit */
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cachify_MEMCACHED
  */
@@ -188,7 +191,7 @@ final class Cachify_MEMCACHED {
 	private static function _cache_signature( $detail ) {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
-			'Cachify | http://cachify.de',
+			'Cachify | https://cachify.pluginkollektiv.org',
 			( $detail ? 'Memcached' : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
