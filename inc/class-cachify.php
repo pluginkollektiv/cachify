@@ -1563,14 +1563,7 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( self::METHOD_REDIS == $data['use_apc'] ) {
-			add_settings_error(
-				'cachify_method_tip',
-				'cachify_method_tip',
-				esc_html__( 'The server environment variables (e.g. REDIS_HOST) need to be adjusted. Please have a look at the setup tab.', 'cachify' ),
-				'notice-warning'
-			);
-		} elseif ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
+		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC && self::METHOD_REDIS != $data['use_apc'] ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
@@ -1672,12 +1665,6 @@ final class Cachify {
 			$tabs['setup'] = array(
 				'name' => __( 'Setup', 'cachify' ),
 				'page' => 'setup/cachify.apc.' . ( self::$is_nginx ? 'nginx' : 'htaccess' ) . '.php',
-			);
-		} elseif ( self::METHOD_REDIS === $options['use_apc'] ) {
-			/* Setup tab for REDIS */
-			$tabs['setup'] = array(
-				'name' => __( 'Setup', 'cachify' ),
-				'page' => 'setup/cachify.redis.nginx.php',
 			);
 		} elseif ( self::METHOD_MMC === $options['use_apc'] && self::$is_nginx ) {
 			/* Setup tab for Memcached */
