@@ -28,11 +28,7 @@ final class Cachify_REDIS {
 	 * @return  boolean  true/false  TRUE when installed
 	 */
 	public static function is_available() {
-		// $option = get_option( 'permalink_structure' );
-		// return ! empty( $option );
-		return class_exists( 'Redis' )
-			   && getenv( 'REDIS_HOST' )
-			   && getenv( 'REDIS_PORT' );
+		return class_exists( 'Redis' );
 	}
 
 	/**
