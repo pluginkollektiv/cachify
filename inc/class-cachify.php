@@ -89,10 +89,10 @@ final class Cachify {
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
 		/* Flush Hooks - third party */
-        add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
-        add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
-        add_action( 'woocommerce_product_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
-        add_action( 'woocommerce_variation_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_product_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_variation_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
 
 		/* Flush icon */
 		add_action(
@@ -856,18 +856,17 @@ final class Cachify {
 	/**
 	 * Removes the post type cache if saved or updated
 	 *
-	 * @since
-	 * @change
+	 * @since 2.0.3
+	 * @since 2.1.7 Make the function public.
+	 * @since 2.4   Renamed to save_update_trash_post with $id parameter.
 	 *
-	 * @param	integer	$id	Post ID
+	 * @param integer $id Post ID.
 	 */
-
 	public static function save_update_trash_post( $id ) {
-
 		$status = get_post_status( $id );
 
 		/* Post type published? */
-		if ( $status === 'publish' ) {
+		if ( 'publish' === $status ) {
 			self::flush_cache_for_posts( $id );
 		}
 	}
@@ -875,20 +874,19 @@ final class Cachify {
 	/**
 	 * Removes the post type cache before an existing post type is updated in the db
 	 *
-	 * @since
-	 * @change
+	 * @since 2.0.3
+	 * @since 2.3.0
+	 * @since 2.4   Renamed to post_update.
 	 *
-	 * @param	integer	$id		Post ID
-	 * @param	array	$data	Post data
+	 * @param integer $id   Post ID.
+	 * @param array   $data Post data.
 	 */
-
 	public static function post_update( $id, $data ) {
-
 		$new_status = $data['post_status'];
 		$old_status = get_post_status( $id );
 
 		/* Was it published and is it not trashed now? */
-		if ( $new_status !== 'trash' && $old_status === 'publish' ) {
+		if ( 'trash' !== $new_status && 'publish' === $old_status ) {
 			self::flush_cache_for_posts( $id );
 		}
 	}
@@ -896,23 +894,22 @@ final class Cachify {
 	/**
 	 * Clear cache when any post type has been created or updated
 	 *
-	 * @since
-	 * @change
+	 * @since 2.4
 	 *
-	 * @param	integer|object	$data  Post ID or post
+	 * @param integer|WP_Post $post Post ID or object.
 	 */
-
-	public static function flush_cache_for_posts( $data ) {
-
+	public static function flush_cache_for_posts( $post ) {
 		if ( is_int( $post ) ) {
-			$post_id = $data;
+			$post_id = $post;
 			$data = get_post( $post_id );
 
 			if ( ! is_object( $data ) ) {
 				return;
 			}
-		} elseif ( is_object( $data ) ) {
-			$post_id = $data->ID;
+		} elseif ( is_object( $post ) ) {
+			$post_id = $post->ID;
+		} else {
+			return;
 		}
 
 		/* Remove cache OR flush */
@@ -924,20 +921,18 @@ final class Cachify {
 	}
 
 	/**
-	 * WooCommerce stock hooks
+	 * WooCommerce stock hooks.
 	 *
-	 * @since
+	 * @since 2.4
 	 *
-	 * @param	integer|object	$product	Product ID or product
+	 * @param integer|object $product Product ID or object.
 	 */
-
 	public static function flush_woocommerce( $product ) {
-
 		if ( is_int( $product ) ) {
 			$id = $product;
 		} else {
 			$id = $product->get_id();
-	}
+		}
 
 		self::flush_cache_for_posts( $id );
 	}
