@@ -1,3 +1,6 @@
+.idea/
+css/*.min.css
+vendor/
+node_modules/
 composer.lock
-node_modules
-vendor
+package-lock.json

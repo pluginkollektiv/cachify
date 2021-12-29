@@ -1,8 +1,16 @@
 <?php
+/**
+ * Class for database based caching.
+ *
+ * @package Cachify
+ */
+
+/* Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Cachify_DB
-*/
+ * Cachify_DB
+ */
 final class Cachify_DB {
 
 	/**
@@ -42,7 +50,7 @@ final class Cachify_DB {
 	public static function store_item( $hash, $data, $lifetime ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 
@@ -53,9 +61,9 @@ final class Cachify_DB {
 				'data' => $data,
 				'meta' => array(
 					'queries' => self::_page_queries(),
-					'timer'	  => self::_page_timer(),
+					'timer'   => self::_page_timer(),
 					'memory'  => self::_page_memory(),
-					'time'	  => current_time( 'timestamp' ),
+					'time'    => current_time( 'timestamp' ),
 				),
 			),
 			$lifetime
@@ -118,10 +126,11 @@ final class Cachify_DB {
 		}
 
 		/* Content */
-		echo $cache['data'];
+		echo $cache['data']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo self::_cache_signature( $sig_detail, $cache['meta'] );
 		}
 
@@ -166,7 +175,7 @@ final class Cachify_DB {
 		if ( $detail ) {
 			return sprintf(
 				"\n\n<!-- %s\n%s @ %s\n%s\n%s\n-->",
-				'Cachify | http://cachify.de',
+				'Cachify | https://cachify.pluginkollektiv.org',
 				'DB Cache',
 				date_i18n(
 					'd.m.Y H:i:s',
@@ -188,7 +197,7 @@ final class Cachify_DB {
 		} else {
 			return sprintf(
 				"\n\n<!-- %s\n%s @ %s -->",
-				'Cachify | http://cachify.de',
+				'Cachify | https://cachify.pluginkollektiv.org',
 				__( 'Generated', 'cachify' ),
 				date_i18n(
 					'd.m.Y H:i:s',

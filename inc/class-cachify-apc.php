@@ -1,8 +1,16 @@
 <?php
+/**
+ * Class for APC based caching.
+ *
+ * @package Cachify
+ */
+
+/* Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Cachify_APC
-*/
+ * Cachify_APC
+ */
 final class Cachify_APC {
 
 	/**
@@ -43,7 +51,7 @@ final class Cachify_APC {
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
-			trigger_error( __METHOD__ . ": Empty input.", E_USER_WARNING );
+			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
 			return;
 		}
 
@@ -137,7 +145,7 @@ final class Cachify_APC {
 	private static function _cache_signature( $detail ) {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
-			'Cachify | http://cachify.de',
+			'Cachify | https://cachify.pluginkollektiv.org',
 			( $detail ? 'APC Cache' : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',

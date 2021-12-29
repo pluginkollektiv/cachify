@@ -1,8 +1,16 @@
 <?php
+/**
+ * Class for initializing the hooks and actions.
+ *
+ * @package Cachify
+ */
+
+/* Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Cachify
-*/
+ * Cachify
+ */
 final class Cachify {
 
 	/**
@@ -66,7 +74,6 @@ final class Cachify {
 	 * @since   1.0.0
 	 * @change  2.2.2
 	 *
-	 * @param   void
 	 * @return  void
 	 */
 	public function __construct() {
@@ -187,7 +194,7 @@ final class Cachify {
 				'doing_dark_mode',
 				array(
 					__CLASS__,
-					'admin_dashboard_dark_mode_styles'
+					'admin_dashboard_dark_mode_styles',
 				)
 			);
 
@@ -417,6 +424,16 @@ final class Cachify {
 	}
 
 	/**
+	 * Register the language file
+	 *
+	 * @since   2.1.3
+	 * @change  2.3.2
+	 */
+	public static function register_textdomain() {
+		load_plugin_textdomain( 'cachify' );
+	}
+
+	/**
 	 * Set default options
 	 *
 	 * @since   2.0
@@ -428,19 +445,19 @@ final class Cachify {
 
 		/* APC */
 		if ( self::METHOD_APC === self::$options['use_apc'] && Cachify_APC::is_available() ) {
-			self::$method = new Cachify_APC;
+			self::$method = new Cachify_APC();
 
 			/* HDD */
 		} elseif ( self::METHOD_HDD === self::$options['use_apc'] && Cachify_HDD::is_available() ) {
-			self::$method = new Cachify_HDD;
+			self::$method = new Cachify_HDD();
 
 			/* MEMCACHED */
 		} elseif ( self::METHOD_MMC === self::$options['use_apc'] && Cachify_MEMCACHED::is_available() ) {
-			self::$method = new Cachify_MEMCACHED;
+			self::$method = new Cachify_MEMCACHED();
 
 			/* DB */
 		} else {
-			self::$method = new Cachify_DB;
+			self::$method = new Cachify_DB();
 		}
 	}
 
@@ -456,12 +473,12 @@ final class Cachify {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
-				'only_guests'	 	=> 1,
-				'compress_html'	 	=> self::MINIFY_DISABLED,
-				'cache_expires'	 	=> 12,
-				'without_ids'	 	=> '',
-				'without_agents' 	=> '',
-				'use_apc'		 	=> self::METHOD_DB,
+				'only_guests'       => 1,
+				'compress_html'     => self::MINIFY_DISABLED,
+				'cache_expires'     => 12,
+				'without_ids'       => '',
+				'without_agents'    => '',
+				'use_apc'           => self::METHOD_DB,
 				'reset_on_post'     => 1,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
@@ -510,7 +527,7 @@ final class Cachify {
 						admin_url( 'options-general.php' )
 					),
 					esc_html__( 'Settings', 'cachify' )
-				)
+				),
 			)
 		);
 	}
@@ -606,7 +623,8 @@ final class Cachify {
 	 * @return  integer    Cache size in bytes.
 	 */
 	public static function get_cache_size() {
-		if ( ! $size = get_transient( 'cachify_cache_size' ) ) {
+		$size = get_transient( 'cachify_cache_size' );
+		if ( ! $size ) {
 			/* Read */
 			$size = (int) call_user_func(
 				array(
@@ -648,10 +666,10 @@ final class Cachify {
 		/* Add menu item */
 		$wp_admin_bar->add_menu(
 			array(
-				'id' 	 => 'cachify',
+				'id'     => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'	 => '<span class="ab-icon dashicons"></span>' .
+				'title'  => '<span class="ab-icon dashicons"></span>' .
 										'<span class="ab-label">' .
 											__(
 												'Flush site cache',
@@ -682,7 +700,7 @@ final class Cachify {
 		}
 
 		/* Check nonce */
-		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], '_cachify__flush_nonce' ) ) {
+		if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), '_cachify__flush_nonce' ) ) {
 			return;
 		}
 
@@ -763,7 +781,7 @@ final class Cachify {
 			return false;
 		}
 
-		echo sprintf(
+		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			esc_html__( 'Cachify cache is flushed.', 'cachify' )
 		);
@@ -836,7 +854,6 @@ final class Cachify {
 	 * @since   2.1.7  Make the function public
 	 * @since   2.0.3
 	 *
-	 * @param   void
 	 * @return  void
 	 */
 	public static function register_publish_hooks() {
@@ -898,16 +915,6 @@ final class Cachify {
 			return;
 		}
 
-		/* Save as var */
-		$remove_post_type_cache = (int) $_POST['_cachify_remove_post_type_cache_on_update'];
-
-		/* Save as user meta */
-		update_user_meta(
-			get_current_user_id(),
-			'_cachify_remove_post_type_cache_on_update',
-			$remove_post_type_cache
-		);
-
 		/* Remove cache OR flush */
 		if ( 1 !== self::$options['reset_on_post'] ) {
 			self::remove_page_cache_by_post_id( $post_id );
@@ -925,15 +932,12 @@ final class Cachify {
 	 * @param   integer $post_id  Post ID.
 	 */
 	public static function remove_page_cache_by_post_id( $post_id ) {
-		/* Value check */
-		if ( ! $post_id = (int) $post_id ) {
+		$post_id = (int) $post_id;
+		if ( ! $post_id ) {
 			return;
 		}
 
-		/* Remove page by url */
-		self::remove_page_cache_by_url(
-			get_permalink( $post_id )
-		);
+		self::remove_page_cache_by_url( get_permalink( $post_id ) );
 	}
 
 	/**
@@ -945,8 +949,8 @@ final class Cachify {
 	 * @param  string $url  Page URL.
 	 */
 	public static function remove_page_cache_by_url( $url ) {
-		/* Value check */
-		if ( ! $url = (string) $url ) {
+		$url = (string) $url;
+		if ( ! $url ) {
 			return;
 		}
 
@@ -980,7 +984,7 @@ final class Cachify {
 	 * @return  bool  Show details in signature.
 	 */
 	private static function _signature_details() {
-		return self::$options['sig_detail'] === 1;
+		return 1 === self::$options['sig_detail'];
 	}
 
 	/**
@@ -995,9 +999,15 @@ final class Cachify {
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
 		$url_parts = wp_parse_url( $url );
-		return md5(
-			empty( $url ) ? ( $prefix . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) : ( $prefix . $url_parts['host'] . $url_parts['path'] )
-		) . '.cachify';
+
+		if ( empty( $url ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			$hash_key = $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
+		} else {
+			$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+		}
+
+		return md5( $hash_key ) . '.cachify';
 	}
 
 	/**
@@ -1022,7 +1032,8 @@ final class Cachify {
 	 * @return  boolean  TRUE if index
 	 */
 	private static function _is_index() {
-		return basename( $_SERVER['SCRIPT_NAME'] ) === 'index.php';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		return basename( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) === 'index.php';
 	}
 
 	/**
@@ -1071,12 +1082,8 @@ final class Cachify {
 	 * Register all hooks to flush the total cache
 	 *
 	 * @since   2.4.0
-	 *
-	 * @param   void
-	 * @return  void
 	 */
 	public static function register_flush_cache_hooks() {
-
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
 			'cachify_flush_cache' => 10,
@@ -1089,7 +1096,7 @@ final class Cachify {
 			'edit_terms' => 10,
 			'user_register' => 10,
 			'edit_user_profile_update' => 10,
-			'delete_user' => 10
+			'delete_user' => 10,
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
@@ -1125,7 +1132,10 @@ final class Cachify {
 		$options = self::$options;
 
 		/* Request vars */
-		if ( ! empty( $_POST ) || ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) ) {
+		if ( ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return true;
+		}
+		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 
@@ -1171,7 +1181,8 @@ final class Cachify {
 		if ( $options['without_agents'] && isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 			$user_agent_strings = self::_preg_split( $options['without_agents'] );
 			foreach ( $user_agent_strings as $user_agent_string ) {
-				if ( strpos( $_SERVER["HTTP_USER_AGENT"], $user_agent_string ) !== false ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				if ( strpos( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ), $user_agent_string ) !== false ) {
 					return true;
 				}
 			}
@@ -1388,19 +1399,10 @@ final class Cachify {
 					array(),
 					$plugin_data['Version']
 				);
-			break;
-
-			case 'settings_page_cachify':
-				wp_enqueue_style(
-					'cachify-settings',
-					plugins_url( 'css/settings.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
-			break;
+				break;
 
 			default:
-			break;
+				break;
 		}
 
 	}
@@ -1452,7 +1454,6 @@ final class Cachify {
 	 * @since  2.0.0
 	 * @change 2.1.3
 	 *
-	 * @param  array $methods  Array of all available methods.
 	 * @return array           Array of actually available methods.
 	 */
 	private static function _method_select() {
@@ -1499,20 +1500,6 @@ final class Cachify {
 	}
 
 	/**
-	 * Register the language file
-	 *
-	 * @since   2.1.3
-	 * @change  2.1.3
-	 */
-	public static function register_textdomain() {
-		load_plugin_textdomain(
-			'cachify',
-			false,
-			CACHIFY_DIR . '/lang'
-		);
-	}
-
-	/**
 	 * Register settings
 	 *
 	 * @since   1.0
@@ -1541,7 +1528,7 @@ final class Cachify {
 	public static function validate_options( $data ) {
 		/* Empty data? */
 		if ( empty( $data ) ) {
-			return;
+			return array();
 		}
 
 		/* Flush cache */
@@ -1559,15 +1546,15 @@ final class Cachify {
 
 		/* Return */
 		return array(
-			'only_guests'      => (int) ( ! empty( $data['only_guests'] )),
+			'only_guests'      => (int) ( ! empty( $data['only_guests'] ) ),
 			'compress_html'    => (int) $data['compress_html'],
 			'cache_expires'    => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
 			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
 			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
 			'use_apc'          => (int) $data['use_apc'],
 			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
-			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] )),
-			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] )),
+			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] ) ),
+			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] ) ),
 		);
 	}
 
@@ -1580,37 +1567,45 @@ final class Cachify {
 	public static function options_page() {
 		$options = self::_get_options();
 		$cachify_tabs = self::_get_tabs( $options );
-		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] ) ? $_GET['cachify_tab'] : 'settings';
-	?>
+		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
+			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
+			: 'settings';
+		?>
 
 		<div class="wrap" id="cachify_settings">
 			<h1>Cachify</h1>
 
 			<?php
-				/* Add a navbar if necessary */
-				if ( count( $cachify_tabs ) > 1 ) {
-					echo '<h2 class="nav-tab-wrapper">';
-					foreach ( $cachify_tabs as $tab_key => $tab_data ) {
-						printf(
-							'<a class="nav-tab %s" href="%s">%s</a>',
-							$tab_key === $current_tab ? 'nav-tab-active' : '',
+			// Add a navbar if necessary.
+			if ( count( $cachify_tabs ) > 1 ) {
+				echo '<h2 class="nav-tab-wrapper">';
+				foreach ( $cachify_tabs as $tab_key => $tab_data ) {
+					printf(
+						'<a class="nav-tab %s" href="%s">%s</a>',
+						esc_attr( $tab_key === $current_tab ? 'nav-tab-active' : '' ),
+						esc_url(
 							add_query_arg(
-								array( 'page' => 'cachify', 'cachify_tab' => $tab_key ),
+								array(
+									'page' => 'cachify',
+									'cachify_tab' => $tab_key,
+								),
 								admin_url( 'options-general.php' )
-							),
-							esc_html( $tab_data['name'] )
-						);
-					}
-					echo '</h2>';
+							)
+						),
+						esc_html( $tab_data['name'] )
+					);
 				}
+				echo '</h2>';
+			}
 
 				/* Include current tab */
 				include $cachify_tabs[ $current_tab ]['page'];
 
 				/* Include common footer */
-				include 'cachify.settings_footer.php';
+				include 'cachify.settings-footer.php';
 			?>
-		</div><?php
+		</div>
+		<?php
 	}
 
 	/**
@@ -1619,7 +1614,7 @@ final class Cachify {
 	 * @since   2.3.0
 	 * @change  2.3.0
 	 *
-	 * @param array $options
+	 * @param array $options the options.
 	 * @return array
 	 */
 	private static function _get_tabs( $options ) {

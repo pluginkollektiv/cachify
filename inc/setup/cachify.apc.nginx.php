@@ -1,4 +1,10 @@
 <?php
+/**
+ * Setup for APC on nginx server.
+ *
+ * @package Cachify
+ */
+
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
@@ -16,26 +22,19 @@ $ending = '/cachify/apc/proxy.php</strong>;
   }
 }';
 
+// phpcs:disable Squiz.PHP.EmbeddedPhp
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-				<?php esc_html_e( 'nginx APC setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your nginx PHP configuration', 'cachify' ); ?>
-				</label>
-			</td>
-		</tr>
-	</table>
+<h2><?php esc_html_e( 'nginx APC setup', 'cachify' ); ?></h2>
+<p><?php esc_html_e( 'Please add the following lines to your nginx PHP configuration', 'cachify' ); ?></p>
 
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px">
-		<pre style="white-space: pre-wrap"><?php echo sprintf( '%s%s%s',
-			$beginning,
-			WP_PLUGIN_DIR,
-		$ending ); ?></pre>
-	</div>
+<textarea rows="13" class="large-text code cachify-code" name="code" readonly><?php
+	printf(
+		'%s%s%s',
+		esc_html( $beginning ),
+		esc_html( WP_PLUGIN_DIR ),
+		esc_html( $ending )
+	);
+	?></textarea>
 
-	<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>
+<small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>

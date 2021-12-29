@@ -18,25 +18,25 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * Extendability via hooks/filters.
 
 ### Support ###
-* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify)
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/cachify/)
 * We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
 ### Contribute ###
 * Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/cachify).
 * Pull requests for documented bugs are highly appreciated.
-* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify) first.
-* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify).
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/cachify/) first.
+* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/cachify/).
 
 ### Donate
 [Donate to us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW)
 
 ### Credits ###
-* Author: [Sergej Müller](https://sergejmueller.github.io/)
-* Maintainers: [pluginkollektiv](http://pluginkollektiv.org)
+* Author: [Sergej Müller](https://sergejmueller.github.io)
+* Maintainers: [pluginkollektiv](https://pluginkollektiv.org)
 
 
 ## Installation ##
-* If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
+* If you don’t know how to install a plugin for WordPress, [here’s how](https://wordpress.org/support/article/managing-plugins/#installing-plugins).
 
 ### Requirements ###
 * PHP 5.2.4 or greater
@@ -46,10 +46,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 
 
 ## Frequently Asked Questions ##
-Please have a look [in the FAQ pages](https://cachify.pluginkollektiv.org/documentation#faq).
+Please have a look [in the FAQ pages](https://cachify.pluginkollektiv.org/documentation/faq/).
 
 A complete documentation is available in the [online handbook](https://cachify.pluginkollektiv.org/documentation/).
 
 
 ## Changelog ##
-[Changelog](./CHANGELOG.md).
+[Changelog](./CHANGELOG.md)
