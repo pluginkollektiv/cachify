@@ -33,8 +33,8 @@ final class Cachify_REDIS {
 		// $option = get_option( 'permalink_structure' );
 		// return ! empty( $option );
 		return class_exists( 'Redis' )
-			&& getenv( 'REDIS_HOST' )
-			&& getenv( 'REDIS_PORT' );
+			   && getenv( 'REDIS_HOST' )
+			   && getenv( 'REDIS_PORT' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class Cachify_REDIS {
 	 * @param bool   $sig_detail  Show details in signature.
 	 * @param string $cache       Cached content.
 	 */
-	public static function print_cache ($sig_detail, $cache) {
+	public static function print_cache( $sig_detail, $cache ) {
 		echo $cache;    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
 	}
