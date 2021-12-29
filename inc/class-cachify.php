@@ -774,8 +774,8 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
-	 * @param   integer	$id			Comment ID
-	 * @param   array	$comment	Comment data
+	 * @param integer $id      Comment ID.
+	 * @param array   $comment Comment data.
 	 */
 	public static function comment_edit( $id, $comment ) {
 
@@ -799,8 +799,8 @@ final class Cachify {
 	 * @since   0.1.0
 	 * @change  2.1.2
 	 *
-	 * @param	integer			$id			Comment ID
-	 * @param	integer|string	$approved	Comment status
+	 * @param integer        $id       Comment ID.
+	 * @param integer|string $approved Comment status.
 	 */
 	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
@@ -819,12 +819,12 @@ final class Cachify {
 	 * @since   0.1
 	 * @change  2.1.2
 	 *
-	 * @param   string $new_status  New status.
-	 * @param   string $old_status  Old status.
-	 * @param   object $comment     The comment.
+	 * @param string $new_status New status.
+	 * @param string $old_status Old status.
+	 * @param object $comment    The comment.
 	 */
 	public static function comment_status( $new_status, $old_status, $comment ) {
-		if ( $old_status === 'approved' || $new_status === 'approved' ) {
+		if ( 'approved' === $old_status || 'approved' === $new_status ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
