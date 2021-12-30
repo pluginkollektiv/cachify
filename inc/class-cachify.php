@@ -1006,21 +1006,21 @@ final class Cachify {
 	 *
 	 * @since   0.1
 	 * @change  2.0
+	 * @change  2.4.0 Fix issue with port in URL.
 	 *
 	 * @param   string $url  URL to hash [optional].
 	 * @return  string       Cachify hash value.
 	 */
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
-		$url_parts = wp_parse_url( $url );
 
 		if ( empty( $url ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			$hash_key = $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
-		} else {
-			$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+			$url = wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
+		$url_parts = wp_parse_url( $url );
+		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
 		return md5( $hash_key ) . '.cachify';
 	}
 
