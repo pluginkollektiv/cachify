@@ -1135,6 +1135,7 @@ final class Cachify {
 	 *
 	 * @since   0.2
 	 * @change  2.3.0
+	 * @change  2.4.0 Add check for sitemap feature.
 	 *
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1200,6 +1201,11 @@ final class Cachify {
 					return true;
 				}
 			}
+		}
+
+		// Sitemap feature added in WP 5.5.
+		if ( get_query_var( 'sitemap' ) || get_query_var( 'sitemap-subtype' ) || get_query_var( 'sitemap-stylesheet' ) ) {
+			return true;
 		}
 
 		return false;
