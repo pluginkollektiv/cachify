@@ -144,7 +144,7 @@ final class Cachify {
 
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
 			if ( $timestamp == false ) {
-				wp_schedule_event( time(), 'cache_expire', 'hdd_cache_cron' );
+				wp_schedule_event( time(), 'cashify_cache_expire', 'hdd_cache_cron' );
 			}
 
 			add_action(
@@ -563,7 +563,7 @@ final class Cachify {
 	 * @return array
 	 */
 	public static function add_cron_cache_expiration() {
-		$schedules['cache_expire'] = array(
+		$schedules['cashify_cache_expire'] = array(
 			'interval' => self::$options['cache_expires'] * 3600,
 			'display'  => 'Cache Expiration',
 		);
@@ -830,7 +830,7 @@ final class Cachify {
 		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
 			if ( $timestamp !== false ) {
-				wp_reschedule_event( $timestamp, 'cache_expire', 'hdd_cache_cron' );
+				wp_reschedule_event( $timestamp, 'cashify_cache_expire', 'hdd_cache_cron' );
 				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
 			}
 		}
