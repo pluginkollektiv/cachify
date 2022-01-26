@@ -132,7 +132,7 @@ final class Cachify {
 			2
 		);
 
-		/* Add Cron for clearing the HDD Cache daily */
+		/* Add Cron for clearing the HDD Cache */
 		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
 			add_filter(
 				'cron_schedules',
@@ -547,9 +547,9 @@ final class Cachify {
 	}
 
 	/**
-	 * HDD Cache expiration cron
+	 * HDD Cache expiration cron action
 	 *
-	 * @since   2.3.3
+	 * @since  2.3.3
 	 */
 	public static function run_hdd_cache_cron() {
 		Cachify_HDD::clear_cache();
@@ -558,7 +558,7 @@ final class Cachify {
 	/**
 	 * Add cache expiration cron shedule
 	 *
-	 * @since 2.3.3
+	 * @since  2.3.3
 	 *
 	 * @return array
 	 */
