@@ -32,7 +32,9 @@ defined( 'ABSPATH' ) || exit;
 			<td>
 				<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ); ?>" class="small-text" />
 				<?php esc_html_e( 'Hours', 'cachify' ); ?>
-				<p class="description"><?php esc_html_e( 'HDD cache will only expire correctly when triggered by a system cron.', 'cachify' ); ?></p>
+				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
+					<p class="description"><?php esc_html_e( 'HDD cache will only expire correctly when triggered by a system cron.', 'cachify' ); ?></p>
+				<?php endif; ?>
 
 				<p class="description">
 					<?php
