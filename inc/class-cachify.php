@@ -134,16 +134,24 @@ final class Cachify {
 
 		/* Add Cron for clearing the HDD Cache daily */
 		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
+			add_filter(
+				'cron_schedules',
+				array(
+					__CLASS__,
+					'add_cron_cache_expiration',
+				)
+			);
+
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
 			if ( $timestamp == false ) {
-				wp_schedule_event( time(), 'daily', 'hdd_cache_cron' );
+				wp_schedule_event( time(), 'cache_expire', 'hdd_cache_cron' );
 			}
 
 			add_action(
 				'hdd_cache_cron',
 				array(
 					__CLASS__,
-					'run_hdd_cache_cron'
+					'run_hdd_cache_cron',
 				)
 			);
 		}
@@ -288,9 +296,9 @@ final class Cachify {
 	public static function on_deactivation() {
 		/* Remove hdd cache cron when hdd is selected */
 		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
-			$timestamp = wp_next_scheduled('hdd_cache_cron');
-			if($timestamp !== false){
-				wp_unschedule_event($timestamp, 'hdd_cache_cron');
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( $timestamp !== false ) {
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
 			}
 		}
 
@@ -545,6 +553,21 @@ final class Cachify {
 	 */
 	public static function run_hdd_cache_cron() {
 		Cachify_HDD::clear_cache();
+	}
+
+	/**
+	 * Add cache expiration cron shedule
+	 *
+	 * @since 2.3.3
+	 *
+	 * @return array
+	 */
+	public static function add_cron_cache_expiration() {
+		$schedules['cache_expire'] = array(
+			'interval' => self::$options['cache_expires'] * 3600,
+			'display'  => 'Cache Expiration',
+		);
+		return $schedules;
 	}
 
 	/**
@@ -807,8 +830,8 @@ final class Cachify {
 		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
 			if ( $timestamp !== false ) {
-				wp_reschedule_event($timestamp, 'daily', 'hdd_cache_cron' );
-				wp_unschedule_event($timestamp, 'hdd_cache_cron' );
+				wp_reschedule_event( $timestamp, 'cache_expire', 'hdd_cache_cron' );
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
 			}
 		}
 
