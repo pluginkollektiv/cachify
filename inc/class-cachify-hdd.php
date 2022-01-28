@@ -185,6 +185,7 @@ final class Cachify_HDD {
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
+
 		$handle = @fopen( $file, 'wb' );
 		if ( ! $handle ) {
 			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
@@ -192,7 +193,7 @@ final class Cachify_HDD {
 		}
 
 		/* Write */
-		@fwrite( $handle, $data );
+		fwrite( $handle, $data );
 		fclose( $handle );
 		clearstatcache();
 
