@@ -59,6 +59,14 @@ final class Cachify {
 	const MINIFY_HTML_JS = 2;
 
 	/**
+	 * REST endpoints
+	 * 
+	 * @var	   string
+	 */
+	const REST_NAMESPACE_V1 = 'cachify/v1';
+	const REST_ROUTE_FLUSH = 'flush';
+
+	/**
 	 * Pseudo constructor
 	 *
 	 * @since   2.0.5
@@ -111,6 +119,25 @@ final class Cachify {
 				'add_flush_icon',
 			),
 			90
+		);
+
+		/* Flush icon script */
+		add_action(
+			'admin_bar_menu',
+			array(
+				__CLASS__,
+				'add_flush_icon_script',
+			),
+			90
+		);
+
+		/* Flush REST endpoint */
+		add_action(
+			'rest_api_init',
+			array(
+				__CLASS__,
+				'add_flush_rest_endpoint',
+			)
 		);
 
 		add_action(
@@ -674,6 +701,37 @@ final class Cachify {
 			return;
 		}
 
+		echo '
+		<style>
+		    #wp-admin-bar-cachify .animate-pulse:before {
+				animation: cachify-dash-icon-fade 2s infinite;
+				animation-timing-function: linear;
+			}
+
+		    #wp-admin-bar-cachify .animate-success:before {
+				animation: cachify-dash-icon-success 2s;
+				animation-timing-function: linear;
+			}
+
+		    #wp-admin-bar-cachify .animate-fail:before {
+				animation: cachify-dash-icon-fail 2s;
+				animation-timing-function: linear;
+			}
+
+			@keyframes cachify-dash-icon-fade {
+				0%, 100% { opacity: 1 }
+				50% { opacity: 0 }
+			}
+
+			@keyframes cachify-dash-icon-success {
+				from { color: #27b127 }
+			}
+
+			@keyframes cachify-dash-icon-fail {
+				from { color: #ff3b3b }
+			}
+		</style>';
+
 		/* Display the admin icon anytime */
 		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
 
@@ -681,7 +739,7 @@ final class Cachify {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'cachify',
-				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
+				'href' => '',
 				'parent' => 'top-secondary',
 				'title'  => '<span class="ab-icon dashicons"></span>' .
 										'<span class="ab-label">' .
@@ -692,9 +750,84 @@ final class Cachify {
 										'</span>',
 				'meta'   => array(
 					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
+					'onclick' => 'cachify_flush()',
 				),
 			)
 		);
+	}
+
+    /**
+	 * Add a script to query the REST endpoint and animate the flush icon in admin bar menu
+	 *
+	 * @since   ?
+	 * @change  ?
+	 *
+	 * @hook    mixed   cachify_user_can_flush_cache ?
+	 *
+	 * @param   object $wp_admin_bar  Object of menu items.
+	 */
+	public static function add_flush_icon_script( $wp_admin_bar ) {
+		/* Quit */
+		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
+			return;
+		}
+
+		/* Output the admin icon script */
+		$nonce = wp_create_nonce( 'wp_rest' );
+		$url = esc_url_raw( rest_url( self::REST_NAMESPACE_V1 . '/' . self::REST_ROUTE_FLUSH ) );
+		echo "
+		<script>
+			function cachify_flush() {
+				var admin_bar_icon = document.querySelector( '#wp-admin-bar-cachify .ab-icon' );
+				if ( admin_bar_icon !== null ) {
+					admin_bar_icon.classList.remove( 'animate-success' );
+					admin_bar_icon.classList.remove( 'animate-fail' );
+					admin_bar_icon.classList.add( 'animate-pulse' );
+				}
+
+				var request = new XMLHttpRequest();
+				request.addEventListener( 'load', function () {
+					console.log( this );
+					if ( this.status === 200 ) {
+						admin_bar_icon.classList.remove( 'animate-pulse' );
+						admin_bar_icon.classList.add( 'animate-success' );
+						return;
+					}
+
+					admin_bar_icon.classList.add( 'animate-fail' );
+				});
+
+				request.addEventListener('error', function () {
+					admin_bar_icon.classList.add( 'animate-fail' );					
+				});
+
+				request.open( 'DELETE', '$url' );
+				request.setRequestHeader( 'X-WP-Nonce', '$nonce' );
+				request.send();
+			}
+		</script>
+		";
+	}
+
+
+	/**
+	 * Registers an REST endpoint for the flush operation
+	 */
+	public static function add_flush_rest_endpoint() {
+		register_rest_route( self::REST_NAMESPACE_V1, self::REST_ROUTE_FLUSH, array(
+			'methods' => WP_REST_Server::DELETABLE,
+			'callback' => array(
+				__CLASS__,
+				'flush_cache'
+			),
+			'permission_callback' => function () {
+				return current_user_can( 'manage_options' );
+			}
+		) );
+	}
+
+	public static function echo_something() {
+		echo "something";
 	}
 
 	/**
@@ -728,6 +861,25 @@ final class Cachify {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
+		/* Flush cache */
+		self::flush_cache();
+
+		if ( ! is_admin() ) {
+			wp_safe_redirect(
+				remove_query_arg(
+					'_cachify',
+					wp_get_referer()
+				)
+			);
+
+			exit();
+		}
+	}
+
+	/**
+	 * Flush cache
+	 */
+	public static function flush_cache() {
 		/* Flush cache */
 		if ( is_multisite() && is_network_admin() ) {
 			/* Old blog */
@@ -768,16 +920,6 @@ final class Cachify {
 					)
 				);
 			}
-		}
-		if ( ! is_admin() ) {
-			wp_safe_redirect(
-				remove_query_arg(
-					'_cachify',
-					wp_get_referer()
-				)
-			);
-
-			exit();
 		}
 	}
 
