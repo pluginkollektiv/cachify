@@ -63,7 +63,7 @@ final class Cachify {
 	 *
 	 * @var	   string
 	 */
-	const REST_NAMESPACE_V1 = 'cachify/v1';
+	const REST_NAMESPACE = 'cachify/v1';
 	const REST_ROUTE_FLUSH = 'flush';
 
 	/**
@@ -820,7 +820,7 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			'cachify_admin_bar_flush_ajax_object',
 			array(
-				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE_V1 . '/' . self::REST_ROUTE_FLUSH ) ),
+				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
 				'nonce' => wp_create_nonce( 'wp_rest' )
 			)
 		);
@@ -831,7 +831,7 @@ final class Cachify {
 	 * Registers an REST endpoint for the flush operation
 	 */
 	public static function add_flush_rest_endpoint() {
-		register_rest_route( self::REST_NAMESPACE_V1, self::REST_ROUTE_FLUSH, array(
+		register_rest_route( self::REST_NAMESPACE, self::REST_ROUTE_FLUSH, array(
 			'methods' => WP_REST_Server::DELETABLE,
 			'callback' => array(
 				__CLASS__,
