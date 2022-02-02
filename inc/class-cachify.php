@@ -143,7 +143,7 @@ final class Cachify {
 			);
 
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
-			if (false == $timestamp) {
+			if ( false == $timestamp ) {
 				wp_schedule_event( time(), 'cashify_cache_expire', 'hdd_cache_cron' );
 			}
 
