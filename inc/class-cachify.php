@@ -111,6 +111,24 @@ final class Cachify {
 			)
 		);
 
+		/* Register scripts */
+		add_action(
+			'init',
+			array(
+				__CLASS__,
+				'register_scripts',
+			)
+		);
+
+		/* Register styles */
+		add_action(
+			'init',
+			array(
+				__CLASS__,
+				'register_styles',
+			)
+		);
+
 		/* Flush icon */
 		add_action(
 			'admin_bar_menu',
@@ -451,6 +469,51 @@ final class Cachify {
 	}
 
 	/**
+	 * Register the styles
+	 */
+	public static function register_styles() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+		$plugin_data = get_plugin_data( CACHIFY_FILE );
+
+		/* Register dashboard CSS */
+		wp_enqueue_style(
+			'cachify-dashboard',
+			plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
+			array(),
+			$plugin_data['Version']
+		);
+
+		/* Register admin bar flush CSS */
+		wp_register_style(
+			'cachify-admin-bar-flush',
+			plugins_url( 'css/admin-bar-flush.css', CACHIFY_FILE ),
+			array(),
+			$plugin_data['Version']
+		);		
+	}
+
+	/**
+	 * Register the scripts
+	 */
+	public static function register_scripts() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+		$plugin_data = get_plugin_data( CACHIFY_FILE );
+
+		/* Register admin bar flush script */
+		wp_register_script(
+			'cachify-admin-bar-flush',
+			plugins_url( 'js/admin-bar-flush.js', CACHIFY_FILE ),
+			array(),
+			$plugin_data['Version'],
+			true
+		);
+	}	
+
+	/**
 	 * Register the language file
 	 *
 	 * @since   2.1.3
@@ -701,19 +764,8 @@ final class Cachify {
 			return;
 		}
 
-		/* Plugin data */
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		}
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
-		/* Register css */
-		wp_enqueue_style(
-			'cachify-admin-bar-flush',
-			plugins_url( 'css/admin-bar-flush.css', CACHIFY_FILE ),
-			array(),
-			$plugin_data['Version']
-		);
+		/* Enqueue style */
+		wp_enqueue_style( 'cachify-admin-bar-flush' );
 
 		/* Display the admin icon anytime */
 		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
@@ -760,17 +812,8 @@ final class Cachify {
 			return;
 		}
 
-		/* Plugin data */
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
 		/* Enqueue script */
-		wp_enqueue_script(
-			'cachify-admin-bar-flush',
-			plugins_url( 'js/admin-bar-flush.js', CACHIFY_FILE ),
-			array(),
-			$plugin_data['Version'],
-			true
-		);
+		wp_enqueue_script( 'cachify-admin-bar-flush' );
 
 		/* Localize script */
 		wp_localize_script(
@@ -1536,12 +1579,7 @@ final class Cachify {
 		/* Register css */
 		switch ( $hook ) {
 			case 'index.php':
-				wp_enqueue_style(
-					'cachify-dashboard',
-					plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
+				wp_enqueue_style( 'cachify-dashboard' );
 				break;
 
 			default:
