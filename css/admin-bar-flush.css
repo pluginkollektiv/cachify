@@ -1,0 +1,19 @@
+#wp-admin-bar-cachify .animate-pulse {
+    animation: cachify-dash-icon-pulse 2s infinite;
+    animation-timing-function: linear;
+}
+
+#wp-admin-bar-cachify .animate-fade {
+    animation: cachify-dash-icon-fade-in 0.1s;
+    animation-timing-function: linear;
+}
+
+@keyframes cachify-dash-icon-pulse {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0 }
+}
+
+@keyframes cachify-dash-icon-fade-in {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
