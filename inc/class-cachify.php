@@ -1135,7 +1135,7 @@ final class Cachify {
 	 *
 	 * @since   0.2
 	 * @change  2.3.0
-	 * @change  2.4.0 Add check for sitemap feature.
+	 * @change  2.4.0 Add check for sitemap feature and skip cache for other request methods than GET.
 	 *
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1147,7 +1147,7 @@ final class Cachify {
 		$options = self::$options;
 
 		/* Skip for all request methods except GET */
-		if ( $_SERVER['REQUEST_METHOD'] !== 'GET' ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
