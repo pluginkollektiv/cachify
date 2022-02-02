@@ -702,6 +702,9 @@ final class Cachify {
 		}
 
 		/* Plugin data */
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
 		$plugin_data = get_plugin_data( CACHIFY_FILE );
 
 		/* Register css */
@@ -761,7 +764,13 @@ final class Cachify {
 		$plugin_data = get_plugin_data( CACHIFY_FILE );
 
 		/* Enqueue script */
-		wp_enqueue_script( 'cachify-admin-bar-flush', plugins_url( 'js/admin-bar-flush.js', CACHIFY_FILE ), array(), $plugin_data['Version'] );
+		wp_enqueue_script(
+			'cachify-admin-bar-flush',
+			plugins_url( 'js/admin-bar-flush.js', CACHIFY_FILE ),
+			array(),
+			$plugin_data['Version'],
+			true
+		);
 
 		/* Localize script */
 		wp_localize_script(
