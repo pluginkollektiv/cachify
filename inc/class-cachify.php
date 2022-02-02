@@ -565,7 +565,7 @@ final class Cachify {
 	public static function add_cron_cache_expiration() {
 		$schedules['cashify_cache_expire'] = array(
 			'interval' => self::$options['cache_expires'] * 3600,
-			'display'  => __( 'Cachify expire', 'cachify' ),
+			'display'  => esc_html__( 'Cachify expire', 'cachify' ),
 		);
 		return $schedules;
 	}
