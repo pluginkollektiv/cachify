@@ -133,7 +133,7 @@ final class Cachify {
 		);
 
 		/* Add Cron for clearing the HDD Cache */
-		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			add_filter(
 				'cron_schedules',
 				array(
@@ -143,7 +143,7 @@ final class Cachify {
 			);
 
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
-			if ( false == $timestamp ) {
+			if ( false === $timestamp ) {
 				wp_schedule_event( time(), 'cashify_cache_expire', 'hdd_cache_cron' );
 			}
 
@@ -295,9 +295,9 @@ final class Cachify {
 	 */
 	public static function on_deactivation() {
 		/* Remove hdd cache cron when hdd is selected */
-		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
-			if ( false != $timestamp ) {
+			if ( false !== $timestamp ) {
 				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
 			}
 		}
@@ -827,9 +827,9 @@ final class Cachify {
 		}
 
 		/* Reschedule HDD Cache Cron */
-		if ( self::METHOD_HDD == self::$options['use_apc'] ) {
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
-			if ( false != $timestamp ) {
+			if ( false !== $timestamp ) {
 				wp_reschedule_event( $timestamp, 'cashify_cache_expire', 'hdd_cache_cron' );
 				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
 			}
