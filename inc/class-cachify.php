@@ -60,7 +60,7 @@ final class Cachify {
 
 	/**
 	 * REST endpoints
-	 * 
+	 *
 	 * @var	   string
 	 */
 	const REST_NAMESPACE_V1 = 'cachify/v1';
@@ -739,7 +739,7 @@ final class Cachify {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'cachify',
-				'href' => '',
+				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
 				'title'  => '<span class="ab-icon dashicons"></span>' .
 										'<span class="ab-label">' .
@@ -750,7 +750,6 @@ final class Cachify {
 										'</span>',
 				'meta'   => array(
 					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
-					'onclick' => 'cachify_flush()',
 				),
 			)
 		);
@@ -777,7 +776,9 @@ final class Cachify {
 		$url = esc_url_raw( rest_url( self::REST_NAMESPACE_V1 . '/' . self::REST_ROUTE_FLUSH ) );
 		echo "
 		<script>
-			function cachify_flush() {
+			function cachify_flush(event) {
+                event.preventDefault();
+
 				var admin_bar_icon = document.querySelector( '#wp-admin-bar-cachify .ab-icon' );
 				if ( admin_bar_icon !== null ) {
 					admin_bar_icon.classList.remove( 'animate-success' );
@@ -798,13 +799,17 @@ final class Cachify {
 				});
 
 				request.addEventListener('error', function () {
-					admin_bar_icon.classList.add( 'animate-fail' );					
+					admin_bar_icon.classList.add( 'animate-fail' );
 				});
 
 				request.open( 'DELETE', '$url' );
 				request.setRequestHeader( 'X-WP-Nonce', '$nonce' );
 				request.send();
 			}
+
+			document.addEventListener('DOMContentLoaded', function () {
+                document.querySelector( '#wp-admin-bar-cachify .ab-item' ).addEventListener( 'click', cachify_flush );
+			});
 		</script>
 		";
 	}
