@@ -192,7 +192,7 @@ final class Cachify_HDD {
 		}
 
 		/* Write */
-		@fwrite( $handle, $data );
+		fwrite( $handle, $data );
 		fclose( $handle );
 		clearstatcache();
 
