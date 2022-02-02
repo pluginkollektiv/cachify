@@ -703,12 +703,12 @@ final class Cachify {
 
 		echo '
 		<style>
-		    #wp-admin-bar-cachify .animate-pulse::before {
+		    #wp-admin-bar-cachify .animate-pulse {
 				animation: cachify-dash-icon-pulse 2s infinite;
 				animation-timing-function: linear;
 			}
 
-		    #wp-admin-bar-cachify .animate-fade::before {
+		    #wp-admin-bar-cachify .animate-fade {
 				animation: cachify-dash-icon-fade-in 0.1s;
 				animation-timing-function: linear;
 			}
@@ -727,13 +727,19 @@ final class Cachify {
 		/* Display the admin icon anytime */
 		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
 
+		/* Check if the flush action was used without AJAX */
+		$dashicon_class = 'dashicons-trash';
+		if ( isset( $_GET['_cachify'] ) && 'flushed' === $_GET['_cachify'] ) {
+			$dashicon_class = 'dashicons-yes-alt';
+		}
+
 		/* Add menu item */
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'  => '<span class="ab-icon dashicons dashicons-trash"></span>' .
+				'title'  => '<span class="ab-icon dashicons ' . $dashicon_class . '"></span>' .
 										'<span class="ab-label">' .
 											__(
 												'Flush site cache',
@@ -773,8 +779,8 @@ final class Cachify {
                     'animate-fade',
                     'animate-pulse',
                     'dashicons-trash',
-                    'dashicons-yes',
-                    'dashicons-no'
+                    'dashicons-yes-alt',
+                    'dashicons-dismiss'
                 ];
 
                 for ( var i = 0; i < classes.length; i++ ) {
@@ -782,10 +788,21 @@ final class Cachify {
                 }
 			}
 
+            function cachify_start_flush_icon_reset_timeout( admin_bar_icon ) {
+                setTimeout( function () {
+                    cachify_flush_icon_remove_classes( admin_bar_icon );
+					admin_bar_icon.classList.add( 'animate-fade' );
+					admin_bar_icon.classList.add( 'dashicons-trash' );
+                }, 2000 );
+            }
+
 			function cachify_flush( event ) {
                 event.preventDefault();
 
 				var admin_bar_icon = document.querySelector( '#wp-admin-bar-cachify .ab-icon' );
+                if ( ! admin_bar_icon.classList.contains( 'dashicons-trash' ) || admin_bar_icon.classList.contains( 'animate-pulse' ) ) {
+                	return;
+                }
 				if ( admin_bar_icon !== null ) {
                     cachify_flush_icon_remove_classes( admin_bar_icon );
 					admin_bar_icon.classList.add( 'animate-pulse' );
@@ -794,20 +811,22 @@ final class Cachify {
 
 				var request = new XMLHttpRequest();
 				request.addEventListener( 'load', function () {
+                    cachify_start_flush_icon_reset_timeout( admin_bar_icon );
 					cachify_flush_icon_remove_classes( admin_bar_icon );
 					admin_bar_icon.classList.add( 'animate-fade' );
 					if ( this.status === 200 ) {
-                        admin_bar_icon.classList.add( 'dashicons-yes' );
+                        admin_bar_icon.classList.add( 'dashicons-yes-alt' );
 						return;
 					}
 
-                    admin_bar_icon.classList.add( 'dashicons-no' );
+                    admin_bar_icon.classList.add( 'dashicons-dismiss' );
 				});
 
-				request.addEventListener('error', function () {
+				request.addEventListener( 'error', function () {
+                    cachify_start_flush_icon_reset_timeout( admin_bar_icon )
                     cachify_flush_icon_remove_classes( admin_bar_icon );
 					admin_bar_icon.classList.add( 'animate-fade' );
-                    admin_bar_icon.classList.add( 'dashicons-no' );
+                    admin_bar_icon.classList.add( 'dashicons-dismiss' );
 				});
 
 				request.open( 'DELETE', '$url' );
@@ -816,7 +835,13 @@ final class Cachify {
 			}
 
 			document.addEventListener( 'DOMContentLoaded', function () {
-                document.querySelector( '#wp-admin-bar-cachify .ab-item' ).addEventListener( 'click', cachify_flush );
+                var ab_item = document.querySelector( '#wp-admin-bar-cachify .ab-item' );
+                ab_item.addEventListener( 'click', cachify_flush );
+
+                var admin_bar_icon = document.querySelector( '#wp-admin-bar-cachify .ab-icon' );
+                admin_bar_icon.addEventListener( 'animationend', function () {
+                    admin_bar_icon.classList.remove( 'animate-fade' );
+                } );
 			});
 		</script>
 		";
@@ -873,16 +898,15 @@ final class Cachify {
 		/* Flush cache */
 		self::flush_cache();
 
-		if ( ! is_admin() ) {
-			wp_safe_redirect(
-				remove_query_arg(
-					'_cachify',
-					wp_get_referer()
-				)
-			);
+		wp_safe_redirect(
+			add_query_arg(
+				'_cachify',
+				'flushed',
+				wp_get_referer()
+			)
+		);
 
-			exit();
-		}
+		exit();
 	}
 
 	/**
