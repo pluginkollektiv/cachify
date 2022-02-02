@@ -826,10 +826,6 @@ final class Cachify {
 		) );
 	}
 
-	public static function echo_something() {
-		echo "something";
-	}
-
 	/**
 	 * Process plugin's meta actions
 	 *
