@@ -479,7 +479,7 @@ final class Cachify {
 			'cachify-dashboard',
 			plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
 			array(),
-			filemtime( plugin_dir_path ( CACHIFY_FILE ) . 'css/dashboard.min.css' )
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/dashboard.min.css' )
 		);
 
 		/* Register admin bar flush CSS */
@@ -487,7 +487,7 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			plugins_url( 'css/admin-bar-flush.min.css', CACHIFY_FILE ),
 			array(),
-			filemtime(  plugin_dir_path ( CACHIFY_FILE ) . 'css/admin-bar-flush.min.css' )
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/admin-bar-flush.min.css' )
 		);
 	}
 
@@ -502,7 +502,7 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			plugins_url( 'js/admin-bar-flush.min.js', CACHIFY_FILE ),
 			array(),
-			filemtime( plugin_dir_path ( CACHIFY_FILE ) . 'js/admin-bar-flush.min.js' ),
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'js/admin-bar-flush.min.js' ),
 			true
 		);
 	}
@@ -765,6 +765,8 @@ final class Cachify {
 		/* Display the admin icon anytime */
 		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
 
+		/* Print area for aria live updates */
+		echo '<span class="ab-aria-live-area screen-reader-text" aria-live="polite"></span>';
 		/* Check if the flush action was used without AJAX */
 		$dashicon_class = 'dashicons-trash';
 		if ( isset( $_GET['_cachify'] ) && 'flushed' === $_GET['_cachify'] ) {
@@ -777,7 +779,7 @@ final class Cachify {
 				'id'     => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'  => '<span class="ab-icon dashicons ' . $dashicon_class . '"></span>' .
+				'title'  => '<span class="ab-icon dashicons ' . $dashicon_class . '" aria-hidden="true"></span>' .
 										'<span class="ab-label">' .
 											__(
 												'Flush site cache',

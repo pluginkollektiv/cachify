@@ -30,3 +30,18 @@
 		opacity: 1;
 	}
 }
+
+#wp-admin-bar-cachify button.ab-item {
+	background: none;
+	border: none;
+	padding: 0 8px 0 7px;
+}
+
+#wp-admin-bar-cachify button.ab-item:focus {
+	outline: none;
+}
+
+#wpadminbar #wp-admin-bar-cachify button.ab-item:focus span.ab-label {
+	color: inherit;
+}
+
