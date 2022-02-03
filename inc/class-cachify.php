@@ -1573,9 +1573,6 @@ final class Cachify {
 			return;
 		}
 
-		/* Plugin data */
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
 		/* Register css */
 		switch ( $hook ) {
 			case 'index.php':
