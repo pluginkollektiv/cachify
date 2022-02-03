@@ -61,7 +61,7 @@ final class Cachify {
 	/**
 	 * REST endpoints
 	 *
-	 * @var	   string
+	 * @var    string
 	 */
 	const REST_NAMESPACE = 'cachify/v1';
 	const REST_ROUTE_FLUSH = 'flush';
@@ -470,48 +470,42 @@ final class Cachify {
 
 	/**
 	 * Register the styles
+	 *
+	 * @since 2.4.0
 	 */
 	public static function register_styles() {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		}
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
 		/* Register dashboard CSS */
-		wp_enqueue_style(
+		wp_register_style(
 			'cachify-dashboard',
 			plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
 			array(),
-			$plugin_data['Version']
+			filemtime( plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ) )
 		);
 
 		/* Register admin bar flush CSS */
 		wp_register_style(
 			'cachify-admin-bar-flush',
-			plugins_url( 'css/admin-bar-flush.css', CACHIFY_FILE ),
+			plugins_url( 'css/admin-bar-flush.min.css', CACHIFY_FILE ),
 			array(),
-			$plugin_data['Version']
-		);		
+			filemtime( plugins_url( 'css/admin-bar-flush.min.css', CACHIFY_FILE ) )
+		);
 	}
 
 	/**
 	 * Register the scripts
+	 *
+	 * @since 2.4.0
 	 */
 	public static function register_scripts() {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		}
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
 		/* Register admin bar flush script */
 		wp_register_script(
 			'cachify-admin-bar-flush',
-			plugins_url( 'js/admin-bar-flush.js', CACHIFY_FILE ),
+			plugins_url( 'js/admin-bar-flush.min.js', CACHIFY_FILE ),
 			array(),
-			$plugin_data['Version'],
+			filemtime( plugins_url( 'js/admin-bar-flush.min.js', CACHIFY_FILE ) ),
 			true
 		);
-	}	
+	}
 
 	/**
 	 * Register the language file
@@ -753,6 +747,7 @@ final class Cachify {
 	 *
 	 * @since   1.2
 	 * @change  2.2.2
+	 * @change  2.4.0 Adjust icon for flush request via AJAX
 	 *
 	 * @hook    mixed   cachify_user_can_flush_cache
 	 *
@@ -799,8 +794,7 @@ final class Cachify {
 	/**
 	 * Add a script to query the REST endpoint and animate the flush icon in admin bar menu
 	 *
-	 * @since   ?
-	 * @change  ?
+	 * @since   2.4.0
 	 *
 	 * @hook    mixed   cachify_user_can_flush_cache ?
 	 *
@@ -821,7 +815,7 @@ final class Cachify {
 			'cachify_admin_bar_flush_ajax_object',
 			array(
 				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
-				'nonce' => wp_create_nonce( 'wp_rest' )
+				'nonce' => wp_create_nonce( 'wp_rest' ),
 			)
 		);
 	}
@@ -829,18 +823,36 @@ final class Cachify {
 
 	/**
 	 * Registers an REST endpoint for the flush operation
+	 *
+	 * @change 2.4.0
 	 */
 	public static function add_flush_rest_endpoint() {
-		register_rest_route( self::REST_NAMESPACE, self::REST_ROUTE_FLUSH, array(
-			'methods' => WP_REST_Server::DELETABLE,
-			'callback' => array(
-				__CLASS__,
-				'flush_cache'
-			),
-			'permission_callback' => function () {
-				return current_user_can( 'manage_options' );
-			}
-		) );
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_FLUSH,
+			array(
+				'methods' => WP_REST_Server::DELETABLE,
+				'callback' => array(
+					__CLASS__,
+					'flush_cache',
+				),
+				'permission_callback' => array(
+					__CLASS__,
+					'user_can_manage_options',
+				),
+			)
+		);
+	}
+
+	/**
+	 * Check if user can manage options
+	 *
+	 * @since   2.4.0
+	 *
+	 * @return  bool
+	 */
+	public static function user_can_manage_options() {
+		return current_user_can( 'manage_options' );
 	}
 
 	/**
@@ -848,6 +860,7 @@ final class Cachify {
 	 *
 	 * @since   0.5
 	 * @change  2.2.2
+	 * @change  2.4.0  Extract cache flushing to own method and always redirect to referer with new value for `_cachify` param.
 	 *
 	 * @hook    mixed  cachify_user_can_flush_cache
 	 *
@@ -890,6 +903,8 @@ final class Cachify {
 
 	/**
 	 * Flush cache
+	 *
+	 * @since 2.4.0
 	 */
 	public static function flush_cache() {
 		/* Flush cache */
