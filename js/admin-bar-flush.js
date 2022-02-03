@@ -1,5 +1,7 @@
 /* global cachify_admin_bar_flush_ajax_object */
 ( function() {
+	var is_flushing = false;
+
 	function flush_icon_remove_classes( admin_bar_icon ) {
 		var classes = [
 			'animate-fade',
@@ -19,16 +21,22 @@
 			flush_icon_remove_classes( admin_bar_icon );
 			admin_bar_icon.classList.add( 'animate-fade' );
 			admin_bar_icon.classList.add( 'dashicons-trash' );
+			is_flushing = false;
 		}, 2000 );
 	}
 
 	function flush( event ) {
 		event.preventDefault();
 
+		var fallback_url = this.getAttribute( 'href' );
+
 		var admin_bar_icon = document.querySelector( '#wp-admin-bar-cachify .ab-icon' );
-		if ( ! admin_bar_icon.classList.contains( 'dashicons-trash' ) || admin_bar_icon.classList.contains( 'animate-pulse' ) ) {
+
+		if ( is_flushing ) {
 			return;
 		}
+		is_flushing = true;
+
 		if ( admin_bar_icon !== null ) {
 			flush_icon_remove_classes( admin_bar_icon );
 			admin_bar_icon.classList.add( 'animate-pulse' );
@@ -37,26 +45,23 @@
 
 		var request = new XMLHttpRequest();
 		request.addEventListener( 'load', function() {
-			start_flush_icon_reset_timeout( admin_bar_icon );
-			flush_icon_remove_classes( admin_bar_icon );
-			admin_bar_icon.classList.add( 'animate-fade' );
 			if ( this.status === 200 ) {
+				start_flush_icon_reset_timeout( admin_bar_icon );
+				flush_icon_remove_classes( admin_bar_icon );
+				admin_bar_icon.classList.add( 'animate-fade' );
 				admin_bar_icon.classList.add( 'dashicons-yes-alt' );
 				return;
 			}
 
-			admin_bar_icon.classList.add( 'dashicons-dismiss' );
+			window.location = fallback_url;
 		} );
 
 		request.addEventListener( 'error', function() {
-			start_flush_icon_reset_timeout( admin_bar_icon );
-			flush_icon_remove_classes( admin_bar_icon );
-			admin_bar_icon.classList.add( 'animate-fade' );
-			admin_bar_icon.classList.add( 'dashicons-dismiss' );
+			window.location = fallback_url;
 		} );
 
 		request.open( 'DELETE', cachify_admin_bar_flush_ajax_object.url );
-		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce );
+		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce + ' asdasd ' );
 		request.send();
 	}
 
