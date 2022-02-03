@@ -1,4 +1,4 @@
-/* global admin_bar_flush_ajax_object */
+/* global cachify_admin_bar_flush_ajax_object */
 ( function() {
 	function flush_icon_remove_classes( admin_bar_icon ) {
 		var classes = [
@@ -55,8 +55,8 @@
 			admin_bar_icon.classList.add( 'dashicons-dismiss' );
 		} );
 
-		request.open( 'DELETE', admin_bar_flush_ajax_object.url );
-		request.setRequestHeader( 'X-WP-Nonce', admin_bar_flush_ajax_object.nonce );
+		request.open( 'DELETE', cachify_admin_bar_flush_ajax_object.url );
+		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce );
 		request.send();
 	}
 
