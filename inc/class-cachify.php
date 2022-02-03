@@ -254,7 +254,7 @@ final class Cachify {
 			);
 
 			add_action(
-				'robots_txt',
+				'do_robots',
 				array(
 					__CLASS__,
 					'robots_txt',
@@ -489,29 +489,15 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
-	 * @since   1.0
-	 * @change  2.1.9
-	 *
-	 * @param   string $data  Original content of dynamic robots.txt.
-	 * @return  string        Modified content of robots.txt.
+	 * @since 1.0
+	 * @since 2.1.9
+	 * @since 2.4   Removed $data parameter and return value.
 	 */
-	public static function robots_txt( $data ) {
+	public static function robots_txt() {
 		/* HDD only */
-		if ( self::METHOD_HDD !== self::$options['use_apc'] ) {
-			return $data;
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			echo 'Disallow: */cache/cachify/';
 		}
-
-		/* Parse site URL */
-		$url_parts = wp_parse_url( site_url() );
-
-		/* Output */
-		$data .= sprintf(
-			'%2$sDisallow: %1$s/wp-content/cache/cachify/%2$s',
-			( empty( $url_parts['path'] ) ? '' : $url_parts['path'] ),
-			PHP_EOL
-		);
-
-		return $data;
 	}
 
 	/**
@@ -1006,21 +992,21 @@ final class Cachify {
 	 *
 	 * @since   0.1
 	 * @change  2.0
+	 * @change  2.4.0 Fix issue with port in URL.
 	 *
 	 * @param   string $url  URL to hash [optional].
 	 * @return  string       Cachify hash value.
 	 */
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
-		$url_parts = wp_parse_url( $url );
 
 		if ( empty( $url ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			$hash_key = $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
-		} else {
-			$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+			$url = wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
+		$url_parts = wp_parse_url( $url );
+		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
 		return md5( $hash_key ) . '.cachify';
 	}
 
@@ -1135,6 +1121,7 @@ final class Cachify {
 	 *
 	 * @since   0.2
 	 * @change  2.3.0
+	 * @change  2.4.0 Add check for sitemap feature and skip cache for other request methods than GET.
 	 *
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1145,8 +1132,8 @@ final class Cachify {
 		/* Plugin options */
 		$options = self::$options;
 
-		/* Request vars */
-		if ( ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		/* Skip for all request methods except GET */
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -1200,6 +1187,11 @@ final class Cachify {
 					return true;
 				}
 			}
+		}
+
+		// Sitemap feature added in WP 5.5.
+		if ( get_query_var( 'sitemap' ) || get_query_var( 'sitemap-subtype' ) || get_query_var( 'sitemap-stylesheet' ) ) {
+			return true;
 		}
 
 		return false;
@@ -1334,6 +1326,18 @@ final class Cachify {
 
 		/* Save? */
 		if ( $should_cache ) {
+			/**
+			 * Filters the buffered data itself
+			 *
+			 * @since 2.4
+			 *
+			 * @param string $data          The actual data.
+			 * @param object $method        Instance of the selected caching method.
+			 * @param string $cache_hash    The cache hash.
+			 * @param int    $cache_expires Cache validity period.
+			 */
+			$data = apply_filters( 'cachify_modify_output', $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+
 			call_user_func(
 				array(
 					self::$method,

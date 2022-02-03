@@ -30,7 +30,7 @@ $beginning = '# BEGIN CACHIFY
 
   # Main Rules
   RewriteCond %{REQUEST_URI} /$
-  RewriteCond %{REQUEST_METHOD} !=POST
+  RewriteCond %{REQUEST_METHOD} ="GET"
   RewriteCond %{QUERY_STRING} ^$
   RewriteCond %{REQUEST_URI} !^\/(wp\-admin|wp\-content\/cache)\/.*
   RewriteCond %{HTTP_COOKIE} !(wp\-postpass|wordpress_logged_in|comment_author)_
