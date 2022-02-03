@@ -558,9 +558,11 @@ final class Cachify {
 	/**
 	 * Add cache expiration cron schedule.
 	 *
-	 * @since 2.4
+	 * @param array $schedules Array of previously added non-default schedules.
 	 *
-	 * @return array
+	 * @return array Array of non-default schedules with our tasks added.
+	 *
+	 * @since 2.4
 	 */
 	public static function add_cron_cache_expiration( $schedules ) {
 		$schedules['cachify_cache_expire'] = array(
