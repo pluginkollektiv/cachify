@@ -58,5 +58,11 @@
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"
     ]
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "composer/installers": true
+    }
   }
 }
