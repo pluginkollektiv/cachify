@@ -134,21 +134,14 @@ final class Cachify {
 
 		/* Backend */
 		if ( is_admin() ) {
-			add_action(
-				'wp_initialize_site',
-				array(
-					__CLASS__,
-					'install_later',
-				)
-			);
-
-			add_action(
-				'wp_delete_site',
-				array(
-					__CLASS__,
-					'uninstall_later',
-				)
-			);
+			if ( version_compare( get_bloginfo( 'version' ), '5.1', '<' ) ) {
+				// The following hooks are deprecated since WP 5.1 (#246).
+				add_action( 'wpmu_new_blog', array( __CLASS__, 'install_later' ) );
+				add_action( 'delete_blog', array( __CLASS__, 'uninstall_later' ) );
+			} else {
+				add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
+				add_action( 'wp_delete_site', array( __CLASS__, 'uninstall_later' ) );
+			}
 
 			add_action(
 				'admin_init',
