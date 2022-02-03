@@ -61,7 +61,7 @@
 		} );
 
 		request.open( 'DELETE', cachify_admin_bar_flush_ajax_object.url );
-		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce + ' asdasd ' );
+		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce );
 		request.send();
 	}
 
