@@ -132,6 +132,30 @@ final class Cachify {
 			2
 		);
 
+		/* Add Cron for clearing the HDD Cache */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			add_filter(
+				'cron_schedules',
+				array(
+					__CLASS__,
+					'add_cron_cache_expiration',
+				)
+			);
+
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false === $timestamp ) {
+				wp_schedule_event( time(), 'cachify_cache_expire', 'hdd_cache_cron' );
+			}
+
+			add_action(
+				'hdd_cache_cron',
+				array(
+					__CLASS__,
+					'run_hdd_cache_cron',
+				)
+			);
+		}
+
 		/* Backend */
 		if ( is_admin() ) {
 			add_action(
@@ -270,6 +294,14 @@ final class Cachify {
 	 * @change  2.1.0
 	 */
 	public static function on_deactivation() {
+		/* Remove hdd cache cron when hdd is selected */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
 		self::flush_total_cache( true );
 	}
 
@@ -498,6 +530,32 @@ final class Cachify {
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			echo 'Disallow: */cache/cachify/';
 		}
+	}
+
+	/**
+	 * HDD Cache expiration cron action.
+	 *
+	 * @since 2.4
+	 */
+	public static function run_hdd_cache_cron() {
+		Cachify_HDD::clear_cache();
+	}
+
+	/**
+	 * Add cache expiration cron schedule.
+	 *
+	 * @param array $schedules Array of previously added non-default schedules.
+	 *
+	 * @return array Array of non-default schedules with our tasks added.
+	 *
+	 * @since 2.4
+	 */
+	public static function add_cron_cache_expiration( $schedules ) {
+		$schedules['cachify_cache_expire'] = array(
+			'interval' => self::$options['cache_expires'] * 3600,
+			'display'  => esc_html__( 'Cachify expire', 'cachify' ),
+		);
+		return $schedules;
 	}
 
 	/**
@@ -755,6 +813,16 @@ final class Cachify {
 				);
 			}
 		}
+
+		/* Reschedule HDD Cache Cron */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_reschedule_event( $timestamp, 'cachify_cache_expire', 'hdd_cache_cron' );
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
 		if ( ! is_admin() ) {
 			wp_safe_redirect(
 				remove_query_arg(
@@ -1666,4 +1734,5 @@ final class Cachify {
 
 		return $tabs;
 	}
+
 }
