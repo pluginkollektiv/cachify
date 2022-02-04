@@ -1280,9 +1280,8 @@ final class Cachify {
 	 * @param bool $clear_all_methods  Flush all caching methods (default: FALSE).
 	 */
 	public static function flush_total_cache( $clear_all_methods = false ) {
-		$saved_post_revision = did_action( 'save_post_revision' );
-		if ( $saved_post_revision ) {
-			// We do not need to flush the cache for saved post revisions.
+		// We do not need to flush the cache for saved post revisions.
+		if ( did_action( 'save_post_revision' ) ) {
 			return;
 		}
 
