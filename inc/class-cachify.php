@@ -177,6 +177,30 @@ final class Cachify {
 			2
 		);
 
+		/* Add Cron for clearing the HDD Cache */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			add_filter(
+				'cron_schedules',
+				array(
+					__CLASS__,
+					'add_cron_cache_expiration',
+				)
+			);
+
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false === $timestamp ) {
+				wp_schedule_event( time(), 'cachify_cache_expire', 'hdd_cache_cron' );
+			}
+
+			add_action(
+				'hdd_cache_cron',
+				array(
+					__CLASS__,
+					'run_hdd_cache_cron',
+				)
+			);
+		}
+
 		/* Backend */
 		if ( is_admin() ) {
 			add_action(
@@ -299,7 +323,7 @@ final class Cachify {
 			);
 
 			add_action(
-				'robots_txt',
+				'do_robots',
 				array(
 					__CLASS__,
 					'robots_txt',
@@ -315,6 +339,14 @@ final class Cachify {
 	 * @change  2.1.0
 	 */
 	public static function on_deactivation() {
+		/* Remove hdd cache cron when hdd is selected */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
 		self::flush_total_cache( true );
 	}
 
@@ -573,29 +605,41 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
-	 * @since   1.0
-	 * @change  2.1.9
-	 *
-	 * @param   string $data  Original content of dynamic robots.txt.
-	 * @return  string        Modified content of robots.txt.
+	 * @since 1.0
+	 * @since 2.1.9
+	 * @since 2.4   Removed $data parameter and return value.
 	 */
-	public static function robots_txt( $data ) {
+	public static function robots_txt() {
 		/* HDD only */
-		if ( self::METHOD_HDD !== self::$options['use_apc'] ) {
-			return $data;
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			echo 'Disallow: */cache/cachify/';
 		}
+	}
 
-		/* Parse site URL */
-		$url_parts = wp_parse_url( site_url() );
+	/**
+	 * HDD Cache expiration cron action.
+	 *
+	 * @since 2.4
+	 */
+	public static function run_hdd_cache_cron() {
+		Cachify_HDD::clear_cache();
+	}
 
-		/* Output */
-		$data .= sprintf(
-			'%2$sDisallow: %1$s/wp-content/cache/cachify/%2$s',
-			( empty( $url_parts['path'] ) ? '' : $url_parts['path'] ),
-			PHP_EOL
+	/**
+	 * Add cache expiration cron schedule.
+	 *
+	 * @param array $schedules Array of previously added non-default schedules.
+	 *
+	 * @return array Array of non-default schedules with our tasks added.
+	 *
+	 * @since 2.4
+	 */
+	public static function add_cron_cache_expiration( $schedules ) {
+		$schedules['cachify_cache_expire'] = array(
+			'interval' => self::$options['cache_expires'] * 3600,
+			'display'  => esc_html__( 'Cachify expire', 'cachify' ),
 		);
-
-		return $data;
+		return $schedules;
 	}
 
 	/**
@@ -949,6 +993,26 @@ final class Cachify {
 					)
 				);
 			}
+		}
+
+		/* Reschedule HDD Cache Cron */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_reschedule_event( $timestamp, 'cachify_cache_expire', 'hdd_cache_cron' );
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
+		if ( ! is_admin() ) {
+			wp_safe_redirect(
+				remove_query_arg(
+					'_cachify',
+					wp_get_referer()
+				)
+			);
+
+			exit();
 		}
 	}
 
@@ -1306,7 +1370,7 @@ final class Cachify {
 	 *
 	 * @since   0.2
 	 * @change  2.3.0
-	 * @change  2.4.0 Add check for sitemap feature.
+	 * @change  2.4.0 Add check for sitemap feature and skip cache for other request methods than GET.
 	 *
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1317,8 +1381,8 @@ final class Cachify {
 		/* Plugin options */
 		$options = self::$options;
 
-		/* Request vars */
-		if ( ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		/* Skip for all request methods except GET */
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -1843,4 +1907,5 @@ final class Cachify {
 
 		return $tabs;
 	}
+
 }
