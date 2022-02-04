@@ -35,7 +35,7 @@ $beginning = '# BEGIN CACHIFY
   &lt;/IfModule&gt;
 
   # Main Rules
-  RewriteCond %{REQUEST_METHOD} !=POST
+  RewriteCond %{REQUEST_METHOD} ="GET"
   RewriteCond %{QUERY_STRING} =""
   RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
   RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
@@ -47,54 +47,40 @@ $middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
 $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
 &lt;/IfModule&gt;
 # END CACHIFY';
+
+// phpcs:disable Squiz.PHP.EmbeddedPhp
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-				<?php esc_html_e( '.htaccess HDD setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?>
-			</td>
-		</tr>
+<h2><?php esc_html_e( '.htaccess HDD setup', 'cachify' ); ?></h2>
+<p><?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?></p>
 
-		<tr>
-			<th>
-				<?php esc_html_e( 'Notes', 'cachify' ); ?>
-			</th>
-			<td>
-				<ul style="list-style-type:circle">
-					<li>
-						<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
-					</li>
-					<li>
-						<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
-					</li>
-					<li>
-						<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
-						<pre>&lt;IfModule mod_cache.c&gt;
-  CacheDisable /
+<textarea rows="16" class="large-text code cachify-code" name="code" readonly><?php
+	printf(
+		'%s%s%s%s%s',
+		esc_html( $beginning ),
+		esc_html( WP_CONTENT_DIR ),
+		esc_html( $middle ),
+		esc_html( wp_make_link_relative( content_url() ) ),
+		esc_html( $ending )
+	);
+	?></textarea>
+
+<h3><?php esc_html_e( 'Notes', 'cachify' ); ?></h3>
+<ol>
+	<li>
+		<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
+	</li>
+	<li>
+		<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
+	</li>
+	<li>
+		<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
+		<pre>&lt;IfModule mod_cache.c&gt;
+CacheDisable /
 &lt;/IfModule&gt;</pre>
-					</li>
-					<li>
-						<?php esc_html_e( 'In case of special character errors, you can add the following to the .htaccess file:', 'cachify' ); ?><br />
-						<pre>AddDefaultCharset UTF-8</pre>
-					</li>
-				</ul>
-			</td>
-		</tr>
-	</table>
-
-	<textarea rows="16" class="large-text code cachify-code" name="code" readonly>
-		<?php
-		printf(
-			'%s%s%s%s%s',
-			esc_html( $beginning ),
-			esc_html( WP_CONTENT_DIR ),
-			esc_html( $middle ),
-			esc_html( wp_make_link_relative( content_url() ) ),
-			esc_html( $ending )
-		);
-		?>
-	</textarea>
+	</li>
+	<li>
+		<?php esc_html_e( 'In case of special character errors, you can add the following to the .htaccess file:', 'cachify' ); ?><br />
+		<pre>AddDefaultCharset UTF-8</pre>
+	</li>
+</ol>

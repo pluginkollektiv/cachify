@@ -132,8 +132,12 @@ final class Cachify_MEMCACHED {
 			return;
 		}
 
+		if ( ! self::$_memcached instanceof Memcached ) {
+			return;
+		}
+
 		/* Flush */
-		@self::$_memcached->flush();
+		self::$_memcached->flush();
 	}
 
 	/**

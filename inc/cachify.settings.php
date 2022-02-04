@@ -30,13 +30,10 @@ defined( 'ABSPATH' ) || exit;
 				<label for="cachify_cache_expires"><?php esc_html_e( 'Cache expiration', 'cachify' ); ?></label>
 			</th>
 			<td>
+				<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ); ?>" class="small-text" />
+				<?php esc_html_e( 'Hours', 'cachify' ); ?>
 				<?php if ( self::METHOD_HDD === $options['use_apc'] ) : ?>
-					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="" disabled="disabled" class="small-text" />
-					<?php esc_html_e( 'Hours', 'cachify' ); ?>
-					<p class="description"><?php esc_html_e( 'HDD cache will only expire as you update posts or flush it yourself.', 'cachify' ); ?></p>
-				<?php else : ?>
-					<input type="number" min="0" step="1" name="cachify[cache_expires]" id="cachify_cache_expires" value="<?php echo esc_attr( $options['cache_expires'] ); ?>" class="small-text" />
-					<?php esc_html_e( 'Hours', 'cachify' ); ?>
+					<p class="description"><?php esc_html_e( 'HDD cache will only expire correctly when triggered by a system cron.', 'cachify' ); ?></p>
 				<?php endif; ?>
 
 				<p class="description">
@@ -54,7 +51,7 @@ defined( 'ABSPATH' ) || exit;
 				?>
 
 				<p>
-					<a class="button button-flush" href="<?php echo esc_url( $flush_cache_url ); ?>">
+					<a class="button button-secondary" href="<?php echo esc_url( $flush_cache_url ); ?>">
 						<?php esc_html_e( 'Flush cache now', 'cachify' ); ?>
 					</a>
 				</p>

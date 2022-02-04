@@ -83,57 +83,35 @@ final class Cachify {
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
 		/* Publish hooks */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_publish_hooks',
-			),
-			99
-		);
+		add_action( 'init', array( __CLASS__, 'register_publish_hooks' ), 99 );
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 
-		add_action(
-			'cachify_remove_post_cache',
-			array(
-				__CLASS__,
-				'remove_page_cache_by_post_id',
-			)
-		);
+		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
 		/* Flush icon */
-		add_action(
-			'admin_bar_menu',
-			array(
-				__CLASS__,
-				'add_flush_icon',
-			),
-			90
-		);
+		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon' ), 90 );
 
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'process_flush_request',
-			)
-		);
+		add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
 
 		/* Flush (post) cache if comment is made from frontend or backend */
-		add_action(
-			'pre_comment_approved',
-			array(
-				__CLASS__,
-				'pre_comment',
-			),
-			99,
-			2
-		);
+		add_action( 'pre_comment_approved', array( __CLASS__, 'pre_comment' ), 99, 2 );
 
-		/* Backend */
+		/* Add Cron for clearing the HDD Cache */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			add_filter( 'cron_schedules', array( __CLASS__, 'add_cron_cache_expiration' ) );
+
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false === $timestamp ) {
+				wp_schedule_event( time(), 'cachify_cache_expire', 'hdd_cache_cron' );
+			}
+
+			add_action( 'hdd_cache_cron', array( __CLASS__, 'run_hdd_cache_cron' ) );
+		}
+
 		if ( is_admin() ) {
+			/* Backend */
 			if ( version_compare( get_bloginfo( 'version' ), '5.1', '<' ) ) {
 				// The following hooks are deprecated since WP 5.1 (#246).
 				add_action( 'wpmu_new_blog', array( __CLASS__, 'install_later' ) );
@@ -143,117 +121,33 @@ final class Cachify {
 				add_action( 'wp_delete_site', array( __CLASS__, 'uninstall_later' ) );
 			}
 
-			add_action(
-				'admin_init',
-				array(
-					__CLASS__,
-					'register_textdomain',
-				)
-			);
+			add_action( 'admin_init', array( __CLASS__, 'register_textdomain' ) );
 
-			add_action(
-				'admin_init',
-				array(
-					__CLASS__,
-					'register_settings',
-				)
-			);
+			add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 
-			add_action(
-				'admin_menu',
-				array(
-					__CLASS__,
-					'add_page',
-				)
-			);
+			add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
 
-			add_action(
-				'admin_enqueue_scripts',
-				array(
-					__CLASS__,
-					'add_admin_resources',
-				)
-			);
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_admin_resources' ) );
 
-			add_action(
-				'admin_head',
-				array(
-					__CLASS__,
-					'admin_dashboard_styles',
-				)
-			);
+			add_action( 'admin_head', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action(
-				'doing_dark_mode',
-				array(
-					__CLASS__,
-					'admin_dashboard_dark_mode_styles',
-				)
-			);
+			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
 
-			add_action(
-				'transition_comment_status',
-				array(
-					__CLASS__,
-					'touch_comment',
-				),
-				10,
-				3
-			);
+			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
 
-			add_action(
-				'edit_comment',
-				array(
-					__CLASS__,
-					'edit_comment',
-				)
-			);
+			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
 
-			add_filter(
-				'dashboard_glance_items',
-				array(
-					__CLASS__,
-					'add_dashboard_count',
-				)
-			);
+			add_filter( 'dashboard_glance_items', array( __CLASS__, 'add_dashboard_count' ) );
 
-			add_filter(
-				'plugin_row_meta',
-				array(
-					__CLASS__,
-					'row_meta',
-				),
-				10,
-				2
-			);
+			add_filter( 'plugin_row_meta', array( __CLASS__, 'row_meta' ), 10, 2 );
 
-			add_filter(
-				'plugin_action_links_' . CACHIFY_BASE,
-				array(
-					__CLASS__,
-					'action_links',
-				)
-			);
+			add_filter( 'plugin_action_links_' . CACHIFY_BASE, array( __CLASS__, 'action_links' ) );
 
-			/* Frontend */
 		} else {
-			add_action(
-				'template_redirect',
-				array(
-					__CLASS__,
-					'manage_cache',
-				),
-				0
-			);
-
-			add_action(
-				'robots_txt',
-				array(
-					__CLASS__,
-					'robots_txt',
-				)
-			);
-		}// End if().
+			/* Frontend */
+			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
+			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+		}
 	}
 
 	/**
@@ -263,6 +157,14 @@ final class Cachify {
 	 * @change  2.1.0
 	 */
 	public static function on_deactivation() {
+		/* Remove hdd cache cron when hdd is selected */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
 		self::flush_total_cache( true );
 	}
 
@@ -482,29 +384,41 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
-	 * @since   1.0
-	 * @change  2.1.9
-	 *
-	 * @param   string $data  Original content of dynamic robots.txt.
-	 * @return  string        Modified content of robots.txt.
+	 * @since 1.0
+	 * @since 2.1.9
+	 * @since 2.4   Removed $data parameter and return value.
 	 */
-	public static function robots_txt( $data ) {
+	public static function robots_txt() {
 		/* HDD only */
-		if ( self::METHOD_HDD !== self::$options['use_apc'] ) {
-			return $data;
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			echo 'Disallow: */cache/cachify/';
 		}
+	}
 
-		/* Parse site URL */
-		$url_parts = wp_parse_url( site_url() );
+	/**
+	 * HDD Cache expiration cron action.
+	 *
+	 * @since 2.4
+	 */
+	public static function run_hdd_cache_cron() {
+		Cachify_HDD::clear_cache();
+	}
 
-		/* Output */
-		$data .= sprintf(
-			'%2$sDisallow: %1$s/wp-content/cache/cachify/%2$s',
-			( empty( $url_parts['path'] ) ? '' : $url_parts['path'] ),
-			PHP_EOL
+	/**
+	 * Add cache expiration cron schedule.
+	 *
+	 * @param array $schedules Array of previously added non-default schedules.
+	 *
+	 * @return array Array of non-default schedules with our tasks added.
+	 *
+	 * @since 2.4
+	 */
+	public static function add_cron_cache_expiration( $schedules ) {
+		$schedules['cachify_cache_expire'] = array(
+			'interval' => self::$options['cache_expires'] * 3600,
+			'display'  => esc_html__( 'Cachify expire', 'cachify' ),
 		);
-
-		return $data;
+		return $schedules;
 	}
 
 	/**
@@ -740,28 +654,26 @@ final class Cachify {
 
 			/* Notice */
 			if ( is_admin() ) {
-				add_action(
-					'network_admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
+				add_action( 'network_admin_notices', array( __CLASS__, 'flush_notice' ) );
 			}
 		} else {
 			self::flush_total_cache();
 
 			/* Notice */
 			if ( is_admin() ) {
-				add_action(
-					'admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
+				add_action( 'admin_notices', array( __CLASS__, 'flush_notice' ) );
 			}
 		}
+
+		/* Reschedule HDD Cache Cron */
+		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
+			if ( false !== $timestamp ) {
+				wp_reschedule_event( $timestamp, 'cachify_cache_expire', 'hdd_cache_cron' );
+				wp_unschedule_event( $timestamp, 'hdd_cache_cron' );
+			}
+		}
+
 		if ( ! is_admin() ) {
 			wp_safe_redirect(
 				remove_query_arg(
@@ -878,22 +790,8 @@ final class Cachify {
 
 		/* Loop the post types */
 		foreach ( $post_types as $post_type ) {
-			add_action(
-				'publish_' . $post_type,
-				array(
-					__CLASS__,
-					'publish_post_types',
-				),
-				10,
-				2
-			);
-			add_action(
-				'publish_future_' . $post_type,
-				array(
-					__CLASS__,
-					'flush_total_cache',
-				)
-			);
+			add_action( 'publish_' . $post_type, array( __CLASS__, 'publish_post_types' ), 10, 2 );
+			add_action( 'publish_future_' . $post_type, array( __CLASS__, 'flush_total_cache' ) );
 		}
 	}
 
@@ -999,21 +897,21 @@ final class Cachify {
 	 *
 	 * @since   0.1
 	 * @change  2.0
+	 * @change  2.4.0 Fix issue with port in URL.
 	 *
 	 * @param   string $url  URL to hash [optional].
 	 * @return  string       Cachify hash value.
 	 */
 	private static function _cache_hash( $url = '' ) {
 		$prefix = is_ssl() ? 'https-' : '';
-		$url_parts = wp_parse_url( $url );
 
 		if ( empty( $url ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			$hash_key = $prefix . wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
-		} else {
-			$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+			$url = wp_unslash( $_SERVER['HTTP_HOST'] ) . wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
+		$url_parts = wp_parse_url( $url );
+		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
 		return md5( $hash_key ) . '.cachify';
 	}
 
@@ -1110,15 +1008,7 @@ final class Cachify {
 
 		/* Loop all hooks and register actions */
 		foreach ( $flush_cache_hooks as $hook => $priority ) {
-			add_action(
-				$hook,
-				array(
-					'Cachify',
-					'flush_total_cache',
-				),
-				$priority,
-				0
-			);
+			add_action( $hook, array( 'Cachify', 'flush_total_cache' ), $priority, 0 );
 		}
 
 	}
@@ -1128,6 +1018,7 @@ final class Cachify {
 	 *
 	 * @since   0.2
 	 * @change  2.3.0
+	 * @change  2.4.0 Add check for sitemap feature and skip cache for other request methods than GET.
 	 *
 	 * @return  boolean              TRUE on exclusion
 	 *
@@ -1138,8 +1029,8 @@ final class Cachify {
 		/* Plugin options */
 		$options = self::$options;
 
-		/* Request vars */
-		if ( ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		/* Skip for all request methods except GET */
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 		if ( ! empty( $_GET ) && get_option( 'permalink_structure' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -1193,6 +1084,11 @@ final class Cachify {
 					return true;
 				}
 			}
+		}
+
+		// Sitemap feature added in WP 5.5.
+		if ( get_query_var( 'sitemap' ) || get_query_var( 'sitemap-subtype' ) || get_query_var( 'sitemap-stylesheet' ) ) {
+			return true;
 		}
 
 		return false;
@@ -1327,6 +1223,18 @@ final class Cachify {
 
 		/* Save? */
 		if ( $should_cache ) {
+			/**
+			 * Filters the buffered data itself
+			 *
+			 * @since 2.4
+			 *
+			 * @param string $data          The actual data.
+			 * @param object $method        Instance of the selected caching method.
+			 * @param string $cache_hash    The cache hash.
+			 * @param int    $cache_expires Cache validity period.
+			 */
+			$data = apply_filters( 'cachify_modify_output', $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+
 			call_user_func(
 				array(
 					self::$method,
@@ -1403,15 +1311,6 @@ final class Cachify {
 				wp_enqueue_style(
 					'cachify-dashboard',
 					plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
-				break;
-
-			case 'settings_page_cachify':
-				wp_enqueue_style(
-					'cachify-settings',
-					plugins_url( 'css/settings.min.css', CACHIFY_FILE ),
 					array(),
 					$plugin_data['Version']
 				);
