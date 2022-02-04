@@ -37,6 +37,10 @@
 	padding: 0 8px 0 7px;
 }
 
+#wp-admin-bar-cachify button.ab-item:hover {
+	cursor: pointer;
+}
+
 #wp-admin-bar-cachify button.ab-item:focus {
 	outline: none;
 }
