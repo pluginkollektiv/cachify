@@ -862,6 +862,8 @@ final class Cachify {
 			array(
 				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
 				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'flushing' => __( 'Flushing cache', 'cachify' ),
+				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
 			)
 		);
 	}

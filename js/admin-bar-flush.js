@@ -49,7 +49,7 @@
 			return;
 		}
 		is_flushing = true;
-		aria_live_area.textContent = 'Flushing cache';
+		aria_live_area.textContent = cachify_admin_bar_flush_ajax_object.flushing;
 
 		if ( admin_bar_icon !== null ) {
 			flush_icon_remove_classes();
@@ -64,7 +64,7 @@
 				flush_icon_remove_classes();
 				admin_bar_icon.classList.add( 'animate-fade' );
 				admin_bar_icon.classList.add( 'dashicons-yes-alt' );
-				aria_live_area.textContent = 'Flushed successfully';
+				aria_live_area.textContent = cachify_admin_bar_flush_ajax_object.flushed;
 				return;
 			}
 
