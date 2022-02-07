@@ -91,245 +91,78 @@ final class Cachify {
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
 		/* Publish hooks */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_publish_hooks',
-			),
-			99
-		);
+		add_action( 'init', array( __CLASS__, 'register_publish_hooks' ), 99 );
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 
-		add_action(
-			'cachify_remove_post_cache',
-			array(
-				__CLASS__,
-				'remove_page_cache_by_post_id',
-			)
-		);
+		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
 		/* Register scripts */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_scripts',
-			)
-		);
+		add_action( 'init', array( __CLASS__, 'register_scripts' ) );
 
 		/* Register styles */
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'register_styles',
-			)
-		);
+		add_action( 'init', array( __CLASS__, 'register_styles' ) );
 
 		/* Flush icon */
-		add_action(
-			'admin_bar_menu',
-			array(
-				__CLASS__,
-				'add_flush_icon',
-			),
-			90
-		);
+		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon' ), 90 );
 
 		/* Flush icon script */
-		add_action(
-			'admin_bar_menu',
-			array(
-				__CLASS__,
-				'add_flush_icon_script',
-			),
-			90
-		);
+		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon_script' ), 90 );
 
 		/* Flush REST endpoint */
-		add_action(
-			'rest_api_init',
-			array(
-				__CLASS__,
-				'add_flush_rest_endpoint',
-			)
-		);
+		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
 
-		add_action(
-			'init',
-			array(
-				__CLASS__,
-				'process_flush_request',
-			)
-		);
+    add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
 
 		/* Flush (post) cache if comment is made from frontend or backend */
-		add_action(
-			'pre_comment_approved',
-			array(
-				__CLASS__,
-				'pre_comment',
-			),
-			99,
-			2
-		);
+		add_action( 'pre_comment_approved', array( __CLASS__, 'pre_comment' ), 99, 2 );
 
 		/* Add Cron for clearing the HDD Cache */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			add_filter(
-				'cron_schedules',
-				array(
-					__CLASS__,
-					'add_cron_cache_expiration',
-				)
-			);
+			add_filter( 'cron_schedules', array( __CLASS__, 'add_cron_cache_expiration' ) );
 
 			$timestamp = wp_next_scheduled( 'hdd_cache_cron' );
 			if ( false === $timestamp ) {
 				wp_schedule_event( time(), 'cachify_cache_expire', 'hdd_cache_cron' );
 			}
 
-			add_action(
-				'hdd_cache_cron',
-				array(
-					__CLASS__,
-					'run_hdd_cache_cron',
-				)
-			);
+			add_action( 'hdd_cache_cron', array( __CLASS__, 'run_hdd_cache_cron' ) );
 		}
 
-		/* Backend */
 		if ( is_admin() ) {
-			add_action(
-				'wpmu_new_blog',
-				array(
-					__CLASS__,
-					'install_later',
-				)
-			);
+			/* Backend */
+			add_action( 'wpmu_new_blog', array( __CLASS__, 'install_later' ) );
 
-			add_action(
-				'delete_blog',
-				array(
-					__CLASS__,
-					'uninstall_later',
-				)
-			);
+			add_action( 'delete_blog', array( __CLASS__, 'uninstall_later' ) );
 
-			add_action(
-				'admin_init',
-				array(
-					__CLASS__,
-					'register_textdomain',
-				)
-			);
+			add_action( 'admin_init', array( __CLASS__, 'register_textdomain' ) );
 
-			add_action(
-				'admin_init',
-				array(
-					__CLASS__,
-					'register_settings',
-				)
-			);
+			add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 
-			add_action(
-				'admin_menu',
-				array(
-					__CLASS__,
-					'add_page',
-				)
-			);
+			add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
 
-			add_action(
-				'admin_enqueue_scripts',
-				array(
-					__CLASS__,
-					'add_admin_resources',
-				)
-			);
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_admin_resources' ) );
 
-			add_action(
-				'admin_head',
-				array(
-					__CLASS__,
-					'admin_dashboard_styles',
-				)
-			);
+			add_action( 'admin_head', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action(
-				'doing_dark_mode',
-				array(
-					__CLASS__,
-					'admin_dashboard_dark_mode_styles',
-				)
-			);
+			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
 
-			add_action(
-				'transition_comment_status',
-				array(
-					__CLASS__,
-					'touch_comment',
-				),
-				10,
-				3
-			);
+			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
 
-			add_action(
-				'edit_comment',
-				array(
-					__CLASS__,
-					'edit_comment',
-				)
-			);
+			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
 
-			add_filter(
-				'dashboard_glance_items',
-				array(
-					__CLASS__,
-					'add_dashboard_count',
-				)
-			);
+			add_filter( 'dashboard_glance_items', array( __CLASS__, 'add_dashboard_count' ) );
 
-			add_filter(
-				'plugin_row_meta',
-				array(
-					__CLASS__,
-					'row_meta',
-				),
-				10,
-				2
-			);
+			add_filter( 'plugin_row_meta', array( __CLASS__, 'row_meta' ), 10, 2 );
 
-			add_filter(
-				'plugin_action_links_' . CACHIFY_BASE,
-				array(
-					__CLASS__,
-					'action_links',
-				)
-			);
+			add_filter( 'plugin_action_links_' . CACHIFY_BASE, array( __CLASS__, 'action_links' ) );
 
-			/* Frontend */
 		} else {
-			add_action(
-				'template_redirect',
-				array(
-					__CLASS__,
-					'manage_cache',
-				),
-				0
-			);
-
-			add_action(
-				'do_robots',
-				array(
-					__CLASS__,
-					'robots_txt',
-				)
-			);
-		}// End if().
+			/* Frontend */
+			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
+			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+		}
 	}
 
 	/**
@@ -974,26 +807,14 @@ final class Cachify {
 
 			/* Notice */
 			if ( is_admin() ) {
-				add_action(
-					'network_admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
+				add_action( 'network_admin_notices', array( __CLASS__, 'flush_notice' ) );
 			}
 		} else {
 			self::flush_total_cache();
 
 			/* Notice */
 			if ( is_admin() ) {
-				add_action(
-					'admin_notices',
-					array(
-						__CLASS__,
-						'flush_notice',
-					)
-				);
+				add_action( 'admin_notices', array( __CLASS__, 'flush_notice' ) );
 			}
 		}
 
@@ -1122,22 +943,8 @@ final class Cachify {
 
 		/* Loop the post types */
 		foreach ( $post_types as $post_type ) {
-			add_action(
-				'publish_' . $post_type,
-				array(
-					__CLASS__,
-					'publish_post_types',
-				),
-				10,
-				2
-			);
-			add_action(
-				'publish_future_' . $post_type,
-				array(
-					__CLASS__,
-					'flush_total_cache',
-				)
-			);
+			add_action( 'publish_' . $post_type, array( __CLASS__, 'publish_post_types' ), 10, 2 );
+			add_action( 'publish_future_' . $post_type, array( __CLASS__, 'flush_total_cache' ) );
 		}
 	}
 
@@ -1354,15 +1161,7 @@ final class Cachify {
 
 		/* Loop all hooks and register actions */
 		foreach ( $flush_cache_hooks as $hook => $priority ) {
-			add_action(
-				$hook,
-				array(
-					'Cachify',
-					'flush_total_cache',
-				),
-				$priority,
-				0
-			);
+			add_action( $hook, array( 'Cachify', 'flush_total_cache' ), $priority, 0 );
 		}
 
 	}
@@ -1909,5 +1708,4 @@ final class Cachify {
 
 		return $tabs;
 	}
-
 }
