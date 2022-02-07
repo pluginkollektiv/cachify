@@ -1159,10 +1159,16 @@ final class Cachify {
 	 *
 	 * @since   0.1
 	 * @change  2.0
+	 * @change  2.4.0 Do not flush cache for post revisions.
 	 *
 	 * @param bool $clear_all_methods  Flush all caching methods (default: FALSE).
 	 */
 	public static function flush_total_cache( $clear_all_methods = false ) {
+		// We do not need to flush the cache for saved post revisions.
+		if ( did_action( 'save_post_revision' ) ) {
+			return;
+		}
+
 		if ( $clear_all_methods ) {
 			/* DB */
 			Cachify_DB::clear_cache();
