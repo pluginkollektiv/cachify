@@ -113,7 +113,7 @@ final class Cachify {
 		/* Flush REST endpoint */
 		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
 
-    add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
+		add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
 
 		/* Flush (post) cache if comment is made from frontend or backend */
 		add_action( 'pre_comment_approved', array( __CLASS__, 'pre_comment' ), 99, 2 );
