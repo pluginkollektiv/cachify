@@ -27,6 +27,22 @@ final class Cachify_HDD {
 	}
 
 	/**
+	 * Returns if gzip file creation is enabled
+	 *
+	 * @since  2.4.0
+	 *
+	 * @return bool
+	 */
+	public static function is_gzip_enabled() {
+		/**
+		 * Filter that allows to enable/disable gzip file creation
+		 *
+		 * @param bool $create_gzip_files Whether to create gzip files. Default is `true`
+		 */
+		return apply_filters( 'cachify_create_gzip_files', true );
+	}
+
+	/**
 	 * Caching method as string
 	 *
 	 * @since   2.1.2
@@ -176,7 +192,7 @@ final class Cachify_HDD {
 		 *
 		 * @param bool $create_gzip_files Whether to create gzip files. Default is `true`
 		 */
-		if ( apply_filters( 'cachify_create_gzip_files', true ) ) {
+		if ( self::is_gzip_enabled() ) {
 			self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
 		}
 	}
