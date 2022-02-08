@@ -711,7 +711,7 @@ final class Cachify {
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'flushing' => __( 'Flushing cache', 'cachify' ),
 				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
-				'dashicon_success' => self::get_dashicon_success_class()
+				'dashicon_success' => self::get_dashicon_success_class(),
 			)
 		);
 	}
