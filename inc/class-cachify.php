@@ -647,7 +647,7 @@ final class Cachify {
 		/* Check if the flush action was used without AJAX */
 		$dashicon_class = 'dashicons-trash';
 		if ( isset( $_GET['_cachify'] ) && 'flushed' === $_GET['_cachify'] ) {
-			$dashicon_class = 'dashicons-yes-alt';
+			$dashicon_class = self::get_dashicon_success_class();
 		}
 
 		/* Add menu item */
@@ -668,6 +668,20 @@ final class Cachify {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Returns the dashicon class for the success state in admin bar flush button
+	 *
+	 * @return string
+	 */
+	public static function get_dashicon_success_class() {
+		global $wp_version;
+		if ( version_compare( $wp_version, '5.2', '<' ) ) {
+			return 'dashicons-yes';
+		}
+
+		return 'dashicons-yes-alt';
 	}
 
 	/**
@@ -697,6 +711,7 @@ final class Cachify {
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'flushing' => __( 'Flushing cache', 'cachify' ),
 				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
+				'dashicon_success' => self::get_dashicon_success_class()
 			)
 		);
 	}

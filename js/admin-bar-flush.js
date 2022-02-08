@@ -23,6 +23,7 @@
 			'animate-fade',
 			'animate-pulse',
 			'dashicons-trash',
+			'dashicons-yes',
 			'dashicons-yes-alt',
 			'dashicons-dismiss',
 		];
@@ -63,7 +64,7 @@
 				start_flush_icon_reset_timeout();
 				flush_icon_remove_classes();
 				admin_bar_icon.classList.add( 'animate-fade' );
-				admin_bar_icon.classList.add( 'dashicons-yes-alt' );
+				admin_bar_icon.classList.add( cachify_admin_bar_flush_ajax_object.dashicon_success );
 				aria_live_area.textContent = cachify_admin_bar_flush_ajax_object.flushed;
 				return;
 			}
