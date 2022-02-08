@@ -168,10 +168,18 @@ final class Cachify_HDD {
 			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
 			return;
 		}
-
 		/* Write to file */
 		self::_create_file( self::_file_html( $file_path ), $data );
-		self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
+
+		/**
+		 * Filter to disable creation of GZIP files.
+		 *
+		 * @param bool $disable_gzip
+		 */
+		$disable_gzip = apply_filters( 'cachify_disable_gzip_file_creation', false );
+		if ( ! $disable_gzip ) {
+			self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
+		}
 	}
 
 	/**
