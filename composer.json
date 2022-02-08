@@ -40,7 +40,9 @@
       "@build"
     ],
     "build": [
-      "minifycss css/dashboard.css > css/dashboard.min.css"
+      "minifycss css/dashboard.css > css/dashboard.min.css",
+      "minifycss css/admin-bar-flush.css > css/admin-bar-flush.min.css",
+      "minifyjs js/admin-bar-flush.js > js/admin-bar-flush.min.js"
     ],
     "cs": [
       "@lint-php"
@@ -50,10 +52,14 @@
     ],
     "lint-all": [
       "@lint-php",
-      "@lint-css"
+      "@lint-css",
+      "@lint-js"
     ],
     "lint-css": [
-      "npx stylelint css/dashboard.css"
+      "npx stylelint css/dashboard.css css/admin-bar-flush.css"
+    ],
+    "lint-js": [
+      "npx eslint js/admin-bar-flush.js"
     ],
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"

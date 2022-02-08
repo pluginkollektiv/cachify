@@ -59,6 +59,14 @@ final class Cachify {
 	const MINIFY_HTML_JS = 2;
 
 	/**
+	 * REST endpoints
+	 *
+	 * @var    string
+	 */
+	const REST_NAMESPACE = 'cachify/v1';
+	const REST_ROUTE_FLUSH = 'flush';
+
+	/**
 	 * Pseudo constructor
 	 *
 	 * @since   2.0.5
@@ -90,8 +98,20 @@ final class Cachify {
 
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
+		/* Register scripts */
+		add_action( 'init', array( __CLASS__, 'register_scripts' ) );
+
+		/* Register styles */
+		add_action( 'init', array( __CLASS__, 'register_styles' ) );
+
 		/* Flush icon */
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon' ), 90 );
+
+		/* Flush icon script */
+		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon_script' ), 90 );
+
+		/* Flush REST endpoint */
+		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
 
 		add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
 
@@ -311,6 +331,45 @@ final class Cachify {
 		global $wpdb;
 
 		return $wpdb->get_col( "SELECT blog_id FROM `$wpdb->blogs`" );
+	}
+
+	/**
+	 * Register the styles
+	 *
+	 * @since 2.4.0
+	 */
+	public static function register_styles() {
+		/* Register dashboard CSS */
+		wp_register_style(
+			'cachify-dashboard',
+			plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
+			array(),
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/dashboard.min.css' )
+		);
+
+		/* Register admin bar flush CSS */
+		wp_register_style(
+			'cachify-admin-bar-flush',
+			plugins_url( 'css/admin-bar-flush.min.css', CACHIFY_FILE ),
+			array(),
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/admin-bar-flush.min.css' )
+		);
+	}
+
+	/**
+	 * Register the scripts
+	 *
+	 * @since 2.4.0
+	 */
+	public static function register_scripts() {
+		/* Register admin bar flush script */
+		wp_register_script(
+			'cachify-admin-bar-flush',
+			plugins_url( 'js/admin-bar-flush.min.js', CACHIFY_FILE ),
+			array(),
+			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'js/admin-bar-flush.min.js' ),
+			true
+		);
 	}
 
 	/**
@@ -565,6 +624,7 @@ final class Cachify {
 	 *
 	 * @since   1.2
 	 * @change  2.2.2
+	 * @change  2.4.0 Adjust icon for flush request via AJAX
 	 *
 	 * @hook    mixed   cachify_user_can_flush_cache
 	 *
@@ -576,8 +636,19 @@ final class Cachify {
 			return;
 		}
 
+		/* Enqueue style */
+		wp_enqueue_style( 'cachify-admin-bar-flush' );
+
 		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{content:"\f182";top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
+		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
+
+		/* Print area for aria live updates */
+		echo '<span class="ab-aria-live-area screen-reader-text" aria-live="polite"></span>';
+		/* Check if the flush action was used without AJAX */
+		$dashicon_class = 'dashicons-trash';
+		if ( isset( $_GET['_cachify'] ) && 'flushed' === $_GET['_cachify'] ) {
+			$dashicon_class = self::get_dashicon_success_class();
+		}
 
 		/* Add menu item */
 		$wp_admin_bar->add_menu(
@@ -585,7 +656,7 @@ final class Cachify {
 				'id'     => 'cachify',
 				'href'   => wp_nonce_url( add_query_arg( '_cachify', 'flush' ), '_cachify__flush_nonce' ), // esc_url in /wp-includes/class-wp-admin-bar.php#L438.
 				'parent' => 'top-secondary',
-				'title'  => '<span class="ab-icon dashicons"></span>' .
+				'title'  => '<span class="ab-icon dashicons ' . $dashicon_class . '" aria-hidden="true"></span>' .
 										'<span class="ab-label">' .
 											__(
 												'Flush site cache',
@@ -600,10 +671,94 @@ final class Cachify {
 	}
 
 	/**
+	 * Returns the dashicon class for the success state in admin bar flush button
+	 *
+	 * @since  2.4.0
+	 *
+	 * @return string
+	 */
+	public static function get_dashicon_success_class() {
+		global $wp_version;
+		if ( version_compare( $wp_version, '5.2', '<' ) ) {
+			return 'dashicons-yes';
+		}
+
+		return 'dashicons-yes-alt';
+	}
+
+	/**
+	 * Add a script to query the REST endpoint and animate the flush icon in admin bar menu
+	 *
+	 * @since   2.4.0
+	 *
+	 * @hook    mixed   cachify_user_can_flush_cache ?
+	 *
+	 * @param   object $wp_admin_bar  Object of menu items.
+	 */
+	public static function add_flush_icon_script( $wp_admin_bar ) {
+		/* Quit */
+		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
+			return;
+		}
+
+		/* Enqueue script */
+		wp_enqueue_script( 'cachify-admin-bar-flush' );
+
+		/* Localize script */
+		wp_localize_script(
+			'cachify-admin-bar-flush',
+			'cachify_admin_bar_flush_ajax_object',
+			array(
+				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'flushing' => __( 'Flushing cache', 'cachify' ),
+				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
+				'dashicon_success' => self::get_dashicon_success_class(),
+			)
+		);
+	}
+
+
+	/**
+	 * Registers an REST endpoint for the flush operation
+	 *
+	 * @change 2.4.0
+	 */
+	public static function add_flush_rest_endpoint() {
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_FLUSH,
+			array(
+				'methods' => WP_REST_Server::DELETABLE,
+				'callback' => array(
+					__CLASS__,
+					'flush_cache',
+				),
+				'permission_callback' => array(
+					__CLASS__,
+					'user_can_manage_options',
+				),
+			)
+		);
+	}
+
+	/**
+	 * Check if user can manage options
+	 *
+	 * @since   2.4.0
+	 *
+	 * @return  bool
+	 */
+	public static function user_can_manage_options() {
+		return current_user_can( 'manage_options' );
+	}
+
+	/**
 	 * Process plugin's meta actions
 	 *
 	 * @since   0.5
 	 * @change  2.2.2
+	 * @change  2.4.0  Extract cache flushing to own method and always redirect to referer with new value for `_cachify` param.
 	 *
 	 * @hook    mixed  cachify_user_can_flush_cache
 	 *
@@ -630,6 +785,26 @@ final class Cachify {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
+		/* Flush cache */
+		self::flush_cache();
+
+		wp_safe_redirect(
+			add_query_arg(
+				'_cachify',
+				'flushed',
+				wp_get_referer()
+			)
+		);
+
+		exit();
+	}
+
+	/**
+	 * Flush cache
+	 *
+	 * @since 2.4.0
+	 */
+	public static function flush_cache() {
 		/* Flush cache */
 		if ( is_multisite() && is_network_admin() ) {
 			/* Old blog */
@@ -1303,18 +1478,10 @@ final class Cachify {
 			return;
 		}
 
-		/* Plugin data */
-		$plugin_data = get_plugin_data( CACHIFY_FILE );
-
 		/* Register css */
 		switch ( $hook ) {
 			case 'index.php':
-				wp_enqueue_style(
-					'cachify-dashboard',
-					plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
-					array(),
-					$plugin_data['Version']
-				);
+				wp_enqueue_style( 'cachify-dashboard' );
 				break;
 
 			default:
