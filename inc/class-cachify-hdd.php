@@ -170,14 +170,7 @@ final class Cachify_HDD {
 		}
 		/* Write to file */
 		self::_create_file( self::_file_html( $file_path ), $data );
-
-		/**
-		 * Filter to disable creation of GZIP files.
-		 *
-		 * @param bool $disable_gzip
-		 */
-		$disable_gzip = apply_filters( 'cachify_disable_gzip_file_creation', false );
-		if ( ! $disable_gzip ) {
+		if ( apply_filters( 'cachify_create_gzip_files', true ) ) {
 			self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
 		}
 	}
