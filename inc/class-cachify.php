@@ -673,6 +673,8 @@ final class Cachify {
 	/**
 	 * Returns the dashicon class for the success state in admin bar flush button
 	 *
+	 * @since  2.4.0
+	 *
 	 * @return string
 	 */
 	public static function get_dashicon_success_class() {
