@@ -1506,7 +1506,7 @@ final class Cachify {
 	 * @since 2.3.0
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
-		echo '<style>#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }</style>';
+		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );
 	}
 
 	/**
