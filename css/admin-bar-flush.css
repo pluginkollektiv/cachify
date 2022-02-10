@@ -49,3 +49,19 @@
 	color: inherit;
 }
 
+#wp-admin-bar-cachify {
+	display: list-item !important;
+}
+
+#wp-admin-bar-cachify .ab-icon {
+	margin: 0 !important;
+}
+
+#wp-admin-bar-cachify .ab-icon::before {
+	top: 2px;
+	margin: 0;
+}
+
+#wp-admin-bar-cachify .ab-label {
+	margin: 0 5px;
+}

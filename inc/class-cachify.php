@@ -144,7 +144,7 @@ final class Cachify {
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_admin_resources' ) );
 
-			add_action( 'admin_head', array( __CLASS__, 'admin_dashboard_styles' ) );
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
 
 			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
 
@@ -638,9 +638,6 @@ final class Cachify {
 
 		/* Enqueue style */
 		wp_enqueue_style( 'cachify-admin-bar-flush' );
-
-		/* Display the admin icon anytime */
-		echo '<style>#wp-admin-bar-cachify{display:list-item !important} #wp-admin-bar-cachify .ab-icon{margin:0 !important} #wp-admin-bar-cachify .ab-icon:before{top:2px;margin:0;} #wp-admin-bar-cachify .ab-label{margin:0 5px}</style>';
 
 		/* Print area for aria live updates */
 		echo '<span class="ab-aria-live-area screen-reader-text" aria-live="polite"></span>';
@@ -1499,7 +1496,7 @@ final class Cachify {
 		$wp_version = get_bloginfo( 'version' );
 
 		if ( version_compare( $wp_version, '5.3', '<' ) ) {
-			echo '<style>#dashboard_right_now .cachify-icon use { fill: #82878c; }</style>';
+			wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #82878c; }' );
 		}
 	}
 
