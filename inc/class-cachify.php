@@ -1392,7 +1392,7 @@ final class Cachify {
 		 * @param string $cache_hash    The cache hash.
 		 * @param int    $cache_expires Cache validity period.
 		 */
-		$should_cache = apply_filters( 'cachify_store_item', true, $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+		$should_cache = apply_filters( 'cachify_store_item', http_response_code() === 200, $data, self::$method, self::_cache_hash(), self::_cache_expires() );
 
 		/* Save? */
 		if ( $should_cache ) {
