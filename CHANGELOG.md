@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This projec
 
 ## unreleased
 
+Requires PHP 5.6 and WordPress 4.7 or above
+
 * Enhance: adjust styling for setup instructions (#215, props timse201)
 
 
