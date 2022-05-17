@@ -20,7 +20,7 @@
     <exclude-pattern>vendor/*</exclude-pattern>
 
     <!-- WordPress coding standards -->
-    <config name="minimum_supported_wp_version" value="4.4"/>
+    <config name="minimum_supported_wp_version" value="4.7"/>
     <rule ref="WordPress"/>
     <rule ref="WordPress.WP.I18n">
         <properties>
@@ -29,6 +29,6 @@
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->
-    <config name="testVersion" value="5.2-"/>
+    <config name="testVersion" value="5.6-"/>
     <rule ref="PHPCompatibilityWP"/>
 </ruleset>

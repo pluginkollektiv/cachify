@@ -2,9 +2,9 @@
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, compression, minify, speed
-* Requires at least: 4.4
-* Tested up to:      5.8
-* Requires PHP:      5.2.4
+* Requires at least: 4.7
+* Tested up to:      5.9
+* Requires PHP:      5.6
 * Stable tag:        2.3.2
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
