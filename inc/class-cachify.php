@@ -568,7 +568,7 @@ final class Cachify {
 		$items[] = sprintf(
 			'<a href="%s" title="%s: %s" class="cachify-glance">
             <svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
-                <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s">
+                <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s" />
             </svg> %s</a>',
 			add_query_arg(
 				array(
