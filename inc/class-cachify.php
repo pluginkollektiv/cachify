@@ -1258,6 +1258,13 @@ final class Cachify {
 			return true;
 		}
 
+		/* Content Negotiation */
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( isset( $_SERVER['HTTP_ACCEPT'] ) && false === strpos( $_SERVER['HTTP_ACCEPT'], 'text/html' ) ) {
+			return true;
+		}
+
 		return false;
 	}
 
