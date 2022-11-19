@@ -300,7 +300,7 @@ final class Cachify {
 		}
 
 		/* Switch to blog */
-		switch_to_blog( is_int( $new_site ) ? $new_site : $new_site->blog_id );
+		switch_to_blog( is_int( $old_site ) ? $old_site : $old_site->blog_id );
 
 		/* Install */
 		self::_uninstall_backend();
