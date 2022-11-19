@@ -217,10 +217,10 @@ final class Cachify {
 	/**
 	 * Plugin installation on new WPMS site.
 	 *
-	 * @since   1.0
-	 * @change  2.4.0
+	 * @since 1.0
+	 * @since 2.4 supports WP_Site argument
 	 *
-	 * @param int|WP_Site $new_site New Site object.
+	 * @param int|WP_Site $new_site New site ID or object.
 	 */
 	public static function install_later( $new_site ) {
 		/* No network plugin */
@@ -288,10 +288,10 @@ final class Cachify {
 	/**
 	 * Uninstalling of the plugin for WPMS site.
 	 *
-	 * @since   1.0
-	 * @change  2.4.0
+	 * @since 1.0
+	 * @since 2.4 supports WP_Site argument
 	 *
-	 * @param int|WP_Site $old_site Old Site object.
+	 * @param int|WP_Site $old_site Old site ID or object.
 	 */
 	public static function uninstall_later( $old_site ) {
 		/* No network plugin */
