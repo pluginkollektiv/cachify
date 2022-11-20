@@ -1074,11 +1074,11 @@ final class Cachify {
 	}
 
 	/**
-	 * WooCommerce stock hooks.
+	 * Flush post cache on WooCommerce stock changes.
 	 *
 	 * @since 2.4
 	 *
-	 * @param integer|object $product Product ID or object.
+	 * @param int|WC_Product $product Product ID or object.
 	 */
 	public static function flush_woocommerce( $product ) {
 		if ( is_int( $product ) ) {
