@@ -1,0 +1,67 @@
+#wp-admin-bar-cachify .animate-pulse {
+	animation: cachify-dash-icon-pulse 2s infinite;
+	animation-timing-function: linear;
+}
+
+#wp-admin-bar-cachify .animate-fade {
+	animation: cachify-dash-icon-fade-in 0.1s;
+	animation-timing-function: linear;
+}
+
+@keyframes cachify-dash-icon-pulse {
+
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.2;
+	}
+}
+
+@keyframes cachify-dash-icon-fade-in {
+
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+#wp-admin-bar-cachify button.ab-item {
+	background: none;
+	border: none;
+	padding: 0 8px 0 7px;
+}
+
+#wp-admin-bar-cachify button.ab-item:hover {
+	cursor: pointer;
+}
+
+#wp-admin-bar-cachify button.ab-item:focus {
+	outline: none;
+}
+
+#wpadminbar #wp-admin-bar-cachify button.ab-item:focus span.ab-label {
+	color: inherit;
+}
+
+#wp-admin-bar-cachify {
+	display: list-item !important;
+}
+
+#wp-admin-bar-cachify .ab-icon {
+	margin: 0 !important;
+}
+
+#wp-admin-bar-cachify .ab-icon::before {
+	top: 2px;
+	margin: 0;
+}
+
+#wp-admin-bar-cachify .ab-label {
+	margin: 0 5px;
+}
