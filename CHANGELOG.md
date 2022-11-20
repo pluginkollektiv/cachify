@@ -3,7 +3,10 @@ All notable changes to this project will be documented in this file. This projec
 
 ## unreleased
 
+Requires PHP 5.6 and WordPress 4.7 or above
+
 * Enhance: adjust styling for setup instructions (#215, props timse201)
+* Enhance: update hooks for Multisite initialization in WordPress 5.1 and above (#246, props ouun)
 
 
 ## 2.3.2
