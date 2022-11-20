@@ -1311,6 +1311,7 @@ final class Cachify {
 			'delete_term' => 10,
 			'edit_terms' => 10,
 			'delete_user' => 10,
+			'edit_user_profile_update' => 10,
 			/* third party */
 			'autoptimize_action_cachepurged' => 10,
 		);
