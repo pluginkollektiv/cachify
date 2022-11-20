@@ -90,9 +90,6 @@ final class Cachify {
 
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
-		/* Publish hooks */
-		add_action( 'init', array( __CLASS__, 'register_publish_hooks' ), 99 );
-
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
 		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
@@ -943,6 +940,69 @@ final class Cachify {
 			} else {
 				self::remove_page_cache_by_post_id( $comment->comment_post_ID );
 			}
+		}
+	}
+
+	/**
+	 * Generate publish hook for custom post types
+	 *
+	 * @since   2.1.7  Make the function public
+	 * @since   2.0.3
+	 *
+	 * @deprecated no longer used since 2.4
+	 */
+	public static function register_publish_hooks() {
+		/* Available post types */
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			)
+		);
+
+		/* Empty data? */
+		if ( empty( $post_types ) ) {
+			return;
+		}
+
+		/* Loop the post types */
+		foreach ( $post_types as $post_type ) {
+			add_action( 'publish_' . $post_type, array( __CLASS__, 'publish_post_types' ), 10, 2 );
+			add_action( 'publish_future_' . $post_type, array( __CLASS__, 'flush_total_cache' ) );
+		}
+	}
+
+	/**
+	 * Removes the post type cache on post updates
+	 *
+	 * @since   2.0.3
+	 * @change  2.3.0
+	 *
+	 * @param   integer $post_id  Post ID.
+	 * @param   object  $post     Post object.
+	 *
+	 * @deprecated no longer used since 2.4
+	 */
+	public static function publish_post_types( $post_id, $post ) {
+		/* No post_id? */
+		if ( empty( $post_id ) || empty( $post ) ) {
+			return;
+		}
+
+		/* Post status check */
+		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
+			return;
+		}
+
+		/* Check user role */
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return;
+		}
+
+		/* Remove cache OR flush */
+		if ( 1 !== self::$options['reset_on_post'] ) {
+			self::remove_page_cache_by_post_id( $post_id );
+		} else {
+			self::flush_total_cache();
 		}
 	}
 
