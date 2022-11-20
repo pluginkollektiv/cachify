@@ -90,13 +90,17 @@ final class Cachify {
 
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
-		/* Publish hooks */
-		add_action( 'init', array( __CLASS__, 'register_publish_hooks' ), 99 );
-
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-
+		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
+
+		/* Flush Hooks - third party */
+		add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_product_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
+		add_action( 'woocommerce_variation_set_stock_status', array( __CLASS__, 'flush_woocommerce' ) );
 
 		/* Register scripts */
 		add_action( 'init', array( __CLASS__, 'register_scripts' ) );
@@ -945,7 +949,7 @@ final class Cachify {
 	 * @since   2.1.7  Make the function public
 	 * @since   2.0.3
 	 *
-	 * @return  void
+	 * @deprecated no longer used since 2.4
 	 */
 	public static function register_publish_hooks() {
 		/* Available post types */
@@ -975,6 +979,8 @@ final class Cachify {
 	 *
 	 * @param   integer $post_id  Post ID.
 	 * @param   object  $post     Post object.
+	 *
+	 * @deprecated no longer used since 2.4
 	 */
 	public static function publish_post_types( $post_id, $post ) {
 		/* No post_id? */
@@ -998,6 +1004,90 @@ final class Cachify {
 		} else {
 			self::flush_total_cache();
 		}
+	}
+
+	/**
+	 * Removes the post type cache if saved or updated
+	 *
+	 * @since 2.0.3
+	 * @since 2.1.7 Make the function public.
+	 * @since 2.4   Renamed to save_update_trash_post with $id parameter.
+	 *
+	 * @param integer $id Post ID.
+	 */
+	public static function save_update_trash_post( $id ) {
+		$status = get_post_status( $id );
+
+		/* Post type published? */
+		if ( 'publish' === $status ) {
+			self::flush_cache_for_posts( $id );
+		}
+	}
+
+	/**
+	 * Removes the post type cache before an existing post type is updated in the db
+	 *
+	 * @since 2.0.3
+	 * @since 2.3.0
+	 * @since 2.4   Renamed to post_update.
+	 *
+	 * @param integer $id   Post ID.
+	 * @param array   $data Post data.
+	 */
+	public static function post_update( $id, $data ) {
+		$new_status = $data['post_status'];
+		$old_status = get_post_status( $id );
+
+		/* Was it published and is it not trashed now? */
+		if ( 'trash' !== $new_status && 'publish' === $old_status ) {
+			self::flush_cache_for_posts( $id );
+		}
+	}
+
+	/**
+	 * Clear cache when any post type has been created or updated
+	 *
+	 * @since 2.4
+	 *
+	 * @param integer|WP_Post $post Post ID or object.
+	 */
+	public static function flush_cache_for_posts( $post ) {
+		if ( is_int( $post ) ) {
+			$post_id = $post;
+			$data = get_post( $post_id );
+
+			if ( ! is_object( $data ) ) {
+				return;
+			}
+		} elseif ( is_object( $post ) ) {
+			$post_id = $post->ID;
+		} else {
+			return;
+		}
+
+		/* Remove cache OR flush */
+		if ( 1 !== self::$options['reset_on_post'] ) {
+			self::remove_page_cache_by_post_id( $post_id );
+		} else {
+			self::flush_total_cache();
+		}
+	}
+
+	/**
+	 * Flush post cache on WooCommerce stock changes.
+	 *
+	 * @since 2.4
+	 *
+	 * @param int|WC_Product $product Product ID or object.
+	 */
+	public static function flush_woocommerce( $product ) {
+		if ( is_int( $product ) ) {
+			$id = $product;
+		} else {
+			$id = $product->get_id();
+		}
+
+		self::flush_cache_for_posts( $id );
 	}
 
 	/**
@@ -1174,6 +1264,8 @@ final class Cachify {
 			'user_register' => 10,
 			'edit_user_profile_update' => 10,
 			'delete_user' => 10,
+			/* third party */
+			'autoptimize_action_cachepurged' => 10,
 		);
 
 		$flush_cache_hooks = apply_filters( 'cachify_flush_cache_hooks', $flush_cache_hooks );
