@@ -1,6 +1,8 @@
 .idea/
+.phpunit.result.cache
 css/*.min.css
 vendor/
 node_modules/
 composer.lock
 package-lock.json
+phpunit.*.xml

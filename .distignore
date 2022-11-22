@@ -2,7 +2,9 @@
 /.git
 /.github
 /.wordpress-org
+/bin
 /node_modules
+/tests
 /vendor
 
 # Files
@@ -10,10 +12,14 @@
 /.editorconfig
 /.gitattributes
 /.gitignore
+/.phpunit.result.cache
 /.stylelintrc.json
 /composer.json
 /composer.lock
 /package.json
 /package-lock.json
 /phpcs.xml
+/phpunit.xml
+/phpunit.coverage.xml
+/phpunit.report.xml
 /README.md

@@ -1,6 +1,45 @@
-name: Coding Standards
+name: Tests
 on: [push, pull_request]
 jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: '5.6'
+            wordpress: '4.7'
+          - php: '7.4'
+            wordpress: '5.9'
+          - php: '8.0'
+            wordpress: '6.0'
+          - php: '8.1'
+            wordpress: 'latest'
+          - php: '8.1'
+            wordpress: 'nightly'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.php}}
+          tools: composer
+      - name: Install
+        run: composer install --no-interaction
+      - name: Build
+        run: composer build
+      - name: Setup DB
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: 'mysql-5.7'
+          root-password: "root"
+      - name: Setup WP
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 "${{ matrix.wordpress }}"
+      - name: PHP unit tests
+        run: composer test
+
   quality:
     runs-on: ubuntu-latest
     steps:
