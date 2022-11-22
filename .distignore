@@ -13,6 +13,7 @@
 /.gitattributes
 /.gitignore
 /.phpunit.result.cache
+/.sonarcloud.properties
 /.stylelintrc.json
 /composer.json
 /composer.lock
