@@ -1,7 +1,6 @@
 {
   "extends": "@wordpress/stylelint-config",
   "rules": {
-    "declaration-property-unit-whitelist": null,
     "selector-id-pattern": null
   }
 }
