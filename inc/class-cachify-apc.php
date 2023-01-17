@@ -16,10 +16,9 @@ final class Cachify_APC {
 	/**
 	 * Availability check
 	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
+	 * @return bool TRUE when installed
 	 *
-	 * @return  boolean  true/false  TRUE when installed
+	 * @since 2.0.7
 	 */
 	public static function is_available() {
 		return extension_loaded( 'apc' );
@@ -28,10 +27,9 @@ final class Cachify_APC {
 	/**
 	 * Caching method as string
 	 *
-	 * @since   2.1.2
-	 * @change  2.1.2
+	 * @return string Caching method
 	 *
-	 * @return  string  Caching method
+	 * @since 2.1.2
 	 */
 	public static function stringify_method() {
 		return 'APC';
@@ -40,13 +38,13 @@ final class Cachify_APC {
 	/**
 	 * Store item in cache
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param string $hash       Hash of the entry.
+	 * @param string $data       Content of the entry.
+	 * @param int    $lifetime   Lifetime of the entry.
+	 * @param bool   $sig_detail Show details in signature.
 	 *
-	 * @param   string  $hash        Hash of the entry.
-	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry.
-	 * @param   bool    $sig_detail  Show details in signature.
+	 * @since 2.0
+	 * @since 2.3.0 added $sigDetail parameter
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
@@ -66,11 +64,11 @@ final class Cachify_APC {
 	/**
 	 * Read item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry.
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @return  mixed         Content of the entry
+	 * @return mixed Content of the entry
+	 *
+	 * @since 2.0
 	 */
 	public static function get_item( $hash ) {
 		return ( function_exists( 'apc_exists' ) ? apc_exists( $hash ) : apc_fetch( $hash ) );
@@ -79,11 +77,10 @@ final class Cachify_APC {
 	/**
 	 * Delete item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry.
+	 * @param string $url  URL of the entry [optional].
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @param   string $url   URL of the entry [optional].
+	 * @since 2.0
 	 */
 	public static function delete_item( $hash, $url = '' ) {
 		apc_delete( $hash );
@@ -92,8 +89,7 @@ final class Cachify_APC {
 	/**
 	 * Clear the cache
 	 *
-	 * @since   2.0.0
-	 * @change  2.0.7
+	 * @since 2.0
 	 */
 	public static function clear_cache() {
 		if ( ! self::is_available() ) {
@@ -106,8 +102,7 @@ final class Cachify_APC {
 	/**
 	 * Print the cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @since 2.0
 	 */
 	public static function print_cache() {
 		return;
@@ -116,10 +111,9 @@ final class Cachify_APC {
 	/**
 	 * Get the cache size
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @return mixed Cache size
 	 *
-	 * @return  mixed  Cache size
+	 * @since 2.0
 	 */
 	public static function get_stats() {
 		/* Info */
@@ -136,11 +130,12 @@ final class Cachify_APC {
 	/**
 	 * Generate signature
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param bool $detail Show details in signature.
 	 *
-	 * @param   bool $detail  Show details in signature.
-	 * @return  string        Signature string
+	 * @return string Signature string
+	 *
+	 * @since 2.0
+	 * @since 2.3.0 added $detail parameter
 	 */
 	private static function _cache_signature( $detail ) {
 		return sprintf(
