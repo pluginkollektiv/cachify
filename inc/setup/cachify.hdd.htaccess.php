@@ -26,6 +26,7 @@ $beginning = '# BEGIN CACHIFY
   RewriteRule .* - [E=CACHIFY_DIR:/]
 {{GZIP}}
   # Main Rules
+  RewriteCond %{HTTP_ACCEPT} .*text/html.*
   RewriteCond %{REQUEST_METHOD} GET
   RewriteCond %{QUERY_STRING} =""
   RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
