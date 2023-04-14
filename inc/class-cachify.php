@@ -446,7 +446,7 @@ final class Cachify {
 	public static function robots_txt() {
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			echo 'Disallow: */cache/cachify/';
+			echo "User-agent: *\nDisallow: */cache/cachify/\n";
 		}
 	}
 
