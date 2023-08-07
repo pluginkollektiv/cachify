@@ -93,7 +93,7 @@ final class Cachify {
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'post_updated', array( __CLASS__, 'save_update_trash_post' ), 10, 3 );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
@@ -1006,8 +1006,8 @@ final class Cachify {
 	 * @since 2.1.7 Make the function public.
 	 * @since 2.4.0 Renamed to save_update_trash_post with $id parameter.
 	 */
-	public static function save_update_trash_post( $id ) {
-		$status = get_post_status( $id );
+	public static function save_update_trash_post( $id, $post_after, $post_before ) {
+		$status = get_post_status( $post_before );
 
 		/* Post type published? */
 		if ( 'publish' === $status ) {
