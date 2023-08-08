@@ -1000,9 +1000,9 @@ final class Cachify {
 	/**
 	 * Removes the post type cache if saved or updated
 	 *
-	 * @param int $id Post ID.
-	 * @param WP_Post $post_after.
-	 * @param WP_Post $post_before.
+	 * @param int     $id Post ID.
+	 * @param WP_Post $post_after Post object following the update.
+	 * @param WP_Post $post_before Post object before the update.
 	 *
 	 * @since 2.0.3
 	 * @since 2.1.7 Make the function public.
