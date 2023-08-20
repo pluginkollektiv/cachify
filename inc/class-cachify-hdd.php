@@ -99,8 +99,7 @@ final class Cachify_HDD {
 	 */
 	public static function delete_item( $hash, $url ) {
 		self::_clear_dir(
-			self::_file_path( $url ),
-			true
+			self::_file_path( $url )
 		);
 	}
 
