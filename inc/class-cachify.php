@@ -1006,7 +1006,7 @@ final class Cachify {
 	 *
 	 * @since 2.0.3
 	 * @since 2.1.7 Make the function public.
-	 * @since 2.4.0 Renamed to save_update_trash_post with $id parameter.
+	 * @since 2.4.0 Renamed to save_update_trash_post and introduced parameters.
 	 */
 	public static function save_update_trash_post( $id, $post_after, $post_before ) {
 		$status = get_post_status( $post_before );
