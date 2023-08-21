@@ -228,7 +228,7 @@ final class Cachify_HDD {
 	 * @since 2.0
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
-		/* Remove trailing slash */
+		/* Remote training slash */
 		$dir = untrailingslashit( $dir );
 
 		/* Is directory? */
