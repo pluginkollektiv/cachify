@@ -73,6 +73,17 @@ Generated @ ',
 		);
 		self::assertStringEndsWith( ' -->', $cached );
 
+		// A subpage
+		self::go_to( '/testme/sub' );
+		Cachify_HDD::store_item(
+			'965b4abf2414e45036ab90c9d3f8dbc7', // Ignored.
+			'<html><head><title>Test Me</title></head><body><p>This is a subpage.</p></body></html>',
+			3600, // Ignored.
+			false
+		);
+		self::assertTrue( Cachify_HDD::get_item() );
+		self::assertTrue( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/sub/index.html' ) );
+
 		// Another item.
 		self::go_to( '/test2/' );
 		Cachify_HDD::store_item(
@@ -96,10 +107,17 @@ HDD Cache @ ',
 		Cachify_HDD::delete_item( '965b4abf2414e45036ab90c9d3f8dbc7', 'http://example.org/testme/' );
 		self::assertFalse( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/index.html' ), 'first item was not deleted' );
 		self::assertTrue( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/test2/index.html' ), 'second item should still be present' );
+		self::assertTrue( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/sub/index.html' ), 'subpage should now have been deleted' );
+
+		// Delete the subpage.
+		Cachify_HDD::delete_item( '965b4abf2414e45036ab90c9d3f8dbc7', 'http://example.org/testme/sub' );
+		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/sub/index.html' ), 'subpage item was not deleted' );
+		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/sub' ), 'empty directory was not deleted' );
 
 		// Clear the cache.
 		Cachify_HDD::clear_cache();
-		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/test2' ) );
+		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme' ), 'empty directory was not deleted' );
+		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/test2' ), 'second test page was not deleted' );
 		self::assertFalse( Cachify_HDD::get_item() );
 	}
 }

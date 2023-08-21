@@ -229,44 +229,45 @@ final class Cachify_HDD {
 	 * @since 2.0
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
-		/* Remote training slash */
+		// Remove trailing slash.
 		$dir = untrailingslashit( $dir );
 
-		/* Is directory? */
+		// Is directory?
 		if ( ! is_dir( $dir ) ) {
 			return;
 		}
 
-		/* Read */
+		// List directory contents.
 		$objects = array_diff(
 			scandir( $dir ),
 			array( '..', '.' )
 		);
 
-		/* Empty? */
-		if ( empty( $objects ) ) {
-			return;
-		}
-
-		/* Loop over items */
+		// Loop over items.
 		foreach ( $objects as $object ) {
-			/* Expand path */
+			// Expand path.
 			$object = $dir . DIRECTORY_SEPARATOR . $object;
 
-			/* Directory or file */
-			if ( is_dir( $object ) && $recursive ) {
-				self::_clear_dir( $object, $recursive );
+			if ( is_dir( $object ) ) {
+				if ( $recursive ) {
+					// Recursively clear the directory.
+					self::_clear_dir( $object, $recursive );
+				} elseif ( self::_user_can_delete( $object ) && 0 === count( glob( trailingslashit( $object ) . '*' ) ) ) {
+					// Delete the directory, if empty.
+					@rmdir( $object );
+				}
 			} elseif ( self::_user_can_delete( $object ) ) {
+				// Delete the file.
 				unlink( $object );
 			}
 		}
 
-		/* Remove directory */
-		if ( $recursive && self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+		// Remove directory, if empty.
+		if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
 			@rmdir( $dir );
 		}
 
-		/* Clean up */
+		// Clean up.
 		clearstatcache();
 	}
 
