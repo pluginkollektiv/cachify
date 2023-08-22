@@ -1722,16 +1722,16 @@ final class Cachify {
 
 		/* Return */
 		return array(
-			'only_guests'      => (int) ( ! empty( $data['only_guests'] ) ),
-			'compress_html'    => (int) $data['compress_html'],
-			'cache_expires'    => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
-			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
-			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
-			'use_apc'          => (int) $data['use_apc'],
-			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
-			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] ) ),
-			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] ) ),
-			'change_robots_txt'=> (int) ( ! empty( $data['change_robots_txt'] ) ),
+			'only_guests'       => (int) ( ! empty( $data['only_guests'] ) ),
+			'compress_html'     => (int) $data['compress_html'],
+			'cache_expires'     => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
+			'without_ids'       => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
+			'without_agents'    => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
+			'use_apc'           => (int) $data['use_apc'],
+			'reset_on_post'     => (int) ( ! empty( $data['reset_on_post'] ) ),
+			'reset_on_comment'  => (int) ( ! empty( $data['reset_on_comment'] ) ),
+			'sig_detail'        => (int) ( ! empty( $data['sig_detail'] ) ),
+			'change_robots_txt' => (int) ( ! empty( $data['change_robots_txt'] ) ),
 		);
 	}
 
