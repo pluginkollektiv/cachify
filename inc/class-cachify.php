@@ -1731,6 +1731,7 @@ final class Cachify {
 			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
 			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] ) ),
 			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] ) ),
+			'change_robots_txt'=> (int) ( ! empty( $data['change_robots_txt'] ) ),
 		);
 	}
 
