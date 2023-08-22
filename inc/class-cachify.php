@@ -432,6 +432,7 @@ final class Cachify {
 				'reset_on_post'     => 1,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
+				'change_robots_txt' => 0,
 			)
 		);
 	}
@@ -444,6 +445,9 @@ final class Cachify {
 	 * @since 2.4.0 Removed $data parameter and return value.
 	 */
 	public static function robots_txt() {
+		if ( ! self::$options['change_robots_txt'] ) {
+			return;
+		}
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			echo 'Disallow: */cache/cachify/';
