@@ -93,7 +93,7 @@ final class Cachify {
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'post_updated', array( __CLASS__, 'save_update_trash_post' ), 10, 3 );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 		add_action( 'comment_post', array( __CLASS__, 'new_comment' ), 99, 2 );
@@ -156,8 +156,6 @@ final class Cachify {
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
-
 			add_filter( 'dashboard_glance_items', array( __CLASS__, 'add_dashboard_count' ) );
 
 			add_filter( 'plugin_row_meta', array( __CLASS__, 'row_meta' ), 10, 2 );
@@ -167,7 +165,7 @@ final class Cachify {
 		} else {
 			/* Frontend */
 			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
-			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+			add_filter( 'robots_txt', array( __CLASS__, 'robots_txt' ) );
 		}
 	}
 
@@ -435,15 +433,18 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
+	 * @param string $output The robots.txt output.
+	 *
 	 * @since 1.0
 	 * @since 2.1.9
-	 * @since 2.4.0 Removed $data parameter and return value.
 	 */
-	public static function robots_txt() {
+	public static function robots_txt( $output ) {
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			echo 'Disallow: */cache/cachify/';
+			$output .= "\nUser-agent: *\nDisallow: */cache/cachify/\n";
 		}
+
+		return $output;
 	}
 
 	/**
@@ -1047,14 +1048,16 @@ final class Cachify {
 	/**
 	 * Removes the post type cache if saved or updated
 	 *
-	 * @param int $id Post ID.
+	 * @param int     $id          Post ID.
+	 * @param WP_Post $post_after  Post object following the update.
+	 * @param WP_Post $post_before Post object before the update.
 	 *
 	 * @since 2.0.3
 	 * @since 2.1.7 Make the function public.
-	 * @since 2.4.0 Renamed to save_update_trash_post with $id parameter.
+	 * @since 2.4.0 Renamed to save_update_trash_post and introduced parameters.
 	 */
-	public static function save_update_trash_post( $id ) {
-		$status = get_post_status( $id );
+	public static function save_update_trash_post( $id, $post_after, $post_before ) {
+		$status = get_post_status( $post_before );
 
 		/* Post type published? */
 		if ( 'publish' === $status ) {
@@ -1644,6 +1647,8 @@ final class Cachify {
 	 * Fixing some admin dashboard styles
 	 *
 	 * @since 2.3.0
+	 *
+	 * @deprecated included in dashboard.css since 2.4
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );
