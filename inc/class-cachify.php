@@ -156,8 +156,6 @@ final class Cachify {
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
-
 			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
 
 			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
@@ -1599,6 +1597,8 @@ final class Cachify {
 	 * Fixing some admin dashboard styles
 	 *
 	 * @since 2.3.0
+	 *
+	 * @deprecated included in dashboard.css since 2.4
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );
