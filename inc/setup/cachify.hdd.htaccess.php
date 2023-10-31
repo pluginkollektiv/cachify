@@ -21,6 +21,7 @@ $beginning = '# BEGIN CACHIFY
 
 {{GZIP}}
   # Main Rules
+  RewriteCond %{HTTP_ACCEPT} .*text/html.*
   RewriteCond %{REQUEST_URI} /$
   RewriteCond %{REQUEST_METHOD} GET
   RewriteCond %{QUERY_STRING} ^$

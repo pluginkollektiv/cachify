@@ -16,11 +16,10 @@ final class Cachify_CLI {
 	/**
 	 * Flush Cache Callback
 	 *
-	 * @since   2.3.0
-	 * @change  2.3.0
-	 *
 	 * @param array $args the CLI arguments as array.
 	 * @param array $assoc_args the CLI arguments as associative array.
+	 *
+	 * @since 2.3.0
 	 */
 	public static function flush_cache( $args, $assoc_args ) {
 		// Set default arguments.
@@ -38,11 +37,10 @@ final class Cachify_CLI {
 	/**
 	 * Get cache size
 	 *
-	 * @since   2.3.0
-	 * @change  2.3.0
-	 *
 	 * @param array $args the CLI arguments as array.
 	 * @param array $assoc_args the CLI arguments as associative array.
+	 *
+	 * @since 2.3.0
 	 */
 	public static function get_cache_size( $args, $assoc_args ) {
 		// Set default arguments.
@@ -62,8 +60,7 @@ final class Cachify_CLI {
 	/**
 	 * Register CLI Commands
 	 *
-	 * @since   2.3.0
-	 * @change  2.3.0
+	 * @since 2.3.0
 	 */
 	public static function add_commands() {
 		// Add flush command.

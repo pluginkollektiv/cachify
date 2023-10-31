@@ -26,6 +26,11 @@ location / {
   if ( $query_string ) {
 	return 405;
   }
+
+  if ( $http_accept !~* "text/html" ) {
+	return 405;
+  }
+
   if ( $request_method = POST ) {
 	return 405;
   }
