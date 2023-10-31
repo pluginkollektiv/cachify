@@ -169,7 +169,7 @@ final class Cachify {
 		} else {
 			/* Frontend */
 			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
-			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+			add_filter( 'robots_txt', array( __CLASS__, 'robots_txt' ) );
 		}
 	}
 
@@ -437,15 +437,18 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
+	 * @param string $output The robots.txt output.
+	 *
 	 * @since 1.0
 	 * @since 2.1.9
-	 * @since 2.4.0 Removed $data parameter and return value.
 	 */
-	public static function robots_txt() {
+	public static function robots_txt( $output ) {
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			echo 'Disallow: */cache/cachify/';
+			$output .= "\nUser-agent: *\nDisallow: */cache/cachify/\n";
 		}
+
+		return $output;
 	}
 
 	/**
