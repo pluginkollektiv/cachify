@@ -156,8 +156,6 @@ final class Cachify {
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
-
 			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
 
 			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
@@ -171,7 +169,7 @@ final class Cachify {
 		} else {
 			/* Frontend */
 			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
-			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+			add_filter( 'robots_txt', array( __CLASS__, 'robots_txt' ) );
 		}
 	}
 
@@ -440,18 +438,21 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
+	 * @param string $output The robots.txt output.
+	 *
 	 * @since 1.0
 	 * @since 2.1.9
-	 * @since 2.4.0 Removed $data parameter and return value.
 	 */
-	public static function robots_txt() {
+	public static function robots_txt( $output ) {
 		if ( ! self::$options['change_robots_txt'] ) {
-			return;
+			return $output;
 		}
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			echo 'Disallow: */cache/cachify/';
+			$output .= "\nUser-agent: *\nDisallow: */cache/cachify/\n";
 		}
+
+		return $output;
 	}
 
 	/**
@@ -1603,6 +1604,8 @@ final class Cachify {
 	 * Fixing some admin dashboard styles
 	 *
 	 * @since 2.3.0
+	 *
+	 * @deprecated included in dashboard.css since 2.4
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );

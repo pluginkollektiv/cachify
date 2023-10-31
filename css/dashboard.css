@@ -5,6 +5,10 @@
 	fill: #606a73;
 }
 
+html.dark-mode body:not(.block-editor-page) #dashboard_right_now .cachify-icon {
+	fill: #bbc8d4;
+}
+
 #dashboard_right_now li a.cachify-glance::before {
 	content: "";
 	padding: 0;
