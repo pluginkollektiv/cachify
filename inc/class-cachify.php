@@ -1113,14 +1113,18 @@ final class Cachify {
 			return;
 		}
 
+		$hash = self::_cache_hash( $url )
 		call_user_func(
 			array(
 				self::$method,
 				'delete_item',
 			),
-			self::_cache_hash( $url ),
+			$hash,
 			$url
 		);
+
+		/* Call hook for further actions */
+		do_action( 'cachify_removed_cache_by_url', $url, $hash );
 	}
 
 	/**
@@ -1451,6 +1455,9 @@ final class Cachify {
 				)
 			);
 		}
+
+		/* Call hook for further actions */
+		do_action( 'cachify_flushed_total_cache', $clear_all_methods );
 
 		/* Transient */
 		delete_transient( 'cachify_cache_size' );
