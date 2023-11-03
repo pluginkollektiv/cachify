@@ -1113,7 +1113,7 @@ final class Cachify {
 			return;
 		}
 
-		$hash = self::_cache_hash( $url )
+		$hash = self::_cache_hash( $url );
 		call_user_func(
 			array(
 				self::$method,
