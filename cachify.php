@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 
 /* Constants */
 define( 'CACHIFY_FILE', __FILE__ );
-define( 'CACHIFY_DIR', dirname( __FILE__ ) );
+define( 'CACHIFY_DIR', __DIR__ );
 define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
 
