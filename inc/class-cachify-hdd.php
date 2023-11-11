@@ -174,7 +174,7 @@ final class Cachify_HDD {
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
-			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}." ), E_USER_WARNING );
 			return;
 		}
 		/* Write to file */
@@ -202,7 +202,7 @@ final class Cachify_HDD {
 		/* Writable? */
 		$handle = @fopen( $file, 'wb' );
 		if ( ! $handle ) {
-			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}." ), E_USER_WARNING );
 			return;
 		}
 
