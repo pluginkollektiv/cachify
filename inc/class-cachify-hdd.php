@@ -122,7 +122,8 @@ final class Cachify_HDD {
 	 */
 	public static function print_cache() {
 		$filename = self::_file_html();
-		$size = is_readable( $filename ) ? readfile( $filename ) : false;
+		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
+
 		if ( ! empty( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
@@ -212,7 +213,7 @@ final class Cachify_HDD {
 		clearstatcache();
 
 		/* Permissions */
-		$stat = @stat( dirname( $file ) );
+		$stat  = @stat( dirname( $file ) );
 		$perms = $stat['mode'] & 0007777;
 		$perms = $perms & 0000666;
 		@chmod( $file, $perms );
@@ -255,18 +256,14 @@ final class Cachify_HDD {
 			/* Directory or file */
 			if ( is_dir( $object ) && $recursive ) {
 				self::_clear_dir( $object, $recursive );
-			} else {
-				if ( self::_user_can_delete( $object ) ) {
-					unlink( $object );
-				}
+			} elseif ( self::_user_can_delete( $object ) ) {
+				unlink( $object );
 			}
 		}
 
 		/* Remove directory */
-		if ( $recursive ) {
-			if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
-				@rmdir( $dir );
-			}
+		if ( $recursive && self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+			@rmdir( $dir );
 		}
 
 		/* Clean up */
@@ -402,9 +399,9 @@ final class Cachify_HDD {
 			$file = trailingslashit( $file );
 		}
 
-		$ssl_prefix = is_ssl() ? 'https-' : '';
+		$ssl_prefix   = is_ssl() ? 'https-' : '';
 		$current_blog = get_blog_details( get_current_blog_id() );
-		$blog_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
+		$blog_path    = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
 
 		if ( 0 !== strpos( $file, $blog_path ) ) {
 			return false;
