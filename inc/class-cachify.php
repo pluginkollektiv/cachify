@@ -662,7 +662,7 @@ final class Cachify {
 											) .
 										'</span>',
 				'meta'   => array(
-					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
+					'title' => esc_html__( 'Flush the Cachify cache', 'cachify' ),
 				),
 			)
 		);
