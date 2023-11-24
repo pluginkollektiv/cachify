@@ -19,18 +19,14 @@ $beginning = '# BEGIN CACHIFY
   RewriteCond %{HTTPS} off
   RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
 
-  # set subdirectory
-  RewriteCond %{REQUEST_URI} /$
-  RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
-  RewriteCond %{REQUEST_URI} ^$
-  RewriteRule .* - [E=CACHIFY_DIR:/]
 {{GZIP}}
   # Main Rules
   RewriteCond %{HTTP_ACCEPT} .*text/html.*
+  RewriteCond %{REQUEST_URI} /$
   RewriteCond %{REQUEST_METHOD} GET
-  RewriteCond %{QUERY_STRING} =""
-  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
-  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond %{QUERY_STRING} ^$
+  RewriteCond %{REQUEST_URI} !^\/(wp\-admin|wp\-content\/cache)\/.*
+  RewriteCond %{HTTP_COOKIE} !(wp\-postpass|wordpress_logged_in|comment_author)_
   RewriteCond ';
 
 $gzip = '';
@@ -48,10 +44,10 @@ if ( Cachify_HDD::is_gzip_enabled() ) {
 }
 $beginning = str_replace( '{{GZIP}}', $gzip, $beginning );
 
-$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
+$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html -f
   RewriteRule ^(.*) ';
 
-$ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+$ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html%{ENV:CACHIFY_SUFFIX} [L,NS]
 &lt;/IfModule&gt;
 # END CACHIFY';
 
