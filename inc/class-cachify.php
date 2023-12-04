@@ -582,7 +582,7 @@ final class Cachify {
 				/* translators: 1: "Caching method label"; 2: Actual method. */
 				esc_html__( '%1$s: %2$s', 'cachify' ),
 				esc_html__( 'Caching method', 'cachify' ),
-				esc_attr( strtolower( $method ) ),
+				esc_attr( strtolower( $method ) )
 			),
 			esc_attr( $method ),
 			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
