@@ -48,7 +48,7 @@ if ( Cachify_HDD::is_gzip_enabled() ) {
 }
 $beginning = str_replace( '{{GZIP}}', $gzip, $beginning );
 
-$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html -f
+$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
   RewriteRule ^(.*) ';
 
 $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
