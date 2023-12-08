@@ -74,10 +74,10 @@ final class Cachify_CLI {
 				'shortdesc' => 'Flush site cache',
 				'synopsis'  => array(
 					array(
-						'type'     => 'flag',
-						'name'     => 'all-methods',
-						'description'   => 'Flush all caching methods',
-						'optional' => true,
+						'type'        => 'flag',
+						'name'        => 'all-methods',
+						'description' => 'Flush all caching methods',
+						'optional'    => true,
 					),
 				),
 			)
@@ -94,14 +94,13 @@ final class Cachify_CLI {
 				'shortdesc' => 'Get the size of the cache in bytes',
 				'synopsis'  => array(
 					array(
-						'type'     => 'flag',
-						'name'     => 'raw',
-						'description'   => 'Raw size output in bytes',
-						'optional' => true,
+						'type'        => 'flag',
+						'name'        => 'raw',
+						'description' => 'Raw size output in bytes',
+						'optional'    => true,
 					),
 				),
 			)
 		);
-
 	}
 }

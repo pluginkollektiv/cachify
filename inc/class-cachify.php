@@ -47,7 +47,7 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const METHOD_DB = 0;
+	const METHOD_DB  = 0;
 	const METHOD_APC = 1;
 	const METHOD_HDD = 2;
 	const METHOD_MMC = 3;
@@ -60,16 +60,16 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const MINIFY_DISABLED = 0;
+	const MINIFY_DISABLED  = 0;
 	const MINIFY_HTML_ONLY = 1;
-	const MINIFY_HTML_JS = 2;
+	const MINIFY_HTML_JS   = 2;
 
 	/**
 	 * REST endpoints
 	 *
 	 * @var string
 	 */
-	const REST_NAMESPACE = 'cachify/v1';
+	const REST_NAMESPACE   = 'cachify/v1';
 	const REST_ROUTE_FLUSH = 'flush';
 
 	/**
@@ -94,7 +94,7 @@ final class Cachify {
 
 		/* Flush Hooks */
 		add_action( 'init', array( __CLASS__, 'register_flush_cache_hooks' ), 10, 0 );
-		add_action( 'save_post', array( __CLASS__, 'save_update_trash_post' ) );
+		add_action( 'post_updated', array( __CLASS__, 'save_update_trash_post' ), 10, 3 );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
 
@@ -157,8 +157,6 @@ final class Cachify {
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
 
-			add_action( 'doing_dark_mode', array( __CLASS__, 'admin_dashboard_dark_mode_styles' ) );
-
 			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
 
 			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
@@ -172,7 +170,7 @@ final class Cachify {
 		} else {
 			/* Frontend */
 			add_action( 'template_redirect', array( __CLASS__, 'manage_cache' ), 0 );
-			add_action( 'do_robots', array( __CLASS__, 'robots_txt' ) );
+			add_filter( 'robots_txt', array( __CLASS__, 'robots_txt' ) );
 		}
 	}
 
@@ -428,15 +426,15 @@ final class Cachify {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
-				'only_guests'       => 1,
-				'compress_html'     => self::MINIFY_DISABLED,
-				'cache_expires'     => 12,
-				'without_ids'       => '',
-				'without_agents'    => '',
-				'use_apc'           => self::METHOD_DB,
-				'reset_on_post'     => 1,
-				'reset_on_comment'  => 0,
-				'sig_detail'        => 0,
+				'only_guests'      => 1,
+				'compress_html'    => self::MINIFY_DISABLED,
+				'cache_expires'    => 12,
+				'without_ids'      => '',
+				'without_agents'   => '',
+				'use_apc'          => self::METHOD_DB,
+				'reset_on_post'    => 1,
+				'reset_on_comment' => 0,
+				'sig_detail'       => 0,
 			)
 		);
 	}
@@ -444,15 +442,18 @@ final class Cachify {
 	/**
 	 * Modify robots.txt
 	 *
+	 * @param string $output The robots.txt output.
+	 *
 	 * @since 1.0
 	 * @since 2.1.9
-	 * @since 2.4.0 Removed $data parameter and return value.
 	 */
-	public static function robots_txt() {
+	public static function robots_txt( $output ) {
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
-			echo 'Disallow: */cache/cachify/';
+			$output .= "\nUser-agent: *\nDisallow: */cache/cachify/\n";
 		}
+
+		return $output;
 	}
 
 	/**
@@ -711,10 +712,10 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			'cachify_admin_bar_flush_ajax_object',
 			array(
-				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'flushing' => __( 'Flushing cache', 'cachify' ),
-				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
+				'url'              => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
+				'nonce'            => wp_create_nonce( 'wp_rest' ),
+				'flushing'         => __( 'Flushing cache', 'cachify' ),
+				'flushed'          => __( 'Cache flushed successfully', 'cachify' ),
 				'dashicon_success' => self::get_dashicon_success_class(),
 			)
 		);
@@ -731,8 +732,8 @@ final class Cachify {
 			self::REST_NAMESPACE,
 			self::REST_ROUTE_FLUSH,
 			array(
-				'methods' => WP_REST_Server::DELETABLE,
-				'callback' => array(
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => array(
 					__CLASS__,
 					'flush_cache',
 				),
@@ -784,7 +785,7 @@ final class Cachify {
 
 		/* Load on demand */
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
 		/* Flush cache */
@@ -1005,14 +1006,16 @@ final class Cachify {
 	/**
 	 * Removes the post type cache if saved or updated
 	 *
-	 * @param int $id Post ID.
+	 * @param int     $id          Post ID.
+	 * @param WP_Post $post_after  Post object following the update.
+	 * @param WP_Post $post_before Post object before the update.
 	 *
 	 * @since 2.0.3
 	 * @since 2.1.7 Make the function public.
-	 * @since 2.4.0 Renamed to save_update_trash_post with $id parameter.
+	 * @since 2.4.0 Renamed to save_update_trash_post and introduced parameters.
 	 */
-	public static function save_update_trash_post( $id ) {
-		$status = get_post_status( $id );
+	public static function save_update_trash_post( $id, $post_after, $post_before ) {
+		$status = get_post_status( $post_before );
 
 		/* Post type published? */
 		if ( 'publish' === $status ) {
@@ -1050,7 +1053,7 @@ final class Cachify {
 	public static function flush_cache_for_posts( $post ) {
 		if ( is_int( $post ) ) {
 			$post_id = $post;
-			$data = get_post( $post_id );
+			$data    = get_post( $post_id );
 
 			if ( ! is_object( $data ) ) {
 				return;
@@ -1166,7 +1169,8 @@ final class Cachify {
 		}
 
 		$url_parts = wp_parse_url( $url );
-		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+		$hash_key  = $prefix . $url_parts['host'] . $url_parts['path'];
+
 		return md5( $hash_key ) . '.cachify';
 	}
 
@@ -1244,17 +1248,17 @@ final class Cachify {
 	public static function register_flush_cache_hooks() {
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
-			'cachify_flush_cache' => 10,
-			'_core_updated_successfully' => 10,
-			'switch_theme' => 10,
-			'before_delete_post' => 10,
-			'wp_trash_post' => 10,
-			'create_term' => 10,
-			'delete_term' => 10,
-			'edit_terms' => 10,
-			'user_register' => 10,
-			'edit_user_profile_update' => 10,
-			'delete_user' => 10,
+			'cachify_flush_cache'            => 10,
+			'_core_updated_successfully'     => 10,
+			'switch_theme'                   => 10,
+			'before_delete_post'             => 10,
+			'wp_trash_post'                  => 10,
+			'create_term'                    => 10,
+			'delete_term'                    => 10,
+			'edit_terms'                     => 10,
+			'user_register'                  => 10,
+			'edit_user_profile_update'       => 10,
+			'delete_user'                    => 10,
 			/* third party */
 			'autoptimize_action_cachepurged' => 10,
 		);
@@ -1265,7 +1269,6 @@ final class Cachify {
 		foreach ( $flush_cache_hooks as $hook => $priority ) {
 			add_action( $hook, array( 'Cachify', 'flush_total_cache' ), $priority, 0 );
 		}
-
 	}
 
 	/**
@@ -1585,7 +1588,6 @@ final class Cachify {
 			default:
 				break;
 		}
-
 	}
 
 	/**
@@ -1605,6 +1607,8 @@ final class Cachify {
 	 * Fixing some admin dashboard styles
 	 *
 	 * @since 2.3.0
+	 *
+	 * @deprecated included in dashboard.css since 2.4
 	 */
 	public static function admin_dashboard_dark_mode_styles() {
 		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );
@@ -1748,9 +1752,9 @@ final class Cachify {
 	 * @since 1.0
 	 */
 	public static function options_page() {
-		$options = self::_get_options();
+		$options      = self::_get_options();
 		$cachify_tabs = self::_get_tabs( $options );
-		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
+		$current_tab  = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
 			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
 			: 'settings';
 		?>
@@ -1769,7 +1773,7 @@ final class Cachify {
 						esc_url(
 							add_query_arg(
 								array(
-									'page' => 'cachify',
+									'page'        => 'cachify',
 									'cachify_tab' => $tab_key,
 								),
 								admin_url( 'options-general.php' )

@@ -31,8 +31,8 @@ final class Cachify_MEMCACHED {
 	 */
 	public static function is_available() {
 		return class_exists( 'Memcached' )
-		       // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			   && isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			&& isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
 	}
 
 	/**
@@ -254,8 +254,8 @@ final class Cachify_MEMCACHED {
 		} else {
 			self::$_memcached->setOptions(
 				array(
-					Memcached::OPT_COMPRESSION => false,
-					Memcached::OPT_BUFFER_WRITES => true,
+					Memcached::OPT_COMPRESSION     => false,
+					Memcached::OPT_BUFFER_WRITES   => true,
 					Memcached::OPT_BINARY_PROTOCOL => true,
 				)
 			);

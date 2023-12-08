@@ -104,4 +104,33 @@ class Test_Cachify extends WP_UnitTestCase {
 		Cachify::on_activation();
 		self::assertEquals( array() , get_option( 'cachify' ), 'Cachify option not initialized' );
 	}
+
+
+	/**
+	 * Test hook for robots.txt customization.
+	 */
+	public function test_robots_txt() {
+		// Initial robots.txt content.
+		$robots_txt = "User-agent: *\nDisallow: /wordpress/wp-admin/\nAllow: /wordpress/wp-admin/admin-ajax.php\n";
+
+		// DB cache enabled.
+		update_option( 'cachify' , array( 'use_apc' => Cachify::METHOD_DB ) );
+		new Cachify();
+
+		self::assertEquals(
+			$robots_txt,
+			Cachify::robots_txt( $robots_txt ),
+			'robots.tst should not be modified using DB cache'
+		);
+
+		// HDD cache enabled.
+		update_option( 'cachify' , array( 'use_apc' => Cachify::METHOD_HDD ) );
+		new Cachify();
+
+		self::assertEquals(
+			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
+			Cachify::robots_txt( $robots_txt ),
+			'robots.tst should have been modified using HDD cache'
+		);
+	}
 }
