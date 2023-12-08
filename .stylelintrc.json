@@ -1,6 +1,7 @@
 {
   "extends": "@wordpress/stylelint-config",
   "rules": {
+    "font-family-no-missing-generic-family-keyword": null,
     "selector-id-pattern": null
   }
 }

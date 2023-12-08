@@ -3,6 +3,7 @@
 /.github
 /.wordpress-org
 /bin
+/images/src
 /node_modules
 /tests
 /vendor
