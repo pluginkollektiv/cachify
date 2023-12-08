@@ -46,8 +46,8 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcac
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://wordpress.org/support/article/managing-plugins/#installing-plugins).
 
 ### Requirements ###
-* PHP 5.2.4 or greater
-* WordPress 3.8 or greater
+* PHP 5.6 or greater
+* WordPress 4.7 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
 * Redis (optional, via the phpredis module)
