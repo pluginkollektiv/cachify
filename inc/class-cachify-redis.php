@@ -232,5 +232,4 @@ final class Cachify_REDIS {
 
 		return true;
 	}
-
 }
