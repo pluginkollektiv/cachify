@@ -155,8 +155,8 @@ A complete documentation is available in the [online handbook](https://cachify.p
 * Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress Multisite
 
 ### 2.2.0 ###
-* Toolbar: Display of the "Flush the cachify cache" button on the frontend
-* Toolbar: Controlling the display of the "Flush the cachify cache" button via hook
+* Toolbar: Display of the "Flush the Cachify cache" button on the frontend
+* Toolbar: Controlling the display of the "Flush the Cachify cache" button via hook
 
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
 
