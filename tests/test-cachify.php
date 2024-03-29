@@ -114,23 +114,50 @@ class Test_Cachify extends WP_UnitTestCase {
 		$robots_txt = "User-agent: *\nDisallow: /wordpress/wp-admin/\nAllow: /wordpress/wp-admin/admin-ajax.php\n";
 
 		// DB cache enabled.
-		update_option( 'cachify' , array( 'use_apc' => Cachify::METHOD_DB ) );
+		update_option(
+			'cachify',
+			array(
+				'use_apc'           => Cachify::METHOD_DB,
+				'change_robots_txt' => 1,
+			)
+		);
 		new Cachify();
 
 		self::assertEquals(
 			$robots_txt,
 			Cachify::robots_txt( $robots_txt ),
-			'robots.tst should not be modified using DB cache'
+			'robots.txt should not be modified using DB cache'
 		);
 
 		// HDD cache enabled.
-		update_option( 'cachify' , array( 'use_apc' => Cachify::METHOD_HDD ) );
+		update_option(
+			'cachify',
+			array(
+				'use_apc'           => Cachify::METHOD_HDD,
+				'change_robots_txt' => 1,
+			)
+		);
 		new Cachify();
 
 		self::assertEquals(
 			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
 			Cachify::robots_txt( $robots_txt ),
-			'robots.tst should have been modified using HDD cache'
+			'robots.txt should have been modified using HDD cache'
+		);
+
+		// Disable robots.txt modification.
+		update_option(
+			'cachify',
+			array(
+				'use_apc'           => Cachify::METHOD_HDD,
+				'change_robots_txt' => 0,
+			)
+		);
+
+		self::assertEquals(
+			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
+			Cachify::robots_txt( $robots_txt ),
+			'robots.txt should have been modified using HDD cache'
 		);
 	}
 }
