@@ -12,13 +12,15 @@ jobs:
             wordpress: '5.9'
           - php: '8.0'
             wordpress: '6.0'
-          - php: '8.1'
+          - php: '8.2'
+            wordpress: '6.4'
+          - php: '8.3'
             wordpress: 'latest'
-          - php: '8.1'
+          - php: '8.3'
             wordpress: 'nightly'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup PHP
@@ -43,16 +45,16 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.2'
           tools: composer
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
       - name: Code style checks for PHP and CSS
         run: |
           composer install
