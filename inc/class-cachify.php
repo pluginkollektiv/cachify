@@ -431,7 +431,7 @@ final class Cachify {
 				'reset_on_post'     => 1,
 				'reset_on_comment'  => 0,
 				'sig_detail'        => 0,
-				'change_robots_txt' => 0,
+				'change_robots_txt' => 1,
 			)
 		);
 	}
