@@ -47,10 +47,11 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const METHOD_DB = 0;
+	const METHOD_DB  = 0;
 	const METHOD_APC = 1;
 	const METHOD_HDD = 2;
 	const METHOD_MMC = 3;
+	const METHOD_REDIS = 4;
 
 	/**
 	 * Minify settings
@@ -59,16 +60,16 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const MINIFY_DISABLED = 0;
+	const MINIFY_DISABLED  = 0;
 	const MINIFY_HTML_ONLY = 1;
-	const MINIFY_HTML_JS = 2;
+	const MINIFY_HTML_JS   = 2;
 
 	/**
 	 * REST endpoints
 	 *
 	 * @var string
 	 */
-	const REST_NAMESPACE = 'cachify/v1';
+	const REST_NAMESPACE   = 'cachify/v1';
 	const REST_ROUTE_FLUSH = 'flush';
 
 	/**
@@ -96,6 +97,9 @@ final class Cachify {
 		add_action( 'post_updated', array( __CLASS__, 'save_update_trash_post' ), 10, 3 );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
+		add_action( 'comment_post', array( __CLASS__, 'new_comment' ), 99, 2 );
+		add_action( 'edit_comment', array( __CLASS__, 'comment_edit' ), 10, 2 );
+		add_action( 'transition_comment_status', array( __CLASS__, 'comment_status' ), 10, 3 );
 
 		/* Flush Hooks - third party */
 		add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
@@ -119,9 +123,6 @@ final class Cachify {
 		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
 
 		add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
-
-		/* Flush (post) cache if comment is made from frontend or backend */
-		add_action( 'pre_comment_approved', array( __CLASS__, 'pre_comment' ), 99, 2 );
 
 		/* Add Cron for clearing the HDD Cache */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
@@ -155,10 +156,6 @@ final class Cachify {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_admin_resources' ) );
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
-
-			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
-
-			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
 
 			add_filter( 'dashboard_glance_items', array( __CLASS__, 'add_dashboard_count' ) );
 
@@ -404,6 +401,10 @@ final class Cachify {
 		} elseif ( self::METHOD_MMC === self::$options['use_apc'] && Cachify_MEMCACHED::is_available() ) {
 			self::$method = new Cachify_MEMCACHED();
 
+			/* REDIS */
+		} elseif ( self::METHOD_REDIS === self::$options['use_apc'] && Cachify_REDIS::is_available() ) {
+			self::$method = new Cachify_REDIS();
+
 			/* DB */
 		} else {
 			self::$method = new Cachify_DB();
@@ -421,15 +422,15 @@ final class Cachify {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
-				'only_guests'       => 1,
-				'compress_html'     => self::MINIFY_DISABLED,
-				'cache_expires'     => 12,
-				'without_ids'       => '',
-				'without_agents'    => '',
-				'use_apc'           => self::METHOD_DB,
-				'reset_on_post'     => 1,
-				'reset_on_comment'  => 0,
-				'sig_detail'        => 0,
+				'only_guests'      => 1,
+				'compress_html'    => self::MINIFY_DISABLED,
+				'cache_expires'    => 12,
+				'without_ids'      => '',
+				'without_agents'   => '',
+				'use_apc'          => self::METHOD_DB,
+				'reset_on_post'    => 1,
+				'reset_on_comment' => 0,
+				'sig_detail'       => 0,
 			)
 		);
 	}
@@ -568,7 +569,7 @@ final class Cachify {
 
 		/* Right now item */
 		$items[] = sprintf(
-			'<a href="%s" title="%s: %s" class="cachify-glance">
+			'<a href="%s" title="%s" class="cachify-glance">
             <svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
                 <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s" />
             </svg> %s</a>',
@@ -578,8 +579,12 @@ final class Cachify {
 				),
 				admin_url( 'options-general.php' )
 			),
-			esc_attr( strtolower( $method ) ),
-			esc_html__( 'Caching method', 'cachify' ),
+			sprintf(
+				/* translators: 1: "Caching method label"; 2: Actual method. */
+				esc_html__( '%1$s: %2$s', 'cachify' ),
+				esc_html__( 'Caching method', 'cachify' ),
+				esc_attr( strtolower( $method ) )
+			),
 			esc_attr( $method ),
 			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
 			esc_attr( strtolower( $method ) ),
@@ -662,7 +667,7 @@ final class Cachify {
 											) .
 										'</span>',
 				'meta'   => array(
-					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
+					'title' => esc_html__( 'Flush the Cachify cache', 'cachify' ),
 				),
 			)
 		);
@@ -707,10 +712,10 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			'cachify_admin_bar_flush_ajax_object',
 			array(
-				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'flushing' => __( 'Flushing cache', 'cachify' ),
-				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
+				'url'              => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
+				'nonce'            => wp_create_nonce( 'wp_rest' ),
+				'flushing'         => __( 'Flushing cache', 'cachify' ),
+				'flushed'          => __( 'Cache flushed successfully', 'cachify' ),
 				'dashicon_success' => self::get_dashicon_success_class(),
 			)
 		);
@@ -727,8 +732,8 @@ final class Cachify {
 			self::REST_NAMESPACE,
 			self::REST_ROUTE_FLUSH,
 			array(
-				'methods' => WP_REST_Server::DELETABLE,
-				'callback' => array(
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => array(
 					__CLASS__,
 					'flush_cache',
 				),
@@ -780,7 +785,7 @@ final class Cachify {
 
 		/* Load on demand */
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
 		/* Flush cache */
@@ -865,7 +870,7 @@ final class Cachify {
 	public static function flush_notice() {
 		/* No admin */
 		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
-			return false;
+			return;
 		}
 
 		printf(
@@ -881,14 +886,33 @@ final class Cachify {
 	 *
 	 * @since 0.1.0
 	 * @since 2.1.2
+	 *
+	 * @deprecated 2.4.0 Use comment_edit($id, $comment) instead.
 	 */
 	public static function edit_comment( $id ) {
-		if ( self::$options['reset_on_comment'] ) {
-			self::flush_total_cache();
-		} else {
-			self::remove_page_cache_by_post_id(
-				get_comment( $id )->comment_post_ID
-			);
+		self::comment_edit( $id, array( 'comment_approved' => 1 ) );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @param integer $id      Comment ID.
+	 * @param array   $comment Comment data.
+	 *
+	 * @since 2.4.0 Replacement for edit_comment($id) with additional comment parameter.
+	 */
+	public static function comment_edit( $id, $comment ) {
+		$approved = (int) $comment['comment_approved'];
+
+		/* Approved comment? */
+		if ( 1 === $approved ) {
+			if ( self::$options['reset_on_comment'] ) {
+				self::flush_total_cache();
+			} else {
+				self::remove_page_cache_by_post_id(
+					get_comment( $id )->comment_post_ID
+				);
+			}
 		}
 	}
 
@@ -902,18 +926,33 @@ final class Cachify {
 	 *
 	 * @since 0.1
 	 * @since 2.1.2
+	 * @since 2.4.0 Replacement for edit_comment($id) with additional comment parameter.
 	 */
 	public static function pre_comment( $approved, $comment ) {
+		self::new_comment( $comment['comment_ID'], $approved );
+
+		return $approved;
+	}
+
+	/**
+	 * Remove page from cache or flush on new comment
+	 *
+	 * @param integer|string $id       Comment ID.
+	 * @param integer|string $approved Comment status.
+	 *
+	 * @since 0.1.0
+	 * @since 2.1.2
+	 * @since 2.4.0 Renamed with ID parameter instead of comment array.
+	 */
+	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
 		if ( 1 === $approved ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
-				self::remove_page_cache_by_post_id( $comment['comment_post_ID'] );
+				self::remove_page_cache_by_post_id( get_comment( $id )->comment_post_ID );
 			}
 		}
-
-		return $approved;
 	}
 
 	/**
@@ -925,9 +964,26 @@ final class Cachify {
 	 *
 	 * @since 0.1
 	 * @since 2.1.2
+	 *
+	 * @deprecated 2.4.0 Use comment_status($new_status, $old_status, $comment) instead.
 	 */
 	public static function touch_comment( $new_status, $old_status, $comment ) {
-		if ( $new_status !== $old_status ) {
+		self::comment_status( $new_status, $old_status, $comment );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @param string     $new_status New status.
+	 * @param string     $old_status Old status.
+	 * @param WP_Comment $comment    The comment.
+	 *
+	 * @since 0.1
+	 * @since 2.1.2
+	 * @since 2.4.0 Renamed from touch_comment().
+	 */
+	public static function comment_status( $new_status, $old_status, $comment ) {
+		if ( 'approved' === $old_status || 'approved' === $new_status ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
@@ -1048,7 +1104,7 @@ final class Cachify {
 	public static function flush_cache_for_posts( $post ) {
 		if ( is_int( $post ) ) {
 			$post_id = $post;
-			$data = get_post( $post_id );
+			$data    = get_post( $post_id );
 
 			if ( ! is_object( $data ) ) {
 				return;
@@ -1168,7 +1224,8 @@ final class Cachify {
 		}
 
 		$url_parts = wp_parse_url( $url );
-		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+		$hash_key  = $prefix . $url_parts['host'] . $url_parts['path'];
+
 		return md5( $hash_key ) . '.cachify';
 	}
 
@@ -1246,17 +1303,17 @@ final class Cachify {
 	public static function register_flush_cache_hooks() {
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
-			'cachify_flush_cache' => 10,
-			'_core_updated_successfully' => 10,
-			'switch_theme' => 10,
-			'before_delete_post' => 10,
-			'wp_trash_post' => 10,
-			'create_term' => 10,
-			'delete_term' => 10,
-			'edit_terms' => 10,
-			'user_register' => 10,
-			'edit_user_profile_update' => 10,
-			'delete_user' => 10,
+			'cachify_flush_cache'            => 10,
+			'_core_updated_successfully'     => 10,
+			'switch_theme'                   => 10,
+			'before_delete_post'             => 10,
+			'wp_trash_post'                  => 10,
+			'create_term'                    => 10,
+			'delete_term'                    => 10,
+			'edit_terms'                     => 10,
+			'user_register'                  => 10,
+			'edit_user_profile_update'       => 10,
+			'delete_user'                    => 10,
 			/* third party */
 			'autoptimize_action_cachepurged' => 10,
 		);
@@ -1267,7 +1324,6 @@ final class Cachify {
 		foreach ( $flush_cache_hooks as $hook => $priority ) {
 			add_action( $hook, array( 'Cachify', 'flush_total_cache' ), $priority, 0 );
 		}
-
 	}
 
 	/**
@@ -1445,6 +1501,9 @@ final class Cachify {
 			/* HDD */
 			Cachify_HDD::clear_cache();
 
+			/* REDIS */
+			Cachify_REDIS::clear_cache();
+
 			/* MEMCACHED */
 			Cachify_MEMCACHED::clear_cache();
 		} else {
@@ -1587,7 +1646,6 @@ final class Cachify {
 			default:
 				break;
 		}
-
 	}
 
 	/**
@@ -1646,6 +1704,7 @@ final class Cachify {
 			self::METHOD_APC => esc_html__( 'APC', 'cachify' ),
 			self::METHOD_HDD => esc_html__( 'Hard disk', 'cachify' ),
 			self::METHOD_MMC => esc_html__( 'Memcached', 'cachify' ),
+			self::METHOD_REDIS => esc_html__( 'Redis', 'cachify' ),
 		);
 
 		/* APC */
@@ -1661,6 +1720,11 @@ final class Cachify {
 		/* HDD */
 		if ( ! Cachify_HDD::is_available() ) {
 			unset( $methods[2] );
+		}
+
+		/* Redis */
+		if ( ! Cachify_REDIS::is_available() ) {
+			unset( $methods[4] );
 		}
 
 		return $methods;
@@ -1717,7 +1781,7 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
+		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC && self::METHOD_REDIS != $data['use_apc'] ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
@@ -1746,9 +1810,9 @@ final class Cachify {
 	 * @since 1.0
 	 */
 	public static function options_page() {
-		$options = self::_get_options();
+		$options      = self::_get_options();
 		$cachify_tabs = self::_get_tabs( $options );
-		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
+		$current_tab  = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
 			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
 			: 'settings';
 		?>
@@ -1767,7 +1831,7 @@ final class Cachify {
 						esc_url(
 							add_query_arg(
 								array(
-									'page' => 'cachify',
+									'page'        => 'cachify',
 									'cachify_tab' => $tab_key,
 								),
 								admin_url( 'options-general.php' )

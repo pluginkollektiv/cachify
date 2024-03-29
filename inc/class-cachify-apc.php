@@ -105,7 +105,7 @@ final class Cachify_APC {
 	 * @since 2.0
 	 */
 	public static function print_cache() {
-		return;
+		// Not supported.
 	}
 
 	/**
