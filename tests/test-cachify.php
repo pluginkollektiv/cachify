@@ -126,7 +126,7 @@ class Test_Cachify extends WP_UnitTestCase {
 		self::assertEquals(
 			$robots_txt,
 			Cachify::robots_txt( $robots_txt ),
-			'robots.tst should not be modified using DB cache'
+			'robots.txt should not be modified using DB cache'
 		);
 
 		// HDD cache enabled.
@@ -142,7 +142,7 @@ class Test_Cachify extends WP_UnitTestCase {
 		self::assertEquals(
 			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
 			Cachify::robots_txt( $robots_txt ),
-			'robots.tst should have been modified using HDD cache'
+			'robots.txt should have been modified using HDD cache'
 		);
 
 		// Disable robots.txt modification.
@@ -157,7 +157,7 @@ class Test_Cachify extends WP_UnitTestCase {
 		self::assertEquals(
 			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
 			Cachify::robots_txt( $robots_txt ),
-			'robots.tst should have been modified using HDD cache'
+			'robots.txt should have been modified using HDD cache'
 		);
 	}
 }
