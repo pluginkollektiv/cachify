@@ -122,7 +122,8 @@ final class Cachify_HDD {
 	 */
 	public static function print_cache() {
 		$filename = self::_file_html();
-		$size = is_readable( $filename ) ? readfile( $filename ) : false;
+		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
+
 		if ( ! empty( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
@@ -174,7 +175,7 @@ final class Cachify_HDD {
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
-			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}." ), E_USER_WARNING );
 			return;
 		}
 		/* Write to file */
@@ -202,7 +203,7 @@ final class Cachify_HDD {
 		/* Writable? */
 		$handle = @fopen( $file, 'wb' );
 		if ( ! $handle ) {
-			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}." ), E_USER_WARNING );
 			return;
 		}
 
@@ -212,7 +213,7 @@ final class Cachify_HDD {
 		clearstatcache();
 
 		/* Permissions */
-		$stat = @stat( dirname( $file ) );
+		$stat  = @stat( dirname( $file ) );
 		$perms = $stat['mode'] & 0007777;
 		$perms = $perms & 0000666;
 		@chmod( $file, $perms );
@@ -228,48 +229,45 @@ final class Cachify_HDD {
 	 * @since 2.0
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
-		/* Remote training slash */
+		// Remove trailing slash.
 		$dir = untrailingslashit( $dir );
 
-		/* Is directory? */
+		// Is directory?
 		if ( ! is_dir( $dir ) ) {
 			return;
 		}
 
-		/* Read */
+		// List directory contents.
 		$objects = array_diff(
 			scandir( $dir ),
 			array( '..', '.' )
 		);
 
-		/* Empty? */
-		if ( empty( $objects ) ) {
-			return;
-		}
-
-		/* Loop over items */
+		// Loop over items.
 		foreach ( $objects as $object ) {
-			/* Expand path */
+			// Expand path.
 			$object = $dir . DIRECTORY_SEPARATOR . $object;
 
-			/* Directory or file */
-			if ( is_dir( $object ) && $recursive ) {
-				self::_clear_dir( $object, $recursive );
-			} else {
-				if ( self::_user_can_delete( $object ) ) {
-					unlink( $object );
+			if ( is_dir( $object ) ) {
+				if ( $recursive ) {
+					// Recursively clear the directory.
+					self::_clear_dir( $object, $recursive );
+				} elseif ( self::_user_can_delete( $object ) && 0 === count( glob( trailingslashit( $object ) . '*' ) ) ) {
+					// Delete the directory, if empty.
+					@rmdir( $object );
 				}
+			} elseif ( self::_user_can_delete( $object ) ) {
+				// Delete the file.
+				unlink( $object );
 			}
 		}
 
-		/* Remove directory */
-		if ( $recursive ) {
-			if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
-				@rmdir( $dir );
-			}
+		// Remove directory, if empty.
+		if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+			@rmdir( $dir );
 		}
 
-		/* Clean up */
+		// Clean up.
 		clearstatcache();
 	}
 
@@ -278,14 +276,14 @@ final class Cachify_HDD {
 	 *
 	 * @param string $dir Directory path.
 	 *
-	 * @return mixed Directory size
+	 * @return int|false Directory size
 	 *
 	 * @since 2.0
 	 */
 	public static function _dir_size( $dir = '.' ) {
 		/* Is directory? */
 		if ( ! is_dir( $dir ) ) {
-			return;
+			return false;
 		}
 
 		/* Read */
@@ -296,7 +294,7 @@ final class Cachify_HDD {
 
 		/* Empty? */
 		if ( empty( $objects ) ) {
-			return;
+			return false;
 		}
 
 		/* Init */
@@ -402,9 +400,9 @@ final class Cachify_HDD {
 			$file = trailingslashit( $file );
 		}
 
-		$ssl_prefix = is_ssl() ? 'https-' : '';
+		$ssl_prefix   = is_ssl() ? 'https-' : '';
 		$current_blog = get_blog_details( get_current_blog_id() );
-		$blog_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
+		$blog_path    = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
 
 		if ( 0 !== strpos( $file, $blog_path ) ) {
 			return false;

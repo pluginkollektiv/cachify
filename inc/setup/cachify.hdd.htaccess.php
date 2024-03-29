@@ -44,7 +44,7 @@ if ( Cachify_HDD::is_gzip_enabled() ) {
 }
 $beginning = str_replace( '{{GZIP}}', $gzip, $beginning );
 
-$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html -f
+$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html%{ENV:CACHIFY_SUFFIX} -f
   RewriteRule ^(.*) ';
 
 $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html%{ENV:CACHIFY_SUFFIX} [L,NS]
@@ -74,7 +74,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{REQUEST_URI}index\.html%{ENV:CACH
 		<?php esc_html_e( 'Within .htaccess, the extension has a higher priority and must be placed above the WordPress Rewrite rules (marked mostly by # BEGIN WordPress … # END WordPress).', 'cachify' ); ?>
 	</li>
 	<li>
-		<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as fcgi.', 'cachify' ); ?>
+		<?php esc_html_e( 'Changes to the .htaccess file can not be made if PHP is run as FastCGI.', 'cachify' ); ?>
 	</li>
 	<li>
 		<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
