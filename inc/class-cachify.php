@@ -47,10 +47,11 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const METHOD_DB = 0;
+	const METHOD_DB  = 0;
 	const METHOD_APC = 1;
 	const METHOD_HDD = 2;
 	const METHOD_MMC = 3;
+	const METHOD_REDIS = 4;
 
 	/**
 	 * Minify settings
@@ -59,16 +60,16 @@ final class Cachify {
 	 *
 	 * @since 2.0.9
 	 */
-	const MINIFY_DISABLED = 0;
+	const MINIFY_DISABLED  = 0;
 	const MINIFY_HTML_ONLY = 1;
-	const MINIFY_HTML_JS = 2;
+	const MINIFY_HTML_JS   = 2;
 
 	/**
 	 * REST endpoints
 	 *
 	 * @var string
 	 */
-	const REST_NAMESPACE = 'cachify/v1';
+	const REST_NAMESPACE   = 'cachify/v1';
 	const REST_ROUTE_FLUSH = 'flush';
 
 	/**
@@ -400,6 +401,10 @@ final class Cachify {
 		} elseif ( self::METHOD_MMC === self::$options['use_apc'] && Cachify_MEMCACHED::is_available() ) {
 			self::$method = new Cachify_MEMCACHED();
 
+			/* REDIS */
+		} elseif ( self::METHOD_REDIS === self::$options['use_apc'] && Cachify_REDIS::is_available() ) {
+			self::$method = new Cachify_REDIS();
+
 			/* DB */
 		} else {
 			self::$method = new Cachify_DB();
@@ -417,15 +422,15 @@ final class Cachify {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
-				'only_guests'       => 1,
-				'compress_html'     => self::MINIFY_DISABLED,
-				'cache_expires'     => 12,
-				'without_ids'       => '',
-				'without_agents'    => '',
-				'use_apc'           => self::METHOD_DB,
-				'reset_on_post'     => 1,
-				'reset_on_comment'  => 0,
-				'sig_detail'        => 0,
+				'only_guests'      => 1,
+				'compress_html'    => self::MINIFY_DISABLED,
+				'cache_expires'    => 12,
+				'without_ids'      => '',
+				'without_agents'   => '',
+				'use_apc'          => self::METHOD_DB,
+				'reset_on_post'    => 1,
+				'reset_on_comment' => 0,
+				'sig_detail'       => 0,
 			)
 		);
 	}
@@ -564,7 +569,7 @@ final class Cachify {
 
 		/* Right now item */
 		$items[] = sprintf(
-			'<a href="%s" title="%s: %s" class="cachify-glance">
+			'<a href="%s" title="%s" class="cachify-glance">
             <svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
                 <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s" />
             </svg> %s</a>',
@@ -574,8 +579,12 @@ final class Cachify {
 				),
 				admin_url( 'options-general.php' )
 			),
-			esc_attr( strtolower( $method ) ),
-			esc_html__( 'Caching method', 'cachify' ),
+			sprintf(
+				/* translators: 1: "Caching method label"; 2: Actual method. */
+				esc_html__( '%1$s: %2$s', 'cachify' ),
+				esc_html__( 'Caching method', 'cachify' ),
+				esc_attr( strtolower( $method ) )
+			),
 			esc_attr( $method ),
 			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
 			esc_attr( strtolower( $method ) ),
@@ -658,7 +667,7 @@ final class Cachify {
 											) .
 										'</span>',
 				'meta'   => array(
-					'title' => esc_html__( 'Flush the cachify cache', 'cachify' ),
+					'title' => esc_html__( 'Flush the Cachify cache', 'cachify' ),
 				),
 			)
 		);
@@ -703,10 +712,10 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			'cachify_admin_bar_flush_ajax_object',
 			array(
-				'url' => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'flushing' => __( 'Flushing cache', 'cachify' ),
-				'flushed' => __( 'Cache flushed successfully', 'cachify' ),
+				'url'              => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
+				'nonce'            => wp_create_nonce( 'wp_rest' ),
+				'flushing'         => __( 'Flushing cache', 'cachify' ),
+				'flushed'          => __( 'Cache flushed successfully', 'cachify' ),
 				'dashicon_success' => self::get_dashicon_success_class(),
 			)
 		);
@@ -723,8 +732,8 @@ final class Cachify {
 			self::REST_NAMESPACE,
 			self::REST_ROUTE_FLUSH,
 			array(
-				'methods' => WP_REST_Server::DELETABLE,
-				'callback' => array(
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => array(
 					__CLASS__,
 					'flush_cache',
 				),
@@ -776,7 +785,7 @@ final class Cachify {
 
 		/* Load on demand */
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
 		/* Flush cache */
@@ -861,7 +870,7 @@ final class Cachify {
 	public static function flush_notice() {
 		/* No admin */
 		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
-			return false;
+			return;
 		}
 
 		printf(
@@ -1095,7 +1104,7 @@ final class Cachify {
 	public static function flush_cache_for_posts( $post ) {
 		if ( is_int( $post ) ) {
 			$post_id = $post;
-			$data = get_post( $post_id );
+			$data    = get_post( $post_id );
 
 			if ( ! is_object( $data ) ) {
 				return;
@@ -1211,7 +1220,8 @@ final class Cachify {
 		}
 
 		$url_parts = wp_parse_url( $url );
-		$hash_key = $prefix . $url_parts['host'] . $url_parts['path'];
+		$hash_key  = $prefix . $url_parts['host'] . $url_parts['path'];
+
 		return md5( $hash_key ) . '.cachify';
 	}
 
@@ -1289,17 +1299,17 @@ final class Cachify {
 	public static function register_flush_cache_hooks() {
 		/* Define all default flush cache hooks */
 		$flush_cache_hooks = array(
-			'cachify_flush_cache' => 10,
-			'_core_updated_successfully' => 10,
-			'switch_theme' => 10,
-			'before_delete_post' => 10,
-			'wp_trash_post' => 10,
-			'create_term' => 10,
-			'delete_term' => 10,
-			'edit_terms' => 10,
-			'user_register' => 10,
-			'edit_user_profile_update' => 10,
-			'delete_user' => 10,
+			'cachify_flush_cache'            => 10,
+			'_core_updated_successfully'     => 10,
+			'switch_theme'                   => 10,
+			'before_delete_post'             => 10,
+			'wp_trash_post'                  => 10,
+			'create_term'                    => 10,
+			'delete_term'                    => 10,
+			'edit_terms'                     => 10,
+			'user_register'                  => 10,
+			'edit_user_profile_update'       => 10,
+			'delete_user'                    => 10,
 			/* third party */
 			'autoptimize_action_cachepurged' => 10,
 		);
@@ -1310,7 +1320,6 @@ final class Cachify {
 		foreach ( $flush_cache_hooks as $hook => $priority ) {
 			add_action( $hook, array( 'Cachify', 'flush_total_cache' ), $priority, 0 );
 		}
-
 	}
 
 	/**
@@ -1488,6 +1497,9 @@ final class Cachify {
 			/* HDD */
 			Cachify_HDD::clear_cache();
 
+			/* REDIS */
+			Cachify_REDIS::clear_cache();
+
 			/* MEMCACHED */
 			Cachify_MEMCACHED::clear_cache();
 		} else {
@@ -1627,7 +1639,6 @@ final class Cachify {
 			default:
 				break;
 		}
-
 	}
 
 	/**
@@ -1686,6 +1697,7 @@ final class Cachify {
 			self::METHOD_APC => esc_html__( 'APC', 'cachify' ),
 			self::METHOD_HDD => esc_html__( 'Hard disk', 'cachify' ),
 			self::METHOD_MMC => esc_html__( 'Memcached', 'cachify' ),
+			self::METHOD_REDIS => esc_html__( 'Redis', 'cachify' ),
 		);
 
 		/* APC */
@@ -1701,6 +1713,11 @@ final class Cachify {
 		/* HDD */
 		if ( ! Cachify_HDD::is_available() ) {
 			unset( $methods[2] );
+		}
+
+		/* Redis */
+		if ( ! Cachify_REDIS::is_available() ) {
+			unset( $methods[4] );
 		}
 
 		return $methods;
@@ -1757,7 +1774,7 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC ) {
+		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC && self::METHOD_REDIS != $data['use_apc'] ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
@@ -1786,9 +1803,9 @@ final class Cachify {
 	 * @since 1.0
 	 */
 	public static function options_page() {
-		$options = self::_get_options();
+		$options      = self::_get_options();
 		$cachify_tabs = self::_get_tabs( $options );
-		$current_tab = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
+		$current_tab  = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
 			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
 			: 'settings';
 		?>
@@ -1807,7 +1824,7 @@ final class Cachify {
 						esc_url(
 							add_query_arg(
 								array(
-									'page' => 'cachify',
+									'page'        => 'cachify',
 									'cachify_tab' => $tab_key,
 								),
 								admin_url( 'options-general.php' )

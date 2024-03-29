@@ -9,14 +9,14 @@
 * License:           GPLv2 or later
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
-Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
+Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcached for storing your blog pages. Make WordPress faster!
 
 ## Description ##
-*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx) or — thanks to APC (Alternative PHP Cache) — directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
+*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx), Redis or — thanks to APC (Alternative PHP Cache) — directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
 
 ### Features ###
 * Works with custom post types.
-* Caching methods: DB, HDD, APC and Memcached.
+* Caching methods: DB, HDD, APC, Redis and Memcached.
 * “Flush Cache” button in the WordPress toolbar.
 * Ready for WordPress Multisite.
 * Optional compression of HTML markup.
@@ -50,6 +50,7 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * WordPress 4.7 or greater
 * APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
+* Redis (optional, via the phpredis module)
 
 
 ## Frequently Asked Questions ##
@@ -154,8 +155,8 @@ A complete documentation is available in the [online handbook](https://cachify.p
 * Fix for the PHP notice "Call to undefined function is_plugin_active_for_network" on WordPress Multisite
 
 ### 2.2.0 ###
-* Toolbar: Display of the "Flush the cachify cache" button on the frontend
-* Toolbar: Controlling the display of the "Flush the cachify cache" button via hook
+* Toolbar: Display of the "Flush the Cachify cache" button on the frontend
+* Toolbar: Controlling the display of the "Flush the Cachify cache" button via hook
 
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/cachify).
 
