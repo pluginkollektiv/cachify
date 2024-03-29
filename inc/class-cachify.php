@@ -1515,7 +1515,13 @@ final class Cachify {
 			);
 		}
 
-		/* Call hook for further actions */
+		/**
+		 * Call hook for further actions
+		 *
+		 * @since 2.4.0
+		 *
+		 * @param bool $clear_all_methods All available caching backends have been flushed.
+		 */
 		do_action( 'cachify_flushed_total_cache', $clear_all_methods );
 
 		/* Transient */
