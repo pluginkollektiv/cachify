@@ -89,7 +89,7 @@ final class Cachify_MEMCACHED {
 	public static function get_item( $hash ) {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
-			return;
+			return null;
 		}
 
 		/* Get item */
@@ -143,7 +143,7 @@ final class Cachify_MEMCACHED {
 	 * @since 2.0.7
 	 */
 	public static function print_cache() {
-		return;
+		// Not supported.
 	}
 
 	/**

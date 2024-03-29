@@ -874,7 +874,7 @@ final class Cachify {
 	public static function flush_notice() {
 		/* No admin */
 		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
-			return false;
+			return;
 		}
 
 		printf(

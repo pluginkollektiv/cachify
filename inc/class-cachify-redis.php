@@ -77,7 +77,7 @@ final class Cachify_REDIS {
 	public static function get_item( $hash ) {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
-			return;
+			return null;
 		}
 
 		/* Get item */

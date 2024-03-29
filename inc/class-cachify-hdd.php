@@ -275,14 +275,14 @@ final class Cachify_HDD {
 	 *
 	 * @param string $dir Directory path.
 	 *
-	 * @return mixed Directory size
+	 * @return int|false Directory size
 	 *
 	 * @since 2.0
 	 */
 	public static function _dir_size( $dir = '.' ) {
 		/* Is directory? */
 		if ( ! is_dir( $dir ) ) {
-			return;
+			return false;
 		}
 
 		/* Read */
@@ -293,7 +293,7 @@ final class Cachify_HDD {
 
 		/* Empty? */
 		if ( empty( $objects ) ) {
-			return;
+			return false;
 		}
 
 		/* Init */
