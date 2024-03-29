@@ -151,7 +151,7 @@ class Test_Cachify extends WP_UnitTestCase {
 			array(
 				'use_apc'           => Cachify::METHOD_HDD,
 				'change_robots_txt' => 0,
-			)git
+			)
 		);
 
 		self::assertEquals(
