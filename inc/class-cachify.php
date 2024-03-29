@@ -1170,16 +1170,16 @@ final class Cachify {
 		}
 
 		$hash = self::_cache_hash( $url );
-		call_user_func(
-			array(
-				self::$method,
-				'delete_item',
-			),
-			$hash,
-			$url
-		);
+		call_user_func( array( self::$method, 'delete_item' ), $hash, $url );
 
-		/* Call hook for further actions */
+		/**
+		 * Call hook for further actions after cache has been flushed for a single page.
+		 *
+		 * @since 2.4.0
+		 *
+		 * @param string $url  Page URL.
+		 * @param string $hash Cache hash for given URL.
+		 */
 		do_action( 'cachify_removed_cache_by_url', $url, $hash );
 	}
 
@@ -1507,16 +1507,11 @@ final class Cachify {
 			/* MEMCACHED */
 			Cachify_MEMCACHED::clear_cache();
 		} else {
-			call_user_func(
-				array(
-					self::$method,
-					'clear_cache',
-				)
-			);
+			call_user_func( array( self::$method, 'clear_cache' ) );
 		}
 
 		/**
-		 * Call hook for further actions
+		 * Call hook for further actions after total cache has been flushed.
 		 *
 		 * @since 2.4.0
 		 *
