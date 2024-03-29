@@ -97,6 +97,9 @@ final class Cachify {
 		add_action( 'post_updated', array( __CLASS__, 'save_update_trash_post' ), 10, 3 );
 		add_action( 'pre_post_update', array( __CLASS__, 'post_update' ), 10, 2 );
 		add_action( 'cachify_remove_post_cache', array( __CLASS__, 'remove_page_cache_by_post_id' ) );
+		add_action( 'comment_post', array( __CLASS__, 'new_comment' ), 99, 2 );
+		add_action( 'edit_comment', array( __CLASS__, 'comment_edit' ), 10, 2 );
+		add_action( 'transition_comment_status', array( __CLASS__, 'comment_status' ), 10, 3 );
 
 		/* Flush Hooks - third party */
 		add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'flush_woocommerce' ) );
@@ -120,9 +123,6 @@ final class Cachify {
 		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
 
 		add_action( 'init', array( __CLASS__, 'process_flush_request' ) );
-
-		/* Flush (post) cache if comment is made from frontend or backend */
-		add_action( 'pre_comment_approved', array( __CLASS__, 'pre_comment' ), 99, 2 );
 
 		/* Add Cron for clearing the HDD Cache */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
@@ -156,10 +156,6 @@ final class Cachify {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_admin_resources' ) );
 
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_dashboard_styles' ) );
-
-			add_action( 'transition_comment_status', array( __CLASS__, 'touch_comment' ), 10, 3 );
-
-			add_action( 'edit_comment', array( __CLASS__, 'edit_comment' ) );
 
 			add_filter( 'dashboard_glance_items', array( __CLASS__, 'add_dashboard_count' ) );
 
@@ -890,14 +886,33 @@ final class Cachify {
 	 *
 	 * @since 0.1.0
 	 * @since 2.1.2
+	 *
+	 * @deprecated 2.4.0 Use comment_edit($id, $comment) instead.
 	 */
 	public static function edit_comment( $id ) {
-		if ( self::$options['reset_on_comment'] ) {
-			self::flush_total_cache();
-		} else {
-			self::remove_page_cache_by_post_id(
-				get_comment( $id )->comment_post_ID
-			);
+		self::comment_edit( $id, array( 'comment_approved' => 1 ) );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @param integer $id      Comment ID.
+	 * @param array   $comment Comment data.
+	 *
+	 * @since 2.4.0 Replacement for edit_comment($id) with additional comment parameter.
+	 */
+	public static function comment_edit( $id, $comment ) {
+		$approved = (int) $comment['comment_approved'];
+
+		/* Approved comment? */
+		if ( 1 === $approved ) {
+			if ( self::$options['reset_on_comment'] ) {
+				self::flush_total_cache();
+			} else {
+				self::remove_page_cache_by_post_id(
+					get_comment( $id )->comment_post_ID
+				);
+			}
 		}
 	}
 
@@ -911,18 +926,33 @@ final class Cachify {
 	 *
 	 * @since 0.1
 	 * @since 2.1.2
+	 * @since 2.4.0 Replacement for edit_comment($id) with additional comment parameter.
 	 */
 	public static function pre_comment( $approved, $comment ) {
+		self::new_comment( $comment['comment_ID'], $approved );
+
+		return $approved;
+	}
+
+	/**
+	 * Remove page from cache or flush on new comment
+	 *
+	 * @param integer|string $id       Comment ID.
+	 * @param integer|string $approved Comment status.
+	 *
+	 * @since 0.1.0
+	 * @since 2.1.2
+	 * @since 2.4.0 Renamed with ID parameter instead of comment array.
+	 */
+	public static function new_comment( $id, $approved ) {
 		/* Approved comment? */
 		if ( 1 === $approved ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
-				self::remove_page_cache_by_post_id( $comment['comment_post_ID'] );
+				self::remove_page_cache_by_post_id( get_comment( $id )->comment_post_ID );
 			}
 		}
-
-		return $approved;
 	}
 
 	/**
@@ -934,9 +964,26 @@ final class Cachify {
 	 *
 	 * @since 0.1
 	 * @since 2.1.2
+	 *
+	 * @deprecated 2.4.0 Use comment_status($new_status, $old_status, $comment) instead.
 	 */
 	public static function touch_comment( $new_status, $old_status, $comment ) {
-		if ( $new_status !== $old_status ) {
+		self::comment_status( $new_status, $old_status, $comment );
+	}
+
+	/**
+	 * Remove page from cache or flush on comment edit.
+	 *
+	 * @param string     $new_status New status.
+	 * @param string     $old_status Old status.
+	 * @param WP_Comment $comment    The comment.
+	 *
+	 * @since 0.1
+	 * @since 2.1.2
+	 * @since 2.4.0 Renamed from touch_comment().
+	 */
+	public static function comment_status( $new_status, $old_status, $comment ) {
+		if ( 'approved' === $old_status || 'approved' === $new_status ) {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
