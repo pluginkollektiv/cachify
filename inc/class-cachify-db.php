@@ -146,9 +146,10 @@ final class Cachify_DB {
 		global $wpdb;
 
 		/* Read */
-
-		return $wpdb->get_var(
-			'SELECT SUM( CHAR_LENGTH(option_value) ) FROM `' . $wpdb->options . "` WHERE `option_name` LIKE ('\_transient%.cachify')"
+		return intval(
+			$wpdb->get_var(
+				'SELECT SUM( CHAR_LENGTH(option_value) ) FROM `' . $wpdb->options . "` WHERE `option_name` LIKE ('\_transient%.cachify')"
+			)
 		);
 	}
 
@@ -166,7 +167,7 @@ final class Cachify_DB {
 	private static function _cache_signature( $detail, $meta ) {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
-			return;
+			return '';
 		}
 
 		if ( $detail ) {
@@ -218,7 +219,7 @@ final class Cachify_DB {
 	/**
 	 * Return execution time
 	 *
-	 * @return int Execution time in seconds
+	 * @return string Execution time in seconds
 	 *
 	 * @since 0.1
 	 */

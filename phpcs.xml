@@ -21,7 +21,11 @@
 
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="4.7"/>
-    <rule ref="WordPress"/>
+    <rule ref="WordPress">
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+    </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array" value="cachify"/>
