@@ -10,6 +10,12 @@
             <file>cachify.php</file>
             <directory suffix=".php">inc</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">inc/setup/</directory>
+            <file>inc/cachify.settings.php</file>
+            <file>inc/cachify.settings-footer.php</file>
+        </exclude>
+
         <report>
             <clover outputFile="phpunit.coverage.xml"/>
         </report>
