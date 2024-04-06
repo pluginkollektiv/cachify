@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_DB
  */
-final class Cachify_DB {
+final class Cachify_DB implements Cachify_Backend {
 
 	/**
 	 * Availability check
@@ -41,10 +41,11 @@ final class Cachify_DB {
 	 * @param string $hash     Hash of the entry.
 	 * @param string $data     Content of the entry.
 	 * @param int    $lifetime Lifetime of the entry.
+	 * @param bool   $sig_detail Show details in signature.
 	 *
 	 * @since 2.0
 	 */
-	public static function store_item( $hash, $data, $lifetime ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );

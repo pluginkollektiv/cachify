@@ -68,6 +68,9 @@
     ],
     "test": [
       "phpunit"
+    ],
+    "coverage": [
+      "php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html tests/coverage"
     ]
   },
   "config": {

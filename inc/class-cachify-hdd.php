@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_HDD
  */
-final class Cachify_HDD {
+final class Cachify_HDD implements Cachify_Backend {
 
 	/**
 	 * Availability check
@@ -79,11 +79,12 @@ final class Cachify_HDD {
 	/**
 	 * Read item from cache
 	 *
+	 * @param string $hash Hash of the entry.
 	 * @return bool True if cache is present.
 	 *
 	 * @since 2.0
 	 */
-	public static function get_item() {
+	public static function get_item( $hash ) {
 		return is_readable(
 			self::_file_html()
 		);
@@ -118,9 +119,12 @@ final class Cachify_HDD {
 	/**
 	 * Print the cache
 	 *
+	 * @param bool  $sig_detail Show details in signature.
+	 * @param array $cache      Array of cache values.
+	 *
 	 * @since 2.0
 	 */
-	public static function print_cache() {
+	public static function print_cache( $sig_detail, $cache ) {
 		$filename = self::_file_html();
 		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
 

@@ -34,7 +34,8 @@ class Test_Cachify_DB extends WP_UnitTestCase {
 		Cachify_DB::store_item(
 			'965b4abf2414e45036ab90c9d3f8dbc7',
 			'<html><head><title>Test Me</title></head><body><p>Test Content.</p></body></html>',
-			3600
+			3600,
+			false
 		);
 
 		$cached = Cachify_DB::get_item( '965b4abf2414e45036ab90c9d3f8dbc7' );
@@ -53,7 +54,8 @@ class Test_Cachify_DB extends WP_UnitTestCase {
 		Cachify_DB::store_item(
 			'ef7e4a0540f6cde19e6eb658c69b0064',
 			'<html><head><title>Test 2</title></head><body><p>Test Content #2.</p></body></html>',
-			3600
+			3600,
+			false
 		);
 		self::assertIsArray( Cachify_DB::get_item( 'ef7e4a0540f6cde19e6eb658c69b0064' ), 'second item was not stored' );
 

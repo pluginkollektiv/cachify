@@ -52,7 +52,7 @@ class Test_Cachify_HDD extends WP_UnitTestCase {
 	 * Test the actual caching.
 	 */
 	public function test_caching() {
-		self::assertFalse( Cachify_HDD::get_item() );
+		self::assertFalse( Cachify_HDD::get_item( '965b4abf2414e45036ab90c9d3f8dbc7' ) );
 
 		self::go_to( '/testme/' );
 		Cachify_HDD::store_item(
@@ -61,7 +61,7 @@ class Test_Cachify_HDD extends WP_UnitTestCase {
 			3600, // Ignored.
 			false
 		);
-		self::assertTrue( Cachify_HDD::get_item() );
+		self::assertTrue( Cachify_HDD::get_item( '965b4abf2414e45036ab90c9d3f8dbc7' ) );
 		self::assertTrue( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/index.html' ) );
 		$cached = file_get_contents( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/index.html' );
 		self::assertStringStartsWith(
@@ -81,7 +81,7 @@ Generated @ ',
 			3600, // Ignored.
 			false
 		);
-		self::assertTrue( Cachify_HDD::get_item() );
+		self::assertTrue( Cachify_HDD::get_item( '965b4abf2414e45036ab90c9d3f8dbc7' ) );
 		self::assertTrue( is_file( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme/sub/index.html' ) );
 
 		// Another item.
@@ -118,6 +118,6 @@ HDD Cache @ ',
 		Cachify_HDD::clear_cache();
 		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/testme' ), 'empty directory was not deleted' );
 		self::assertFalse( is_dir( CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . 'example.org/test2' ), 'second test page was not deleted' );
-		self::assertFalse( Cachify_HDD::get_item() );
+		self::assertFalse( Cachify_HDD::get_item( '965b4abf2414e45036ab90c9d3f8dbc7' ) );
 	}
 }

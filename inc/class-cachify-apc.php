@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_APC
  */
-final class Cachify_APC {
+final class Cachify_APC implements Cachify_Backend {
 
 	/**
 	 * Availability check
@@ -102,9 +102,12 @@ final class Cachify_APC {
 	/**
 	 * Print the cache
 	 *
+	 * @param bool   $sig_detail  Show details in signature.
+	 * @param string $cache       Cached content.
+	 *
 	 * @since 2.0
 	 */
-	public static function print_cache() {
+	public static function print_cache( $sig_detail, $cache ) {
 		// Not supported.
 	}
 
