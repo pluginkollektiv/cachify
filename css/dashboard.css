@@ -1,8 +1,16 @@
 /* @group Dashboard */
-#dashboard_right_now .cachify-icon {
-	width: 19px;
-	height: 13px;
-	fill: #606a73;
+@font-face {
+	font-family: cachify-symbols;
+	src: url(../images/symbols.eot);
+	src:
+		url(../images/symbols.eot#iefix) format("embedded-opentype"),
+		url(data:font/woff2;base64,d09GMgABAAAAAAUYAA0AAAAACjAAAATBAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGhgGYACCZhEICokshzsLEgABNgIkAxwEIAWDGwdaG0cIII7URvMXGYLngU7r/ZmJphELZuF0JaddCMme0ztnDR2oVv///7/frDzOv1gyjyqp0ZJL4hBJYhoJSSbWdwhpIhZHiAt1odWVNhu1xWLWEPqLvPgUIABPuiz+EeCDlYdmtPoCWAEnUkC7W9XWydsYQFmsXAPeolXkG6qIhd6UODm2IXylqKeKT9FQZR4ggHo2AqiBdPV6BqIiQDoaTQEdMwoKQvZXSrEBIMaxxZ8CIOjAPjuUVzFgxGSMGEFUWEEBFPq/jIAGGQhSHAcUM3c4ARvIMpAnUEhzeD8IgoqKpqpqXk6aUQsdT03NlrA2GbogCbH77a7fTyl62OHmQ5H4Av+CpHfTvZaX7umJB62vPOi9IOG1orS6TGlz1ZMwwZqmLjwoOzRhH76FGeE2uuu54/0FfWZ/e99erj5dnd27xZf4F2zQE+u8yUW++YuH3PWBhRu/d2lg5kf3fet3h2IZsRjLiCe967YFFy0PLd7s8xG7R3Kbd9E+PZGQ+IpUivkXLIDcRaBz44H4kt6kN7kMdImrymXJSlm4wA8TYb2kLDe0wHBbYoPIbHaGdb/EgSXKZCymJ/elRx4ou2SNPIinbDyZttCPtOTEF1dIfG1g6dbAwo2lNvYoetitqFuv5D1i933z96cUbSzPfyjxB/4FJTckwuu8BdEuJdYXlUpi1mSS3Qk8yeTQA3rinJf+qqZpM8fZJpWr0/7M3jdzu3Qqnnb2TN325SYZvDnOriUqtMgv7Dzd06wZhTsXwq97m7U0BV8pXbvRkS1vhbp1fTN05EidRqVfSTHPSG1RbsDAGU5bMxcPHNCqXOqrswyu8B04sD+rTc7hgwffDHTtGsyTycM5bbL2K8zKpq50OV33+xfvDXUGTP9JqduoeMJ/8Mkcy8AhQ0y6JTBlyECzJdq8h3HXbkOzptE06jc5kSnT5UV9Vy3VWLJXWBMKIuGPezTOjEbfv3N25quM1itZXvupZeVgCUE1B41ubYLZ37BGwwKDJewIj3PrE3xKIFi3YLB/lsM9qXq9aCXVYLQt/tDTqXqD1fmd6uc4XMoZsyGu1BMj6Y3VOgGP4iuw+AbWaPBT/k/1qhd69FSDO/DDow1yslzuNSZ3YbVQWMgO1Bpl+qP5Oqa0Vxs2G97A3mFwV6emdG/vrNC8/tcL1OxId7r/yyIWLSIrqMiorrNpnBd21ar1UzhPaTJ7jtI47D59qumZ3Z4XlKoiK5bGVTyndzeJInmeWmaWNA3n7j5+9+lXXJqiCC46jZaTPHlWs/PzaDxnNk3CeVIrr9N6FZNfb55cOHeAo+5v5hSN9fjrKD5tOKSeBswoAAisgYsxHAMwmIPQM40aDOlGVMFBSaqRQHJmcaFpJ7CCnR0IOcGEEyIFSiMVGiINeooNpDDNY1RB8n6dVO6gIpoFwQ4QKRBEKkSQBi3FBvwM9BgDvPhCnaosYziFjGU0YxnLGBi+M+oZ297XmcEMZTKjiDIB3uk3Cy5TsnF3BjOBiQzvzSafikTgPMCS+RUj7r7mos5JZDOUwYyZmXyUSQxmUGUB08mmFUO7eEW44DFykBhvVTj2f2Q8ACj0zzSDKCiiooomBjGaJo8ZHiHHJD5f1KxWJAL53soAAAA=) format("woff2"),
+		url(../images/symbols.woff) format("woff"),
+		url(../images/symbols.ttf) format("truetype"),
+		url(../images/symbols.svg#cachify) format("svg");
+	font-weight: 400;
+	font-style: normal;
+	font-display: block;
 }
 
 html.dark-mode body:not(.block-editor-page) #dashboard_right_now .cachify-icon {
@@ -10,6 +18,20 @@ html.dark-mode body:not(.block-editor-page) #dashboard_right_now .cachify-icon {
 }
 
 #dashboard_right_now li a.cachify-glance::before {
-	content: "";
-	padding: 0;
-}/* @end group */
+	font: 400 13px/1 cachify-symbols;
+}
+
+#dashboard_right_now li a.cachify-glance.cachify-icon-db::before {
+	content: "\e900";
+}
+
+#dashboard_right_now li a.cachify-glance.cachify-icon-hdd::before {
+	content: "\e901";
+}
+
+#dashboard_right_now li a.cachify-glance.cachify-icon-apc::before,
+#dashboard_right_now li a.cachify-glance.cachify-icon-memcached::before {
+	content: "\e902";
+}
+
+/* @end group */
