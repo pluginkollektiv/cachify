@@ -160,4 +160,55 @@ class Test_Cachify extends WP_UnitTestCase {
 			'robots.txt should have been modified using HDD cache'
 		);
 	}
+
+	/**
+	 * Test call of hooks after flushing the cache.
+	 */
+	public function test_flushed_total_hook() {
+		$flushed_total = array();
+		add_action(
+			'cachify_flushed_total_cache',
+			function( $arg ) use ( &$flushed_total ) {
+				$flushed_total[] = $arg;
+			}
+		);
+
+		Cachify::flush_total_cache( );
+		Cachify::flush_total_cache( false );
+		Cachify::flush_total_cache( true );
+
+		self::assertEquals(
+			array( false, false, true ),
+			$flushed_total,
+			'unexpected hook calls after flushing the cache'
+		);
+	}
+
+	/**
+	 * Test call of hooks after remove cache by URL.
+	 */
+	public function test_removed_by_url_hook() {
+		$flushed_single = array();
+		add_action(
+			'cachify_removed_cache_by_url',
+			function( $url, $hash ) use ( &$flushed_single ) {
+				$flushed_single[] = array( $url, $hash );
+			},
+			10,
+			2
+		);
+
+		Cachify::remove_page_cache_by_url( 'https://example.com/foo' );
+		Cachify::remove_page_cache_by_url( 'https://example.com/bar' );
+
+		self::assertEquals(
+			array(
+				array( 'https://example.com/foo', '45cc6f45ed67ff733a550ceb93ac2694.cachify' ),
+				array( 'https://example.com/bar', '7b579c8fd2d8d8685f9680e7f5fedadc.cachify' ),
+			),
+			$flushed_single,
+			'unexpected hook calls after removing by url'
+		);
+
+	}
 }
