@@ -137,6 +137,16 @@ defined( 'ABSPATH' ) || exit;
 				<label for="cachify_sig_detail"><?php esc_html_e( 'Add additional details to Cachify signature (HTML comment)', 'cachify' ); ?></label>
 			</td>
 		</tr>
+
+		<tr>
+			<th scope="row">
+				<?php esc_html_e( 'Robots.txt', 'cachify' ); ?>
+			</th>
+			<td>
+				<input type="checkbox" name="cachify[change_robots_txt]" id="cachify_change_robots_txt" value="1" <?php checked( '1', $options['change_robots_txt'] ); ?> />
+				<label for="cachify_change_robots_txt"><?php esc_html_e( 'Disallow access to cache folder via robots.txt', 'cachify' ); ?></label>
+			</td>
+		</tr>
 	</table>
 
 	<?php submit_button(); ?>

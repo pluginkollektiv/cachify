@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_MEMCACHED
  */
-final class Cachify_MEMCACHED {
+final class Cachify_MEMCACHED implements Cachify_Backend {
 
 	/**
 	 * Memcached-Object
@@ -140,9 +140,12 @@ final class Cachify_MEMCACHED {
 	/**
 	 * Print the cache
 	 *
+	 * @param bool  $sig_detail Show details in signature.
+	 * @param array $cache      Array of cache values.
+	 *
 	 * @since 2.0.7
 	 */
-	public static function print_cache() {
+	public static function print_cache( $sig_detail, $cache ) {
 		// Not supported.
 	}
 

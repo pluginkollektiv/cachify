@@ -422,15 +422,16 @@ final class Cachify {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
-				'only_guests'      => 1,
-				'compress_html'    => self::MINIFY_DISABLED,
-				'cache_expires'    => 12,
-				'without_ids'      => '',
-				'without_agents'   => '',
-				'use_apc'          => self::METHOD_DB,
-				'reset_on_post'    => 1,
-				'reset_on_comment' => 0,
-				'sig_detail'       => 0,
+				'only_guests'       => 1,
+				'compress_html'     => self::MINIFY_DISABLED,
+				'cache_expires'     => 12,
+				'without_ids'       => '',
+				'without_agents'    => '',
+				'use_apc'           => self::METHOD_DB,
+				'reset_on_post'     => 1,
+				'reset_on_comment'  => 0,
+				'sig_detail'        => 0,
+				'change_robots_txt' => 1,
 			)
 		);
 	}
@@ -444,6 +445,9 @@ final class Cachify {
 	 * @since 2.1.9
 	 */
 	public static function robots_txt( $output ) {
+		if ( ! self::$options['change_robots_txt'] ) {
+			return $output;
+		}
 		/* HDD only */
 		if ( self::METHOD_HDD === self::$options['use_apc'] ) {
 			$output .= "\nUser-agent: *\nDisallow: */cache/cachify/\n";
@@ -1793,15 +1797,16 @@ final class Cachify {
 
 		/* Return */
 		return array(
-			'only_guests'      => (int) ( ! empty( $data['only_guests'] ) ),
-			'compress_html'    => (int) $data['compress_html'],
-			'cache_expires'    => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
-			'without_ids'      => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
-			'without_agents'   => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
-			'use_apc'          => (int) $data['use_apc'],
-			'reset_on_post'    => (int) ( ! empty( $data['reset_on_post'] ) ),
-			'reset_on_comment' => (int) ( ! empty( $data['reset_on_comment'] ) ),
-			'sig_detail'       => (int) ( ! empty( $data['sig_detail'] ) ),
+			'only_guests'       => (int) ( ! empty( $data['only_guests'] ) ),
+			'compress_html'     => (int) $data['compress_html'],
+			'cache_expires'     => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
+			'without_ids'       => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
+			'without_agents'    => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
+			'use_apc'           => (int) $data['use_apc'],
+			'reset_on_post'     => (int) ( ! empty( $data['reset_on_post'] ) ),
+			'reset_on_comment'  => (int) ( ! empty( $data['reset_on_comment'] ) ),
+			'sig_detail'        => (int) ( ! empty( $data['sig_detail'] ) ),
+			'change_robots_txt' => (int) ( ! empty( $data['change_robots_txt'] ) ),
 		);
 	}
 
