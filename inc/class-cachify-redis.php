@@ -214,22 +214,73 @@ final class Cachify_REDIS implements Cachify_Backend {
 		/* Init */
 		self::$_redis = new Redis();
 
-		/* Set options & connect */
+		/**
+		 * Filter hook to adjust Redis connection parameters
+		 *
+		 * @param array $redis_server Redis connection parameters.
+		 *
+		 * @see   Redis::connect() For supported parameters.
+		 *
+		 * @since 2.4.0
+		 */
+		$con = apply_filters( 'cachify_redis_servers', array( 'localhost' ) );
+		$con = self::sanitize_con_parameters( $con );
+
+		if ( false === $con ) {
+			return false;
+		}
+
+		// Establish connection.
 		try {
-			self::$_redis->connect(
-				(string) apply_filters(
-					'cachify_redis_servers',
-					'redis://localhost:6379'
-				)
-			);
+			self::$_redis->connect( ...$con );
+
+			if ( ! self::$_redis->isConnected() ) {
+				return false;
+			}
 		} catch ( Exception $e ) {
 			return false;
 		}
 
-		if ( ! self::$_redis->isConnected() ) {
+		return true;
+	}
+
+	/**
+	 * Sanitize Redis connection parameters.
+	 *
+	 * @param mixed $con Connection parameters (from hook).
+	 *
+	 * @return array|false Array of connection arguments or FALSE, if invalid.
+	 */
+	private static function sanitize_con_parameters( $con ) {
+		if ( is_string( $con ) ) {
+			return array( $con );
+		} elseif ( is_array( $con ) && ! empty( $con ) ) {
+			$con[0] = strval( $con[0] );  // Host or socket path.
+			if ( count( $con ) > 1 ) {
+				$con[1] = intval( $con[1] );  // Port number.
+			}
+			if ( count( $con ) > 2 ) {
+				$con[2] = floatval( $con[2] );  // Socket timeout in seconds.
+			}
+			if ( count( $con ) > 3 && ! is_null( $con[3] ) ) {
+				$con[3] = strval( $con[3] );  // Persistent connection ID.
+			}
+			if ( count( $con ) > 4 ) {
+				$con[4] = intval( $con[4] );  // Retry interval in milliseconds.
+			}
+			if ( count( $con ) > 5 ) {
+				$con[5] = floatval( $con[5] );  // Read timeout in seconds.
+			}
+			if ( count( $con ) > 6 && ! is_null( $con[6] ) && is_array( $con[6] ) ) {
+				return false;  // Context parameters, e.g. authentication (since PhpRedis 5.3).
+			}
+			if ( count( $con ) > 7 ) {
+				$con = array_slice( $con, 0, 7 );  // Trim excessive parameters.
+			}
+
+			return $con;
+		} else {
 			return false;
 		}
-
-		return true;
 	}
 }
