@@ -142,7 +142,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 		}
 
 		/* Info */
-		$data = self::$_redis->info();
+		$data = self::$_redis->info( 'MEMORY' );
 
 		/* No stats? */
 		if ( empty( $data ) ) {
@@ -150,11 +150,11 @@ final class Cachify_REDIS implements Cachify_Backend {
 		}
 
 		/* Empty */
-		if ( empty( $data['used_memory'] ) ) {
+		if ( empty( $data['used_memory_dataset'] ) ) {
 			return null;
 		}
 
-		return $data['used_memory'];
+		return $data['used_memory_dataset'];
 	}
 
 	/**
