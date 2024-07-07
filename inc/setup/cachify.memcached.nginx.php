@@ -13,9 +13,6 @@ defined( 'ABSPATH' ) || exit;
 <p><?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?></p>
 
 <textarea rows="16" class="large-text code cachify-code" name="code" readonly>
-## GZIP
-gzip_static on;
-
 ## CHARSET
 charset utf-8;
 

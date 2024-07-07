@@ -8,11 +8,9 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
-$beginning = '&lt;Files index.php&gt;
-  php_value auto_prepend_file ';
-
-$ending = '/cachify/apc/proxy.php
-&lt;/Files&gt;';
+$htaccess = '<Files index.php>
+  php_value auto_prepend_file ' . WP_PLUGIN_DIR . '/cachify/apc/proxy.php
+</Files>';
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp
 ?>
@@ -21,10 +19,5 @@ $ending = '/cachify/apc/proxy.php
 <p><?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?></p>
 
 <textarea rows="5" class="large-text code cachify-code" name="code" readonly><?php
-	printf(
-		'%s%s%s',
-		esc_html( $beginning ),
-		esc_html( WP_PLUGIN_DIR ),
-		esc_html( $ending )
-	);
-	?></textarea>
+	echo esc_html( $htaccess );
+?></textarea>

@@ -8,17 +8,15 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
-$beginning = 'location ~ .php {
+$nginx_conf = 'location ~ .php {
   include fastcgi_params;
   fastcgi_pass 127.0.0.1:9000;
-  <strong>fastcgi_param PHP_VALUE auto_prepend_file=';
-
-$ending = '/cachify/apc/proxy.php</strong>;
+  fastcgi_param PHP_VALUE auto_prepend_file=' . WP_PLUGIN_DIR . '/cachify/apc/proxy.php;
 
   location ~ /wp-admin/ {
     include fastcgi_params;
     fastcgi_pass 127.0.0.1:9000;
-    <strong>fastcgi_param PHP_VALUE auto_prepend_file=</strong>;
+    fastcgi_param PHP_VALUE auto_prepend_file=;
   }
 }';
 
@@ -29,12 +27,7 @@ $ending = '/cachify/apc/proxy.php</strong>;
 <p><?php esc_html_e( 'Please add the following lines to your nginx PHP configuration', 'cachify' ); ?></p>
 
 <textarea rows="13" class="large-text code cachify-code" name="code" readonly><?php
-	printf(
-		'%s%s%s',
-		esc_html( $beginning ),
-		esc_html( WP_PLUGIN_DIR ),
-		esc_html( $ending )
-	);
-	?></textarea>
+	echo esc_html( $nginx_conf );
+?></textarea>
 
 <small>(<?php esc_html_e( 'You might need to adjust the non-highlighted lines to your needs.', 'cachify' ); ?>)</small>

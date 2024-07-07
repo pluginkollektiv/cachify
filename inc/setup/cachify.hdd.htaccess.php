@@ -8,9 +8,8 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
-$beginning = '# BEGIN CACHIFY
-&lt;IfModule mod_rewrite.c&gt;
-  # ENGINE ON
+$htaccess = '# BEGIN CACHIFY
+<IfModule mod_rewrite.c>;
   RewriteEngine on
 
   # set hostname directory
@@ -24,35 +23,31 @@ $beginning = '# BEGIN CACHIFY
   RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
   RewriteCond %{REQUEST_URI} ^$
   RewriteRule .* - [E=CACHIFY_DIR:/]
-{{GZIP}}
-  # Main Rules
-  RewriteCond %{HTTP_ACCEPT} .*text/html.*
-  RewriteCond %{REQUEST_METHOD} GET
-  RewriteCond %{QUERY_STRING} =""
-  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
-  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
-  RewriteCond ';
+';
 
-$gzip = '';
 if ( Cachify_HDD::is_gzip_enabled() ) {
-	$gzip = '
+	$htaccess .= '
   # gzip
   RewriteRule .* - [E=CACHIFY_SUFFIX:]
-  &lt;IfModule mod_mime.c&gt;
+  <IfModule mod_mime.c>;
     RewriteCond %{HTTP:Accept-Encoding} gzip
     RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
     AddType text/html .gz
     AddEncoding gzip .gz
-  &lt;/IfModule&gt;
+  </IfModule>;
 ';
 }
-$beginning = str_replace( '{{GZIP}}', $gzip, $beginning );
 
-$middle = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
-  RewriteRule ^(.*) ';
-
-$ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
-&lt;/IfModule&gt;
+$htaccess .= '
+  # Main Rules
+  RewriteCond %{HTTP_ACCEPT} .*text/html.*
+  RewriteCond %{REQUEST_METHOD} GET
+  RewriteCond %{QUERY_STRING} ^$
+  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
+  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond ' . WP_CONTENT_DIR . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
+  RewriteRule ^(.*) ' . wp_make_link_relative( content_url() ) . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+</IfModule>;
 # END CACHIFY';
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp
@@ -62,15 +57,8 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 <p><?php esc_html_e( 'Please add the following lines to your .htaccess file', 'cachify' ); ?></p>
 
 <textarea rows="16" class="large-text code cachify-code" name="code" readonly><?php
-	printf(
-		'%s%s%s%s%s',
-		esc_html( $beginning ),
-		esc_html( WP_CONTENT_DIR ),
-		esc_html( $middle ),
-		esc_html( wp_make_link_relative( content_url() ) ),
-		esc_html( $ending )
-	);
-	?></textarea>
+	echo esc_html( $htaccess );
+?></textarea>
 
 <h3><?php esc_html_e( 'Notes', 'cachify' ); ?></h3>
 <ol>
@@ -83,7 +71,7 @@ $ending = '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:C
 	<li>
 		<?php esc_html_e( 'If there are partial errors in the redirects within the blog, the shutdown of the Apache Content Cache can help:', 'cachify' ); ?><br />
 		<pre>&lt;IfModule mod_cache.c&gt;
-CacheDisable /
+  CacheDisable /
 &lt;/IfModule&gt;</pre>
 	</li>
 	<li>
