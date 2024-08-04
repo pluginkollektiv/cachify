@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_REDIS class
  *
- * @since 2.4
+ * @since 2.4.0
  */
 final class Cachify_REDIS implements Cachify_Backend {
 
