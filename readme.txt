@@ -48,7 +48,6 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC, Redis or Memcac
 ### Requirements ###
 * PHP 5.6 or greater
 * WordPress 4.7 or greater
-* APC 3.1.4 or greater (optional)
 * Memcached in Nginx (optional)
 * Redis (optional, via the phpredis module)
 
@@ -70,8 +69,6 @@ If you use Cachify to store the cache on HDD there is no PHP to run. In the case
 ### Cachify with CDN support? ###
 Currently the caching plugin for WordPress has no connection to a CDN provider. Although the Buzzword CDN (Content Delivery Network) is praised as a performance factor, CDN makes little sense for WordPress websites with a national audience. In this case, a home host could provide the requested files faster than a worldwide CDN service provider because the next node could be far away.
 
-### PHP OPcache as a caching method? ###
-Compared to APC (Alternative PHP Cache), PHP OPcache is not able to contain content with custom keys and values. Because of this Cachify can not consider the PHP OPcache as a caching method.
 
 ### When does Cachify automaticaly flush its cache? ###
 * After publishing new posts

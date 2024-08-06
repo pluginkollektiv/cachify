@@ -48,7 +48,7 @@ final class Cachify {
 	 * @since 2.0.9
 	 */
 	const METHOD_DB  = 0;
-	const METHOD_APC = 1;
+	const METHOD_APC = 1;  // No longer available.
 	const METHOD_HDD = 2;
 	const METHOD_MMC = 3;
 	const METHOD_REDIS = 4;
@@ -389,12 +389,8 @@ final class Cachify {
 		/* Options */
 		self::$options = self::_get_options();
 
-		/* APC */
-		if ( self::METHOD_APC === self::$options['use_apc'] && Cachify_APC::is_available() ) {
-			self::$method = new Cachify_APC();
-
-			/* HDD */
-		} elseif ( self::METHOD_HDD === self::$options['use_apc'] && Cachify_HDD::is_available() ) {
+		/* HDD */
+		if ( self::METHOD_HDD === self::$options['use_apc'] && Cachify_HDD::is_available() ) {
 			self::$method = new Cachify_HDD();
 
 			/* MEMCACHED */
@@ -1499,9 +1495,6 @@ final class Cachify {
 			/* DB */
 			Cachify_DB::clear_cache();
 
-			/* APC */
-			Cachify_APC::clear_cache();
-
 			/* HDD */
 			Cachify_HDD::clear_cache();
 
@@ -1706,16 +1699,10 @@ final class Cachify {
 		/* Defaults */
 		$methods = array(
 			self::METHOD_DB  => esc_html__( 'Database', 'cachify' ),
-			self::METHOD_APC => esc_html__( 'APC', 'cachify' ),
 			self::METHOD_HDD => esc_html__( 'Hard disk', 'cachify' ),
 			self::METHOD_MMC => esc_html__( 'Memcached', 'cachify' ),
 			self::METHOD_REDIS => esc_html__( 'Redis', 'cachify' ),
 		);
-
-		/* APC */
-		if ( ! Cachify_APC::is_available() ) {
-			unset( $methods[1] );
-		}
 
 		/* Memcached? */
 		if ( ! Cachify_MEMCACHED::is_available() ) {
@@ -1786,7 +1773,7 @@ final class Cachify {
 		self::flush_total_cache( true );
 
 		/* Notification */
-		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_APC && self::METHOD_REDIS != $data['use_apc'] ) {
+		if ( self::$options['use_apc'] !== $data['use_apc'] && $data['use_apc'] >= self::METHOD_HDD && self::METHOD_REDIS != $data['use_apc'] ) {
 			add_settings_error(
 				'cachify_method_tip',
 				'cachify_method_tip',
@@ -1882,12 +1869,6 @@ final class Cachify {
 			$tabs['setup'] = array(
 				'name' => __( 'Setup', 'cachify' ),
 				'page' => 'setup/cachify.hdd.' . ( self::$is_nginx ? 'nginx' : 'htaccess' ) . '.php',
-			);
-		} elseif ( self::METHOD_APC === $options['use_apc'] ) {
-			/* Setup tab for APC */
-			$tabs['setup'] = array(
-				'name' => __( 'Setup', 'cachify' ),
-				'page' => 'setup/cachify.apc.' . ( self::$is_nginx ? 'nginx' : 'htaccess' ) . '.php',
 			);
 		} elseif ( self::METHOD_MMC === $options['use_apc'] && self::$is_nginx ) {
 			/* Setup tab for Memcached */
