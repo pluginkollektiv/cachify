@@ -389,21 +389,71 @@ final class Cachify {
 		/* Options */
 		self::$options = self::_get_options();
 
-		/* HDD */
-		if ( self::METHOD_HDD === self::$options['use_apc'] && Cachify_HDD::is_available() ) {
-			self::$method = new Cachify_HDD();
-
-			/* MEMCACHED */
-		} elseif ( self::METHOD_MMC === self::$options['use_apc'] && Cachify_MEMCACHED::is_available() ) {
-			self::$method = new Cachify_MEMCACHED();
-
-			/* REDIS */
-		} elseif ( self::METHOD_REDIS === self::$options['use_apc'] && Cachify_REDIS::is_available() ) {
-			self::$method = new Cachify_REDIS();
-
-			/* DB */
+		if ( self::METHOD_APC === self::$options['use_apc'] ) {
+			/* APC */
+			add_action( 'admin_notices', array( __CLASS__, 'admin_notice_unavailable' ) );
+			self::$method = new Cachify_NOOP( 'APC' );
+		} elseif ( self::METHOD_HDD === self::$options['use_apc'] ) {
+			/* HDD */
+			if ( Cachify_HDD::is_available() ) {
+				self::$method = new Cachify_HDD();
+			} else {
+				add_action( 'admin_notices', array( __CLASS__, 'admin_notice_unavailable' ) );
+				self::$method = new Cachify_NOOP( Cachify_HDD::stringify_method() );
+			}
+		} elseif ( self::METHOD_MMC === self::$options['use_apc'] ) {
+			/* Memcached */
+			if ( Cachify_MEMCACHED::is_available() ) {
+				self::$method = new Cachify_MEMCACHED();
+			} else {
+				add_action( 'admin_notices', array( __CLASS__, 'admin_notice_unavailable' ) );
+				self::$method = new Cachify_NOOP( Cachify_MEMCACHED::stringify_method() );
+			}
+		} elseif ( self::METHOD_REDIS === self::$options['use_apc'] ) {
+			/* Redis */
+			if ( Cachify_REDIS::is_available() ) {
+				self::$method = new Cachify_REDIS();
+			} else {
+				add_action( 'admin_notices', array( __CLASS__, 'admin_notice_unavailable' ) );
+				self::$method = new Cachify_NOOP( Cachify_REDIS::stringify_method() );
+			}
 		} else {
+			/* Database */
 			self::$method = new Cachify_DB();
+		}
+	}
+
+	/**
+	 * Show admin notice if caching backend is unavailable.
+	 *
+	 * @since 2.4.0
+	 */
+	public static function admin_notice_unavailable() {
+		if ( current_user_can( 'manage_options' ) ) {
+			$unavailable_method = '-';
+			if ( self::$method instanceof Cachify_NOOP ) {
+				$unavailable_method = self::$method->unavailable_method;
+			}
+
+			printf(
+				'<div class="notice notice-warning is-dismissible"><p><strong>%1$s</strong></p><p>%2$s</p><p>%3$s</p></div>',
+				esc_html__( 'Cachify backend not available', 'cachify' ),
+				esc_html(
+					sprintf(
+						/* translators: Name of the caching backend inserted for placeholder */
+						__( 'The configured caching backend is not available: %s', 'cachify' ),
+						$unavailable_method
+					)
+				),
+				wp_kses(
+					sprintf(
+						/* translators: Link to Cachify settings page inserted at placeholder */
+						__( 'Please check your server configuration and visit the <a href="%s">settings page</a> to chose a different method.', 'cachify' ),
+						add_query_arg( array( 'page' => 'cachify' ), admin_url( 'options-general.php' ) )
+					),
+					array( 'a' => array( 'href' => array() ) )
+				)
+			);
 		}
 	}
 
