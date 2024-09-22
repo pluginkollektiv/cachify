@@ -1,6 +1,7 @@
 .idea/
 .phpunit.result.cache
 css/*.min.css
+dist
 js/*.min.js
 vendor/
 node_modules/
