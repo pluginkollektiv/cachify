@@ -1,7 +1,7 @@
 # Cachify #
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
-* Tags:              acceleration, cache, caching, minimize, performance, apc, disk, hdd, memcached, compression, minify, speed
+* Tags:              cache, caching, performance, optimize, speed
 * Requires at least: 4.7
 * Tested up to:      5.9
 * Requires PHP:      5.6
