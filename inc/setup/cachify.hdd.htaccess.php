@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $htaccess = '# BEGIN CACHIFY
-<IfModule mod_rewrite.c>;
+<IfModule mod_rewrite.c>
   RewriteEngine on
 
   # set hostname directory
@@ -29,12 +29,12 @@ if ( Cachify_HDD::is_gzip_enabled() ) {
 	$htaccess .= '
   # gzip
   RewriteRule .* - [E=CACHIFY_SUFFIX:]
-  <IfModule mod_mime.c>;
+  <IfModule mod_mime.c>
     RewriteCond %{HTTP:Accept-Encoding} gzip
     RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
     AddType text/html .gz
     AddEncoding gzip .gz
-  </IfModule>;
+  </IfModule>
 ';
 }
 
@@ -47,7 +47,7 @@ $htaccess .= '
   RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
   RewriteCond ' . WP_CONTENT_DIR . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
   RewriteRule ^(.*) ' . wp_make_link_relative( content_url() ) . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
-</IfModule>;
+</IfModule>
 # END CACHIFY';
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp
