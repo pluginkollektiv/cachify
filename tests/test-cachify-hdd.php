@@ -33,7 +33,16 @@ class Test_Cachify_HDD extends WP_UnitTestCase {
 	 * Test GZip availability.
 	 */
 	public function test_is_gzip_enabled() {
-		self::assertTrue( Cachify_HDD::is_gzip_enabled(), 'GZip should be enabled by default' );
+		if ( ! function_exists( 'gzencode' ) ) {
+			self::assertFalse( Cachify_HDD::is_gzip_enabled(), 'GZip should be disabled, if not available' );
+
+			// Define gzencode function for testing the hook.
+			function gzencode( $data, $level = -1 ) {
+				return $data;
+			}
+		}
+
+		self::assertTrue( Cachify_HDD::is_gzip_enabled(), 'GZip should be enabled if available' );
 
 		$capture = null;
 		add_filter(

@@ -33,6 +33,11 @@ final class Cachify_HDD implements Cachify_Backend {
 	 * @since 2.4.0
 	 */
 	public static function is_gzip_enabled() {
+		if ( ! function_exists( 'gzencode' ) ) {
+			// GZip is not available on the system.
+			return false;
+		}
+
 		/**
 		 * Filter that allows to enable/disable gzip file creation
 		 *
