@@ -760,13 +760,13 @@ final class Cachify {
 		/* Localize script */
 		wp_localize_script(
 			'cachify-admin-bar-flush',
-			'cachify_admin_bar_flush_ajax_object',
+			'cachifyAdminBarFlushAjaxObject',
 			array(
-				'url'              => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
-				'nonce'            => wp_create_nonce( 'wp_rest' ),
-				'flushing'         => __( 'Flushing cache', 'cachify' ),
-				'flushed'          => __( 'Cache flushed successfully', 'cachify' ),
-				'dashicon_success' => self::get_dashicon_success_class(),
+				'url'             => esc_url_raw( rest_url( self::REST_NAMESPACE . '/' . self::REST_ROUTE_FLUSH ) ),
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'flushing'        => __( 'Flushing cache', 'cachify' ),
+				'flushed'         => __( 'Cache flushed successfully', 'cachify' ),
+				'dashiconSuccess' => self::get_dashicon_success_class(),
 			)
 		);
 	}

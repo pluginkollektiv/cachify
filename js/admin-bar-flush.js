@@ -1,25 +1,36 @@
-/* global cachify_admin_bar_flush_ajax_object */
-( function() {
-	var is_flushing = false,
-		admin_bar_cachify_list_item = document.getElementById( 'wp-admin-bar-cachify' ),
-		flush_link = admin_bar_cachify_list_item.querySelector( 'a.ab-item' ),
-		fallback_url = flush_link.getAttribute( 'href' ),
-		aria_live_area = document.querySelector( '.ab-aria-live-area' );
+/* global cachifyAdminBarFlushAjaxObject */
+{
+	let isFlushing = false;
+	const adminBarItem = document.getElementById('wp-admin-bar-cachify');
+	const flushLink = adminBarItem.querySelector('a.ab-item');
+	const fallbackUrl = flushLink.getAttribute('href');
+	const ariaLiveArea = document.querySelector('.ab-aria-live-area');
 
 	// Replacing flush link with button because with AJAX action, it is semantically not a link anymore.
-	var button = document.createRange().createContextualFragment( '<button class="ab-item">' + flush_link.innerHTML + '</button>' );
-	flush_link.parentNode.replaceChild( button, flush_link );
+	const button = document
+		.createRange()
+		.createContextualFragment(
+			'<button class="ab-item">' + flushLink.innerHTML + '</button>'
+		);
+	flushLink.parentNode.replaceChild(button, flushLink);
 
-	var admin_bar_icon = admin_bar_cachify_list_item.querySelector( '#wp-admin-bar-cachify .ab-icon' );
+	const adminBarIcon = adminBarItem.querySelector(
+		'#wp-admin-bar-cachify .ab-icon'
+	);
 
-	document.querySelector( '#wp-admin-bar-cachify .ab-item' ).addEventListener( 'click', flush );
+	document
+		.querySelector('#wp-admin-bar-cachify .ab-item')
+		.addEventListener('click', flush);
 
-	admin_bar_icon.addEventListener( 'animationend', function() {
-		admin_bar_icon.classList.remove( 'animate-fade' );
-	} );
+	adminBarIcon.addEventListener('animationend', () => {
+		adminBarIcon.classList.remove('animate-fade');
+	});
 
-	function flush_icon_remove_classes() {
-		var classes = [
+	/**
+	 * Remove classes used for animation from flush icon.
+	 */
+	function flushIconRemoveClasses() {
+		const classes = [
 			'animate-fade',
 			'animate-pulse',
 			'dashicons-trash',
@@ -28,56 +39,59 @@
 			'dashicons-dismiss',
 		];
 
-		for ( var i = 0; i < classes.length; i++ ) {
-			admin_bar_icon.classList.remove( classes[i] );
+		for (const element of classes) {
+			adminBarIcon.classList.remove(element);
 		}
 	}
 
-	function start_flush_icon_reset_timeout() {
-		setTimeout( function() {
-			flush_icon_remove_classes();
-			admin_bar_icon.classList.add( 'animate-fade' );
-			admin_bar_icon.classList.add( 'dashicons-trash' );
-			is_flushing = false;
-			aria_live_area.textContent = '';
-		}, 2000 );
+	/**
+	 * Add animation classes to flush icon.
+	 */
+	function startFlushIconResetTimeout() {
+		setTimeout(() => {
+			flushIconRemoveClasses();
+			adminBarIcon.classList.add('animate-fade', 'dashicons-trash');
+			isFlushing = false;
+			ariaLiveArea.textContent = '';
+		}, 2000);
 	}
 
-	function flush( event ) {
+	/**
+	 * Event listener to flush the cache.
+	 *
+	 * @param {MouseEvent} event Click event
+	 */
+	function flush(event) {
 		event.preventDefault();
 
-		if ( is_flushing ) {
+		if (isFlushing) {
 			return;
 		}
-		is_flushing = true;
-		aria_live_area.textContent = cachify_admin_bar_flush_ajax_object.flushing;
+		isFlushing = true;
+		ariaLiveArea.textContent = cachifyAdminBarFlushAjaxObject.flushing;
 
-		if ( admin_bar_icon !== null ) {
-			flush_icon_remove_classes();
-			admin_bar_icon.classList.add( 'animate-pulse' );
-			admin_bar_icon.classList.add( 'dashicons-trash' );
+		if (adminBarIcon !== null) {
+			flushIconRemoveClasses();
+			adminBarIcon.classList.add('animate-pulse');
+			adminBarIcon.classList.add('dashicons-trash');
 		}
 
-		var request = new XMLHttpRequest();
-		request.addEventListener( 'load', function() {
-			if ( this.status === 200 ) {
-				start_flush_icon_reset_timeout();
-				flush_icon_remove_classes();
-				admin_bar_icon.classList.add( 'animate-fade' );
-				admin_bar_icon.classList.add( cachify_admin_bar_flush_ajax_object.dashicon_success );
-				aria_live_area.textContent = cachify_admin_bar_flush_ajax_object.flushed;
-				return;
-			}
-
-			window.location = fallback_url;
-		} );
-
-		request.addEventListener( 'error', function() {
-			window.location = fallback_url;
-		} );
-
-		request.open( 'DELETE', cachify_admin_bar_flush_ajax_object.url );
-		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce );
-		request.send();
+		fetch(cachifyAdminBarFlushAjaxObject.url, {
+			method: 'DELETE',
+			headers: { 'X-WP-Nonce': cachifyAdminBarFlushAjaxObject.nonce },
+		})
+			.then(() => {
+				startFlushIconResetTimeout();
+				flushIconRemoveClasses();
+				adminBarIcon.classList.add('animate-fade');
+				adminBarIcon.classList.add(
+					cachifyAdminBarFlushAjaxObject.dashiconSuccess
+				);
+				ariaLiveArea.textContent =
+					cachifyAdminBarFlushAjaxObject.flushed;
+			})
+			.catch(() => {
+				window.location = fallbackUrl;
+			});
 	}
-}() );
+}
