@@ -1,10 +1,6 @@
 {
-  "extends": "plugin:@wordpress/eslint-plugin/es5",
+  "extends": "plugin:@wordpress/eslint-plugin/recommended",
   "env": {
     "browser": true
-  },
-  "rules": {
-    "camelcase": 0,
-    "vars-on-top": 0
   }
 }
