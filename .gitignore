@@ -1,6 +1,10 @@
 .idea/
+.phpunit.result.cache
 css/*.min.css
+js/*.min.js
 vendor/
 node_modules/
 composer.lock
 package-lock.json
+phpunit.*.xml
+tests/coverage/

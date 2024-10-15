@@ -11,15 +11,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_DB
  */
-final class Cachify_DB {
+final class Cachify_DB implements Cachify_Backend {
 
 	/**
 	 * Availability check
 	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
+	 * @return bool TRUE when installed
 	 *
-	 * @return  boolean  true/false  TRUE when installed
+	 * @since 2.0.7
 	 */
 	public static function is_available() {
 		return true;
@@ -28,10 +27,9 @@ final class Cachify_DB {
 	/**
 	 * Caching method as string
 	 *
-	 * @since   2.1.2
-	 * @change  2.1.2
+	 * @return string Caching method
 	 *
-	 * @return  string  Caching method
+	 * @since 2.1.2
 	 */
 	public static function stringify_method() {
 		return 'DB';
@@ -40,17 +38,18 @@ final class Cachify_DB {
 	/**
 	 * Store item in cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash     Hash of the entry.
+	 * @param string $data     Content of the entry.
+	 * @param int    $lifetime Lifetime of the entry.
+	 * @param bool   $sig_detail Show details in signature.
 	 *
-	 * @param   string  $hash      Hash of the entry.
-	 * @param   string  $data      Content of the entry.
-	 * @param   integer $lifetime  Lifetime of the entry.
+	 * @since 2.0
 	 */
-	public static function store_item( $hash, $data, $lifetime ) {
+	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
+
 			return;
 		}
 
@@ -73,11 +72,11 @@ final class Cachify_DB {
 	/**
 	 * Read item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry.
 	 *
-	 * @param   string $hash    Hash of the entry.
-	 * @return  mixed           Content of the entry
+	 * @return mixed Content of the entry
+	 *
+	 * @since 2.0
 	 */
 	public static function get_item( $hash ) {
 		return get_transient( $hash );
@@ -86,11 +85,10 @@ final class Cachify_DB {
 	/**
 	 * Delete item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry.
+	 * @param string $url  URL of the entry [optional].
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @param   string $url   URL of the entry [optional].
+	 * @since 2.0
 	 */
 	public static function delete_item( $hash, $url = '' ) {
 		delete_transient( $hash );
@@ -99,8 +97,7 @@ final class Cachify_DB {
 	/**
 	 * Clear the cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @since 2.0
 	 */
 	public static function clear_cache() {
 		/* Init */
@@ -113,11 +110,11 @@ final class Cachify_DB {
 	/**
 	 * Print the cache
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param bool  $sig_detail Show details in signature.
+	 * @param array $cache      Array of cache values.
 	 *
-	 * @param   bool  $sig_detail  Show details in signature.
-	 * @param   array $cache       Array of cache values.
+	 * @since 2.0
+	 * @since 2.3.0 added $sig_detail parameter
 	 */
 	public static function print_cache( $sig_detail, $cache ) {
 		/* No array? */
@@ -141,35 +138,37 @@ final class Cachify_DB {
 	/**
 	 * Get the cache size
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @return int Column size
 	 *
-	 * @return  integer  Column size
+	 * @since 2.0
 	 */
 	public static function get_stats() {
 		/* Init */
 		global $wpdb;
 
 		/* Read */
-		return $wpdb->get_var(
-			'SELECT SUM( CHAR_LENGTH(option_value) ) FROM `' . $wpdb->options . "` WHERE `option_name` LIKE ('\_transient%.cachify')"
+		return intval(
+			$wpdb->get_var(
+				'SELECT SUM( CHAR_LENGTH(option_value) ) FROM `' . $wpdb->options . "` WHERE `option_name` LIKE ('\_transient%.cachify')"
+			)
 		);
 	}
 
 	/**
 	 * Generate signature
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param bool  $detail Show details in signature.
+	 * @param array $meta   Content of metadata.
 	 *
-	 * @param   bool  $detail  Show details in signature.
-	 * @param   array $meta    Content of metadata.
-	 * @return  string         Signature string
+	 * @return string Signature string
+	 *
+	 * @since 2.0
+	 * @since 2.3.0 added $detail parameter
 	 */
 	private static function _cache_signature( $detail, $meta ) {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
-			return;
+			return '';
 		}
 
 		if ( $detail ) {
@@ -210,10 +209,9 @@ final class Cachify_DB {
 	/**
 	 * Return query count
 	 *
-	 * @since   0.1
-	 * @change  2.0
+	 * @return int Number of queries
 	 *
-	 * @return  integer  Number of queries
+	 * @since 0.1
 	 */
 	private static function _page_queries() {
 		return $GLOBALS['wpdb']->num_queries;
@@ -222,10 +220,9 @@ final class Cachify_DB {
 	/**
 	 * Return execution time
 	 *
-	 * @since   0.1
-	 * @change  2.0
+	 * @return string Execution time in seconds
 	 *
-	 * @return  integer  Execution time in seconds
+	 * @since 0.1
 	 */
 	private static function _page_timer() {
 		return timer_stop( 0, 2 );
@@ -234,10 +231,9 @@ final class Cachify_DB {
 	/**
 	 * Return memory consumption
 	 *
-	 * @since   0.7
-	 * @change  2.0
+	 * @return string Formatted memory size
 	 *
-	 * @return  string  Formatted memory size
+	 * @since 0.7
 	 */
 	private static function _page_memory() {
 		return ( function_exists( 'memory_get_usage' ) ? size_format( memory_get_usage(), 2 ) : 0 );

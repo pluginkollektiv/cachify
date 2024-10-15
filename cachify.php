@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Cachify
- * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or APC.
+ * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or Redis.
  * Author:      pluginkollektiv
  * Author URI:  https://pluginkollektiv.org
  * Plugin URI:  https://cachify.pluginkollektiv.org
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Version:     2.3.2
+ * Version:     2.4.0
  * Text Domain: cachify
  *
  * @package Cachify
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 
 /* Constants */
 define( 'CACHIFY_FILE', __FILE__ );
-define( 'CACHIFY_DIR', dirname( __FILE__ ) );
+define( 'CACHIFY_DIR', __DIR__ );
 define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
 
@@ -88,14 +88,14 @@ spl_autoload_register( 'cachify_autoload' );
 /**
  * Autoload the class.
  *
- * @param string $class the class name.
+ * @param string $class_name the class name.
  */
-function cachify_autoload( $class ) {
-	if ( in_array( $class, array( 'Cachify', 'Cachify_APC', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_CLI' ), true ) ) {
+function cachify_autoload( $class_name ) {
+	if ( in_array( $class_name, array( 'Cachify', 'Cachify_Backend', 'Cachify_CLI', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_NOOP', 'Cachify_REDIS' ), true ) ) {
 		require_once sprintf(
 			'%s/inc/class-%s.php',
 			CACHIFY_DIR,
-			strtolower( str_replace( '_', '-', $class ) )
+			strtolower( str_replace( '_', '-', $class_name ) )
 		);
 	}
 }

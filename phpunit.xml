@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+    <coverage processUncoveredFiles="false">
+        <include>
+            <file>cachify.php</file>
+            <directory suffix=".php">inc</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">inc/setup/</directory>
+            <file>inc/cachify.settings.php</file>
+            <file>inc/cachify.settings-footer.php</file>
+        </exclude>
+
+        <report>
+            <clover outputFile="phpunit.coverage.xml"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="default">
+            <directory prefix="test-" suffix=".php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <junit outputFile="phpunit.report.xml"/>
+    </logging>
+</phpunit>

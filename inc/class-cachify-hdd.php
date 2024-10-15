@@ -11,15 +11,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Cachify_HDD
  */
-final class Cachify_HDD {
+final class Cachify_HDD implements Cachify_Backend {
 
 	/**
 	 * Availability check
 	 *
-	 * @since   2.0.7
-	 * @change  2.0.7
+	 * @return bool TRUE when installed
 	 *
-	 * @return  boolean  true/false  TRUE when installed
+	 * @since 2.0.7
 	 */
 	public static function is_available() {
 		$option = get_option( 'permalink_structure' );
@@ -27,12 +26,32 @@ final class Cachify_HDD {
 	}
 
 	/**
+	 * Returns if gzip file creation is enabled
+	 *
+	 * @return bool
+	 *
+	 * @since 2.4.0
+	 */
+	public static function is_gzip_enabled() {
+		if ( ! function_exists( 'gzencode' ) ) {
+			// GZip is not available on the system.
+			return false;
+		}
+
+		/**
+		 * Filter that allows to enable/disable gzip file creation
+		 *
+		 * @param bool $create_gzip_files Whether to create gzip files. Default is `true`
+		 */
+		return apply_filters( 'cachify_create_gzip_files', true );
+	}
+
+	/**
 	 * Caching method as string
 	 *
-	 * @since   2.1.2
-	 * @change  2.1.2
+	 * @return string Caching method
 	 *
-	 * @return  string  Caching method
+	 * @since 2.1.2
 	 */
 	public static function stringify_method() {
 		return 'HDD';
@@ -41,13 +60,13 @@ final class Cachify_HDD {
 	/**
 	 * Store item in cache
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param string $hash       Hash  of the entry [ignored].
+	 * @param string $data       Content of the entry.
+	 * @param int    $lifetime   Lifetime of the entry [ignored].
+	 * @param bool   $sig_detail Show details in signature.
 	 *
-	 * @param   string  $hash        Hash  of the entry [ignored].
-	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry [ignored].
-	 * @param   bool    $sig_detail  Show details in signature.
+	 * @since 2.0
+	 * @since 2.3.0 added $sig_details parameter
 	 */
 	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
 		/* Do not store empty data. */
@@ -65,12 +84,12 @@ final class Cachify_HDD {
 	/**
 	 * Read item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry.
+	 * @return bool True if cache is present.
 	 *
-	 * @return  boolean  True if cache is present.
+	 * @since 2.0
 	 */
-	public static function get_item() {
+	public static function get_item( $hash ) {
 		return is_readable(
 			self::_file_html()
 		);
@@ -79,11 +98,10 @@ final class Cachify_HDD {
 	/**
 	 * Delete item from cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $hash Hash of the entry [ignored].
+	 * @param string $url  URL of the entry.
 	 *
-	 * @param   string $hash  Hash of the entry [ignored].
-	 * @param   string $url   URL of the entry.
+	 * @since 2.0
 	 */
 	public static function delete_item( $hash, $url ) {
 		self::_clear_dir(
@@ -94,8 +112,7 @@ final class Cachify_HDD {
 	/**
 	 * Clear the cache
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @since 2.0
 	 */
 	public static function clear_cache() {
 		self::_clear_dir(
@@ -107,12 +124,15 @@ final class Cachify_HDD {
 	/**
 	 * Print the cache
 	 *
-	 * @since   2.0
-	 * @change  2.3
+	 * @param bool  $sig_detail Show details in signature.
+	 * @param array $cache      Array of cache values.
+	 *
+	 * @since 2.0
 	 */
-	public static function print_cache() {
+	public static function print_cache( $sig_detail, $cache ) {
 		$filename = self::_file_html();
-		$size = is_readable( $filename ) ? readfile( $filename ) : false;
+		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
+
 		if ( ! empty( $size ) ) {
 			/* Ok, cache file has been sent to output. */
 			exit;
@@ -122,10 +142,9 @@ final class Cachify_HDD {
 	/**
 	 * Get the cache size
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @return int Directory size
 	 *
-	 * @return  integer  Directory size
+	 * @since 2.0
 	 */
 	public static function get_stats() {
 		return self::_dir_size( CACHIFY_CACHE_DIR );
@@ -134,11 +153,12 @@ final class Cachify_HDD {
 	/**
 	 * Generate signature
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param bool $detail Show details in signature.
 	 *
-	 * @param   bool $detail  Show details in signature.
-	 * @return  string        Signature string
+	 * @return string Signature string
+	 *
+	 * @since 2.0
+	 * @since 2.3.0 added $detail parameter
 	 */
 	private static function _cache_signature( $detail ) {
 		return sprintf(
@@ -155,49 +175,54 @@ final class Cachify_HDD {
 	/**
 	 * Initialize caching process
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $data Cache content.
 	 *
-	 * @param   string $data  Cache content.
+	 * @since 2.0
 	 */
 	private static function _create_files( $data ) {
 		$file_path = self::_file_path();
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
-			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Unable to create directory {$file_path}." ), E_USER_WARNING );
 			return;
 		}
-
 		/* Write to file */
 		self::_create_file( self::_file_html( $file_path ), $data );
-		self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
+
+		/**
+		 * Filter that allows to enable/disable gzip file creation
+		 *
+		 * @param bool $create_gzip_files Whether to create gzip files. Default is `true`
+		 */
+		if ( self::is_gzip_enabled() ) {
+			self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
+		}
 	}
 
 	/**
 	 * Create cache file
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $file Path to cache file.
+	 * @param string $data Cache content.
 	 *
-	 * @param   string $file  Path to cache file.
-	 * @param   string $data  Cache content.
+	 * @since 2.0
 	 */
 	private static function _create_file( $file, $data ) {
 		/* Writable? */
 		$handle = @fopen( $file, 'wb' );
 		if ( ! $handle ) {
-			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}.", E_USER_WARNING ) );
+			trigger_error( esc_html( __METHOD__ . ": Could not write file {$file}." ), E_USER_WARNING );
 			return;
 		}
 
 		/* Write */
-		@fwrite( $handle, $data );
+		fwrite( $handle, $data );
 		fclose( $handle );
 		clearstatcache();
 
 		/* Permissions */
-		$stat = @stat( dirname( $file ) );
+		$stat  = @stat( dirname( $file ) );
 		$perms = $stat['mode'] & 0007777;
 		$perms = $perms & 0000666;
 		@chmod( $file, $perms );
@@ -207,71 +232,67 @@ final class Cachify_HDD {
 	/**
 	 * Clear directory
 	 *
-	 * @since   2.0
-	 * @change  2.0.5
+	 * @param string $dir       Directory path.
+	 * @param bool   $recursive true for clearing subdirectories as well.
 	 *
-	 * @param   string  $dir        Directory path.
-	 * @param   boolean $recursive  true for clearing subdirectories as well.
+	 * @since 2.0
 	 */
 	private static function _clear_dir( $dir, $recursive = false ) {
-		/* Remote training slash */
+		// Remove trailing slash.
 		$dir = untrailingslashit( $dir );
 
-		/* Is directory? */
+		// Is directory?
 		if ( ! is_dir( $dir ) ) {
 			return;
 		}
 
-		/* Read */
+		// List directory contents.
 		$objects = array_diff(
 			scandir( $dir ),
 			array( '..', '.' )
 		);
 
-		/* Empty? */
-		if ( empty( $objects ) ) {
-			return;
-		}
-
-		/* Loop over items */
+		// Loop over items.
 		foreach ( $objects as $object ) {
-			/* Expand path */
+			// Expand path.
 			$object = $dir . DIRECTORY_SEPARATOR . $object;
 
-			/* Directory or file */
-			if ( is_dir( $object ) && $recursive ) {
-				self::_clear_dir( $object, $recursive );
-			} else {
-				if ( self::_user_can_delete( $object ) ) {
-					unlink( $object );
+			if ( is_dir( $object ) ) {
+				if ( $recursive ) {
+					// Recursively clear the directory.
+					self::_clear_dir( $object, $recursive );
+				} elseif ( self::_user_can_delete( $object ) && 0 === count( glob( trailingslashit( $object ) . '*' ) ) ) {
+					// Delete the directory, if empty.
+					@rmdir( $object );
 				}
+			} elseif ( self::_user_can_delete( $object ) ) {
+				// Delete the file.
+				unlink( $object );
 			}
 		}
 
-		/* Remove directory */
-		if ( $recursive ) {
-			if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
-				@rmdir( $dir );
-			}
+		// Remove directory, if empty.
+		if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+			@rmdir( $dir );
 		}
 
-		/* Clean up */
+		// Clean up.
 		clearstatcache();
 	}
 
 	/**
 	 * Get directory size
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $dir Directory path.
 	 *
-	 * @param   string $dir   Directory path.
-	 * @return  mixed         Directory size
+	 * @return int|false Directory size
+	 *
+	 * @since 2.0
 	 */
 	public static function _dir_size( $dir = '.' ) {
 		/* Is directory? */
 		if ( ! is_dir( $dir ) ) {
-			return;
+			return false;
 		}
 
 		/* Read */
@@ -282,7 +303,7 @@ final class Cachify_HDD {
 
 		/* Empty? */
 		if ( empty( $objects ) ) {
-			return;
+			return false;
 		}
 
 		/* Init */
@@ -307,11 +328,11 @@ final class Cachify_HDD {
 	/**
 	 * Path to cache file
 	 *
-	 * @since   2.0
-	 * @change  2.0
+	 * @param string $path Request URI or permalink [optional].
 	 *
-	 * @param   string $path  Request URI or permalink [optional].
-	 * @return  string        Path to cache file
+	 * @return string Path to cache file
+	 *
+	 * @since 2.0
 	 */
 	private static function _file_path( $path = null ) {
 		$prefix = is_ssl() ? 'https-' : '';
@@ -339,11 +360,11 @@ final class Cachify_HDD {
 	/**
 	 * Path to HTML file
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param string $file_path File path [optional].
 	 *
-	 * @param   string $file_path   File path [optional].
-	 * @return  string              Path to HTML file
+	 * @return string Path to HTML file
+	 *
+	 * @since 2.0
 	 */
 	private static function _file_html( $file_path = '' ) {
 		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html';
@@ -352,11 +373,11 @@ final class Cachify_HDD {
 	/**
 	 * Path to GZIP file
 	 *
-	 * @since   2.0
-	 * @change  2.3.0
+	 * @param string $file_path File path [optional].
 	 *
-	 * @param   string $file_path   File path [optional].
-	 * @return  string              Path to GZIP file
+	 * @return string Path to GZIP file
+	 *
+	 * @since 2.0
 	 */
 	private static function _file_gzip( $file_path = '' ) {
 		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html.gz';
@@ -388,9 +409,9 @@ final class Cachify_HDD {
 			$file = trailingslashit( $file );
 		}
 
-		$ssl_prefix = is_ssl() ? 'https-' : '';
+		$ssl_prefix   = is_ssl() ? 'https-' : '';
 		$current_blog = get_blog_details( get_current_blog_id() );
-		$blog_path = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
+		$blog_path    = CACHIFY_CACHE_DIR . DIRECTORY_SEPARATOR . $ssl_prefix . $current_blog->domain . $current_blog->path;
 
 		if ( 0 !== strpos( $file, $blog_path ) ) {
 			return false;
@@ -424,6 +445,5 @@ final class Cachify_HDD {
 		}
 
 		return true;
-
 	}
 }

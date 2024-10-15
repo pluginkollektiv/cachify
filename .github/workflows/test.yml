@@ -1,19 +1,60 @@
-name: Coding Standards
-on: push
+name: Tests
+on: [push, pull_request]
 jobs:
-  quality:
+  unit:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: '5.6'
+            wordpress: '4.7'
+          - php: '7.4'
+            wordpress: '5.9'
+          - php: '8.0'
+            wordpress: '6.0'
+          - php: '8.2'
+            wordpress: '6.4'
+          - php: '8.3'
+            wordpress: 'latest'
+          - php: '8.3'
+            wordpress: 'nightly'
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: ${{matrix.php}}
+          tools: composer
+      - name: Install
+        run: composer install --no-interaction
+      - name: Build
+        run: composer build
+      - name: Setup DB
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: 'mysql-5.7'
+          root-password: "root"
+      - name: Setup WP
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 "${{ matrix.wordpress }}"
+      - name: PHP unit tests
+        run: composer test
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
           tools: composer
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Code style checks for PHP and CSS
         run: |
           composer install

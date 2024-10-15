@@ -1,12 +1,12 @@
 # Cachify #
-Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for storing your blog pages. Make WordPress faster!
+Smart, efficient cache solution for WordPress. Use DB, HDD, Redis or Memcached for storing your blog pages. Make WordPress faster!
 
 ## Description ##
-*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx) or — thanks to APC (Alternative PHP Cache) — directly in the web server’s system cache. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
+*Cachify* optimizes your page loads by caching posts, pages and custom post types as static content. You can choose between caching via database, on the web server’s hard drive (HDD), Memcached (only on Nginx) or Redis. Whenever a page or post is loaded, it can be pulled directly from the cache. The amount of database queries and PHP requests will dramatically decrease towards zero, depending on the caching method you chose.
 
 ### Features ###
 * Works with custom post types.
-* Caching methods: DB, HDD, APC and Memcached.
+* Caching methods: DB, HDD, Redis and Memcached.
 * “Flush Cache” button in the WordPress toolbar.
 * Ready for WordPress Multisite.
 * Optional compression of HTML markup.
@@ -39,10 +39,10 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, APC or Memcached for
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://wordpress.org/support/article/managing-plugins/#installing-plugins).
 
 ### Requirements ###
-* PHP 5.2.4 or greater
-* WordPress 4.4 or greater
-* APC 3.1.4 or greater (optional)
+* PHP 5.6 or greater
+* WordPress 4.7 or greater
 * Memcached in Nginx (optional)
+* Redis (optional, via the phpredis module)
 
 
 ## Frequently Asked Questions ##

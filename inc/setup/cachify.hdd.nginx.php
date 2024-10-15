@@ -9,49 +9,24 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 
-	<table class="form-table">
-		<tr>
-			<th>
-				<?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?>
-			</th>
-			<td>
-				<label for="cachify_setup">
-					<?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?>
-				</label>
-			</td>
-		</tr>
+<h2><?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?></h2>
+<p><?php esc_html_e( 'Please add the following lines to your nginx.conf', 'cachify' ); ?></p>
 
-		<tr>
-			<th>
-				<?php esc_html_e( 'Notes', 'cachify' ); ?>
-			</th>
-			<td>
-				<ul style="list-style-type:circle">
-					<li>
-						<?php
-						printf(
-							/* translators: variable names*/
-							esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
-							'<code>${http_host}</code>',
-							'<code>${host}</code>'
-						);
-						?>
-					</li>
-				</ul>
-			</td>
-		</tr>
-	</table>
-
-	<div style="background:#fff;border:1px solid #ccc;padding:10px 20px"><pre style="white-space: pre-wrap">
+<textarea rows="16" class="large-text code cachify-code" name="code" readonly>
+<?php if ( Cachify_HDD::is_gzip_enabled() ) : ?>
 ## GZIP
 gzip_static on;
 
+<?php endif; ?>
 ## CHARSET
 charset utf-8;
 
 ## INDEX LOCATION
 location / {
   if ( $query_string ) {
+	return 405;
+  }
+  if ( $http_accept !~* "text/html" ) {
 	return 405;
   }
   if ( $request_method = POST ) {
@@ -78,6 +53,20 @@ location @nocache {
 location ~ /wp-content/cache {
   internal;
 }
-</pre></div>
+</textarea>
 
 <small>(<?php esc_html_e( 'You might need to adjust the location directives to your needs.', 'cachify' ); ?>)</small>
+
+<h3><?php esc_html_e( 'Notes', 'cachify' ); ?></h3>
+<ol>
+	<li>
+		<?php
+		printf(
+			/* translators: variable names*/
+			esc_html__( 'For domains with FQDN, the variable %1$s must be used instead of %2$s.', 'cachify' ),
+			'<code>${http_host}</code>',
+			'<code>${host}</code>'
+		);
+		?>
+	</li>
+</ol>
