@@ -1,0 +1,30 @@
+name: Plugin check
+on:
+  push:
+    branches: [ stable', 'release/*' ]
+  pull_request:
+    branches: [ stable ]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install
+        run:  composer install --no-interaction
+
+      - name: Package plugin
+        run: |
+          mkdir -p ./dist
+          rsync -rc --exclude-from=.distignore ./ ./dist/cachify --delete --delete-excluded
+      - name: Check WP plugin
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./dist/cachify
