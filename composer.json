@@ -32,7 +32,11 @@
     "squizlabs/php_codesniffer": "^3.11",
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "wp-coding-standards/wpcs": "^3.2",
-    "yoast/phpunit-polyfills": "^4.0"
+    "yoast/phpunit-polyfills": "^4.0",
+    "phpstan/extension-installer": "^1.4",
+    "phpstan/phpstan": "^1.12",
+    "szepeviktor/phpstan-wordpress": "^v1.3",
+    "php-stubs/wp-cli-stubs": "^v2.12"
   },
   "scripts": {
     "post-install-cmd": [
@@ -71,12 +75,16 @@
     ],
     "coverage": [
       "php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html tests/coverage"
+    ],
+    "phpstan": [
+        "phpstan analyse --memory-limit=1G"
     ]
   },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "composer/installers": true
+      "composer/installers": true,
+      "phpstan/extension-installer": true
     }
   }
 }
