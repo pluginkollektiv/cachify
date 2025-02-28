@@ -1788,7 +1788,7 @@ final class Cachify {
 		return array(
 			'only_guests'       => (int) ( ! empty( $data['only_guests'] ) ),
 			'compress_html'     => (int) $data['compress_html'],
-			'cache_expires'     => (int) ( isset( $data['cache_expires'] ) ? $data['cache_expires'] : self::$options['cache_expires'] ),
+			'cache_expires'     => (int) ( $data['cache_expires'] ?? self::$options['cache_expires'] ),
 			'without_ids'       => (string) isset( $data['without_ids'] ) ? sanitize_text_field( $data['without_ids'] ) : '',
 			'without_agents'    => (string) isset( $data['without_agents'] ) ? sanitize_text_field( $data['without_agents'] ) : '',
 			'use_apc'           => (int) $data['use_apc'],
