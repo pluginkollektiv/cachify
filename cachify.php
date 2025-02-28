@@ -91,7 +91,7 @@ spl_autoload_register( 'cachify_autoload' );
  *
  * @param string $class_name the class name.
  */
-function cachify_autoload( $class_name ) {
+function cachify_autoload( string $class_name ): void {
 	if ( in_array( $class_name, array( 'Cachify', 'Cachify_Backend', 'Cachify_CLI', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_NOOP', 'Cachify_REDIS' ), true ) ) {
 		require_once sprintf(
 			'%s/inc/class-%s.php',

@@ -29,7 +29,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 *
 	 * @param string $unavailable_method Name of the unavailable method.
 	 */
-	public function __construct( $unavailable_method = '' ) {
+	public function __construct( string $unavailable_method = '' ) {
 		$this->unavailable_method = $unavailable_method;
 	}
 
@@ -38,7 +38,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 *
 	 * @return bool TRUE when installed
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		return true;
 	}
 
@@ -47,7 +47,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 *
 	 * @return string Caching method
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'NOOP';
 	}
 
@@ -59,7 +59,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 * @param int    $lifetime Lifetime of the entry.
 	 * @param bool   $sig_detail Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		// NOOP.
 	}
 
@@ -70,7 +70,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 *
 	 * @return false No content
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		return false;
 	}
 
@@ -80,14 +80,14 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 * @param string $hash Hash of the entry.
 	 * @param string $url  URL of the entry [optional].
 	 */
-	public static function delete_item( $hash, $url = '' ) {
+	public static function delete_item( string $hash, string $url = '' ): void {
 		// NOOP.
 	}
 
 	/**
 	 * Clear the cache
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		// NOOP.
 	}
 
@@ -97,7 +97,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 * @param bool  $sig_detail Show details in signature.
 	 * @param array $cache      Array of cache values.
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		// NOOP.
 	}
 
@@ -106,7 +106,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	 *
 	 * @return int Column size
 	 */
-	public static function get_stats() {
+	public static function get_stats(): int {
 		return 0;
 	}
 }

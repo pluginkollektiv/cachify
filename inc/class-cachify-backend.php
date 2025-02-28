@@ -16,17 +16,16 @@ interface Cachify_Backend {
 	/**
 	 * Availability check
 	 *
-	 * @return bool TRUE if
-	 * available
+	 * @return bool TRUE if available
 	 */
-	public static function is_available();
+	public static function is_available(): bool;
 
 	/**
 	 * Caching method as string
 	 *
-	 * @return  string Caching method
+	 * @return string Caching method
 	 */
-	public static function stringify_method();
+	public static function stringify_method(): string;
 
 	/**
 	 * Store item in cache
@@ -36,7 +35,7 @@ interface Cachify_Backend {
 	 * @param int    $lifetime   Lifetime of the entry.
 	 * @param bool   $sig_detail Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail );
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void;
 
 	/**
 	 * Read item from cache
@@ -44,20 +43,20 @@ interface Cachify_Backend {
 	 * @param string $hash Hash of the entry.
 	 * @return mixed Content of the entry.
 	 */
-	public static function get_item( $hash );
+	public static function get_item( string $hash );
 
 	/**
 	 * Delete item from cache
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @param   string $url   URL of the entry.
+	 * @param string $hash Hash of the entry.
+	 * @param string $url  URL of the entry.
 	 */
-	public static function delete_item( $hash, $url );
+	public static function delete_item( string $hash, string $url ): void;
 
 	/**
 	 * Clear the cache
 	 */
-	public static function clear_cache();
+	public static function clear_cache(): void;
 
 	/**
 	 * Print the cache
@@ -65,5 +64,5 @@ interface Cachify_Backend {
 	 * @param bool   $sig_detail  Show details in signature.
 	 * @param string $cache       Cached content.
 	 */
-	public static function print_cache( $sig_detail, $cache );
+	public static function print_cache( bool $sig_detail, $cache ): void;
 }

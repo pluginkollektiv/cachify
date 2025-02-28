@@ -25,30 +25,30 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Availability check
 	 *
-	 * @return  boolean  true/false  TRUE when installed
+	 * @return boolean TRUE when installed
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		return class_exists( 'Redis' );
 	}
 
 	/**
 	 * Caching method as string
 	 *
-	 * @return  string  Caching method
+	 * @return string Caching method
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'Redis';
 	}
 
 	/**
 	 * Store item in cache
 	 *
-	 * @param   string  $hash        Hash  of the entry [ignored].
-	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry [ignored].
-	 * @param   bool    $sig_detail  Show details in signature.
+	 * @param string  $hash       Hash  of the entry [ignored].
+	 * @param string  $data       Content of the entry.
+	 * @param integer $lifetime   Lifetime of the entry [ignored].
+	 * @param bool    $sig_detail Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -71,10 +71,10 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Read item from cache
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @return  mixed         Content of the entry
+	 * @param string $hash Hash of the entry.
+	 * @return mixed Content of the entry
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return null;
@@ -92,7 +92,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param   string $hash  Hash of the entry [ignored].
 	 * @param   string $url   URL of the entry.
 	 */
-	public static function delete_item( $hash, $url ) {
+	public static function delete_item( string $hash, string $url ): void {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return;
@@ -109,7 +109,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 *
 	 * @return void
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return;
@@ -125,7 +125,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param bool   $sig_detail  Show details in signature.
 	 * @param string $cache       Cached content.
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		echo $cache;    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
 	}
@@ -133,9 +133,9 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return  integer  Directory size
+	 * @return integer Directory size
 	 */
-	public static function get_stats() {
+	public static function get_stats(): ?int {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return null;
@@ -160,10 +160,10 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Generate signature
 	 *
-	 * @param   bool $detail  Show details in signature.
-	 * @return  string        Signature string
+	 * @param bool $detail Show details in signature.
+	 * @return string Signature string
 	 */
-	private static function _cache_signature( $detail ) {
+	private static function _cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
@@ -178,10 +178,10 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Path of cache file
 	 *
-	 * @param   string $path  Request URI or permalink [optional].
-	 * @return  string        Path to cache file
+	 * @param string|null $path Request URI or permalink [optional].
+	 * @return string Path to cache file
 	 */
-	private static function _file_path( $path = null ) {
+	private static function _file_path( ?string $path = null ): string {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -198,9 +198,9 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Connect to Redis server
 	 *
-	 * @return  boolean  true/false  TRUE on success
+	 * @return boolean TRUE on success
 	 */
-	private static function _connect_server() {
+	private static function _connect_server(): bool {
 		/* Not enabled? */
 		if ( ! self::is_available() ) {
 			return false;

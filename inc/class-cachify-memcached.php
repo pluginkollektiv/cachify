@@ -29,7 +29,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		return class_exists( 'Memcached' )
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			&& isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
@@ -42,7 +42,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.1.2
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'Memcached';
 	}
 
@@ -57,7 +57,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.0.7
 	 * @since 2.3.0 added $sig_detail parameter
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -86,7 +86,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return null;
@@ -106,7 +106,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function delete_item( $hash, $url = '' ) {
+	public static function delete_item( string $hash, string $url = '' ): void {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return;
@@ -123,7 +123,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
 			return;
@@ -145,7 +145,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		// Not supported.
 	}
 
@@ -191,7 +191,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.0.7
 	 * @since 2.3.0 added $detail parameter
 	 */
-	private static function _cache_signature( $detail ) {
+	private static function _cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
@@ -206,13 +206,13 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	/**
 	 * Path of cache file
 	 *
-	 * @param string $path Request URI or permalink [optional].
+	 * @param string|null $path Request URI or permalink [optional].
 	 *
 	 * @return string Path to cache file
 	 *
 	 * @since 2.0.7
 	 */
-	private static function _file_path( $path = null ) {
+	private static function _file_path( ?string $path = null ): string {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -235,7 +235,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	private static function _connect_server() {
+	private static function _connect_server(): bool {
 		/* Not enabled? */
 		if ( ! self::is_available() ) {
 			return false;
