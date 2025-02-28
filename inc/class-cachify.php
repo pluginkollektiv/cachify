@@ -138,14 +138,8 @@ final class Cachify {
 
 		if ( is_admin() ) {
 			/* Backend */
-			if ( version_compare( get_bloginfo( 'version' ), '5.1', '<' ) ) {
-				// The following hooks are deprecated since WP 5.1 (#246).
-				add_action( 'wpmu_new_blog', array( __CLASS__, 'install_later' ) );
-				add_action( 'delete_blog', array( __CLASS__, 'uninstall_later' ) );
-			} else {
-				add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
-				add_action( 'wp_delete_site', array( __CLASS__, 'uninstall_later' ) );
-			}
+			add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
+			add_action( 'wp_delete_site', array( __CLASS__, 'uninstall_later' ) );
 
 			add_action( 'admin_init', array( __CLASS__, 'register_textdomain' ) );
 
@@ -215,19 +209,20 @@ final class Cachify {
 	/**
 	 * Plugin installation on new WPMS site.
 	 *
-	 * @param int|WP_Site $new_site New site ID or object.
+	 * @param WP_Site $new_site New site ID or object.
 	 *
 	 * @since 1.0
 	 * @since 2.4.0 supports WP_Site argument
+	 * @since 2.5.0 no longer supports int argument
 	 */
-	public static function install_later( $new_site ): void {
+	public static function install_later( WP_Site $new_site ): void {
 		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
 
 		/* Switch to blog */
-		switch_to_blog( is_int( $new_site ) ? $new_site : $new_site->blog_id );
+		switch_to_blog( $new_site->blog_id );
 
 		/* Install */
 		self::_install_backend();
@@ -284,19 +279,20 @@ final class Cachify {
 	/**
 	 * Uninstalling of the plugin for WPMS site.
 	 *
-	 * @param int|WP_Site $old_site Old site ID or object.
+	 * @param WP_Site $old_site Old site ID or object.
 	 *
 	 * @since 1.0
 	 * @since 2.4.0 supports WP_Site argument
+	 * @since 2.5.0 no longer supports int argument
 	 */
-	public static function uninstall_later( $old_site ): void {
+	public static function uninstall_later( WP_Site $old_site ): void {
 		/* No network plugin */
 		if ( ! is_plugin_active_for_network( CACHIFY_BASE ) ) {
 			return;
 		}
 
 		/* Switch to blog */
-		switch_to_blog( is_int( $old_site ) ? $old_site : $old_site->blog_id );
+		switch_to_blog( $old_site->blog_id );
 
 		/* Install */
 		self::_uninstall_backend();
