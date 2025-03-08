@@ -115,8 +115,21 @@ final class Cachify_REDIS implements Cachify_Backend {
 			return;
 		}
 
-		/* Flush */
-		@self::$_redis->flushAll();
+		/* Delete all cache entries for this site */
+		$host = wp_unslash( $_SERVER['HTTP_HOST'] );
+		$keys = self::$_redis->keys( $host . '*' );
+
+		if ( $keys ) {
+			$prefix = self::$_redis->getOption( Redis::OPT_PREFIX );
+
+			// Strip the prefix from the keys, as phpredis' unlink() will add it again.
+			$stripped_keys = array_map(
+				function ( $key ) use ( $prefix ) {
+					return preg_replace( "/^${prefix}/", '', $key );
+				}, $keys
+			);
+			self::$_redis->unlink( $stripped_keys );
+		}
 	}
 
 	/**
@@ -237,6 +250,9 @@ final class Cachify_REDIS implements Cachify_Backend {
 			if ( ! self::$_redis->isConnected() ) {
 				return false;
 			}
+
+			// Automatically prefix the Redis keys for all operations.
+			self::$_redis->setOption( Redis::OPT_PREFIX, 'cachify:' );
 		} catch ( Exception $e ) {
 			return false;
 		}
