@@ -117,7 +117,7 @@ final class Cachify {
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon' ), 90 );
 
 		/* Flush icon script */
-		add_action( 'admin_bar_menu', array( __CLASS__, 'add_flush_icon_script' ), 90 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'add_flush_icon_script' ) );
 
 		/* Flush REST endpoint */
 		add_action( 'rest_api_init', array( __CLASS__, 'add_flush_rest_endpoint' ) );
@@ -692,9 +692,6 @@ final class Cachify {
 			return;
 		}
 
-		/* Enqueue style */
-		wp_enqueue_style( 'cachify-admin-bar-flush' );
-
 		/* Print area for aria live updates */
 		echo '<span class="ab-aria-live-area screen-reader-text" aria-live="polite"></span>';
 		/* Check if the flush action was used without AJAX */
@@ -742,17 +739,18 @@ final class Cachify {
 	/**
 	 * Add a script to query the REST endpoint and animate the flush icon in admin bar menu
 	 *
-	 * @hook  mixed  cachify_user_can_flush_cache ?
-	 *
-	 * @param object $wp_admin_bar Object of menu items.
+	 * @hook cachify_user_can_flush_cache
 	 *
 	 * @since 2.4.0
 	 */
-	public static function add_flush_icon_script( $wp_admin_bar ) {
+	public static function add_flush_icon_script() {
 		/* Quit */
 		if ( ! is_admin_bar_showing() || ! apply_filters( 'cachify_user_can_flush_cache', current_user_can( 'manage_options' ) ) ) {
 			return;
 		}
+
+		/* Enqueue style */
+		wp_enqueue_style( 'cachify-admin-bar-flush' );
 
 		/* Enqueue script */
 		wp_enqueue_script( 'cachify-admin-bar-flush' );
@@ -1680,6 +1678,9 @@ final class Cachify {
 	 * @since 1.0
 	 */
 	public static function add_admin_resources( $hook ) {
+		// Add flush icon script and style to admin bar.
+		self::add_flush_icon_script();
+
 		/* Hooks check */
 		if ( 'index.php' !== $hook && 'settings_page_cachify' !== $hook ) {
 			return;
