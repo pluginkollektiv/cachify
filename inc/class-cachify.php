@@ -343,7 +343,7 @@ final class Cachify {
 			'cachify-dashboard',
 			plugins_url( 'css/dashboard.min.css', CACHIFY_FILE ),
 			array(),
-			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/dashboard.min.css' )
+			CACHIFY_VERSION
 		);
 
 		/* Register admin bar flush CSS */
@@ -351,7 +351,7 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			plugins_url( 'css/admin-bar-flush.min.css', CACHIFY_FILE ),
 			array(),
-			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'css/admin-bar-flush.min.css' )
+			CACHIFY_VERSION
 		);
 	}
 
@@ -366,7 +366,7 @@ final class Cachify {
 			'cachify-admin-bar-flush',
 			plugins_url( 'js/admin-bar-flush.min.js', CACHIFY_FILE ),
 			array(),
-			filemtime( plugin_dir_path( CACHIFY_FILE ) . 'js/admin-bar-flush.min.js' ),
+			CACHIFY_VERSION,
 			true
 		);
 	}
