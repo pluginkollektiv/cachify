@@ -7,7 +7,7 @@
  * Plugin URI:  https://cachify.pluginkollektiv.org
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Version:     2.4.1
+ * Version:     2.4.2
  * Text Domain: cachify
  *
  * @package Cachify
@@ -41,6 +41,7 @@ define( 'CACHIFY_FILE', __FILE__ );
 define( 'CACHIFY_DIR', __DIR__ );
 define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
+define( 'CACHIFY_VERSION', '2.4.2' );
 
 
 /* Hooks */

@@ -1,8 +1,14 @@
 /* global cachify_admin_bar_flush_ajax_object */
-( function() {
-	var is_flushing = false,
-		admin_bar_cachify_list_item = document.getElementById( 'wp-admin-bar-cachify' ),
-		flush_link = admin_bar_cachify_list_item.querySelector( 'a.ab-item' ),
+document.addEventListener( 'DOMContentLoaded', function() {
+	var is_flushing = false;
+	var admin_bar_cachify_list_item = document.getElementById( 'wp-admin-bar-cachify' );
+
+	if ( ! admin_bar_cachify_list_item ) {
+		// Admin bar item is not present in DOM, exit here.
+		return;
+	}
+
+	var flush_link = admin_bar_cachify_list_item.querySelector( 'a.ab-item' ),
 		fallback_url = flush_link.getAttribute( 'href' ),
 		aria_live_area = document.querySelector( '.ab-aria-live-area' );
 
@@ -80,4 +86,4 @@
 		request.setRequestHeader( 'X-WP-Nonce', cachify_admin_bar_flush_ajax_object.nonce );
 		request.send();
 	}
-}() );
+} );
