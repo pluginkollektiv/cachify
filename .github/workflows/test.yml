@@ -16,7 +16,7 @@ jobs:
             wordpress: '6.4'
           - php: '8.3'
             wordpress: 'latest'
-          - php: '8.3'
+          - php: '8.4'
             wordpress: 'nightly'
     steps:
       - name: Checkout
