@@ -121,7 +121,7 @@ class Test_Cachify extends WP_UnitTestCase {
 				'change_robots_txt' => 1,
 			)
 		);
-		new Cachify();
+		Cachify::init();
 
 		self::assertEquals(
 			$robots_txt,
@@ -137,7 +137,7 @@ class Test_Cachify extends WP_UnitTestCase {
 				'change_robots_txt' => 1,
 			)
 		);
-		new Cachify();
+		Cachify::init();
 
 		self::assertEquals(
 			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
