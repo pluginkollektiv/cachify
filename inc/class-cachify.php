@@ -76,17 +76,19 @@ final class Cachify {
 	 * Pseudo constructor
 	 *
 	 * @since 2.0.5
+	 * @deprecated Use {@link init()} instead, construction is not required.
 	 */
 	public static function instance(): self {
+		self::init();
 		return new self();
 	}
 
 	/**
-	 * Constructor
+	 * Initialize the plugin.
 	 *
-	 * @since 1.0
+	 * @since 2.5.0 Logic extracted from constructor as a replacement for "instance()" without return value.
 	 */
-	public function __construct() {
+	public static function init(): void {
 		/* Set defaults */
 		self::_set_default_vars();
 

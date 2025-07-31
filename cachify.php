@@ -49,7 +49,7 @@ add_action(
 	'plugins_loaded',
 	array(
 		'Cachify',
-		'instance',
+		'init',
 	)
 );
 register_activation_hook(
