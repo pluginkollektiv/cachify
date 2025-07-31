@@ -1077,11 +1077,6 @@ final class Cachify {
 	 * @deprecated no longer used since 2.4
 	 */
 	public static function publish_post_types( int $post_id, WP_Post $post ): void {
-		/* No post_id? */
-		if ( empty( $post_id ) || empty( $post ) ) {
-			return;
-		}
-
 		/* Post status check */
 		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
 			return;
