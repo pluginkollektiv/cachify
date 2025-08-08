@@ -13,14 +13,16 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Cachify_MEMCACHED implements Cachify_Backend {
 
+	const CACHE_METHOD_MEMCACHED = 'Memcached';
+
 	/**
 	 * Memcached-Object
 	 *
-	 * @var object
+	 * @var Memcached|null
 	 *
 	 * @since 2.0.7
 	 */
-	private static $_memcached;
+	private static $_memcached = null;
 
 	/**
 	 * Availability check
@@ -30,7 +32,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.0.7
 	 */
 	public static function is_available(): bool {
-		return class_exists( 'Memcached' )
+		return class_exists( Memcached::class )
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			&& isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
 	}
@@ -43,7 +45,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.1.2
 	 */
 	public static function stringify_method(): string {
-		return 'Memcached';
+		return self::CACHE_METHOD_MEMCACHED;
 	}
 
 	/**
@@ -195,7 +197,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
-			( $detail ? 'Memcached' : __( 'Generated', 'cachify' ) ),
+			( $detail ? self::CACHE_METHOD_MEMCACHED : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
 				current_time( 'timestamp' )
@@ -242,7 +244,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 		}
 
 		/* Already connected */
-		if ( is_object( self::$_memcached ) ) {
+		if ( ! is_null( self::$_memcached ) ) {
 			return true;
 		}
 
