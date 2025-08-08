@@ -36,7 +36,8 @@
     "phpstan/extension-installer": "^1.4",
     "phpstan/phpstan": "^1.12",
     "szepeviktor/phpstan-wordpress": "^v1.3",
-    "php-stubs/wp-cli-stubs": "^v2.12"
+    "php-stubs/wp-cli-stubs": "^v2.12",
+    "php-stubs/woocommerce-stubs": "^10.0"
   },
   "scripts": {
     "post-install-cmd": [
