@@ -224,7 +224,7 @@ final class Cachify {
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $new_site->blog_id );
+		switch_to_blog( (int) $new_site->blog_id );
 
 		/* Install */
 		self::_install_backend();
@@ -294,7 +294,7 @@ final class Cachify {
 		}
 
 		/* Switch to blog */
-		switch_to_blog( $old_site->blog_id );
+		switch_to_blog( (int) $old_site->blog_id );
 
 		/* Install */
 		self::_uninstall_backend();
@@ -956,7 +956,7 @@ final class Cachify {
 				self::flush_total_cache();
 			} else {
 				self::remove_page_cache_by_post_id(
-					get_comment( $id )->comment_post_ID
+					(int) get_comment( $id )->comment_post_ID
 				);
 			}
 		}
@@ -996,7 +996,7 @@ final class Cachify {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
-				self::remove_page_cache_by_post_id( get_comment( $id )->comment_post_ID );
+				self::remove_page_cache_by_post_id( (int) get_comment( $id )->comment_post_ID );
 			}
 		}
 	}
@@ -1033,7 +1033,7 @@ final class Cachify {
 			if ( self::$options['reset_on_comment'] ) {
 				self::flush_total_cache();
 			} else {
-				self::remove_page_cache_by_post_id( $comment->comment_post_ID );
+				self::remove_page_cache_by_post_id( (int) $comment->comment_post_ID );
 			}
 		}
 	}
