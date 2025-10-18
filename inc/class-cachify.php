@@ -25,7 +25,7 @@ final class Cachify {
 	/**
 	 * Caching method
 	 *
-	 * @var object
+	 * @var Cachify_Backend
 	 *
 	 * @since 2.0
 	 */
@@ -602,12 +602,7 @@ final class Cachify {
 		$size = self::get_cache_size();
 
 		/* Caching method */
-		$method = call_user_func(
-			array(
-				self::$method,
-				'stringify_method',
-			)
-		);
+		$method = self::$method::stringify_method();
 
 		/* Output of the cache size */
 		$cachesize = ( 0 === $size )
@@ -655,12 +650,7 @@ final class Cachify {
 		$size = get_transient( 'cachify_cache_size' );
 		if ( ! $size ) {
 			/* Read */
-			$size = (int) call_user_func(
-				array(
-					self::$method,
-					'get_stats',
-				)
-			);
+			$size = self::$method::get_stats();
 
 			/* Save */
 			set_transient(
@@ -1209,7 +1199,7 @@ final class Cachify {
 		}
 
 		$hash = self::_cache_hash( $url );
-		call_user_func( array( self::$method, 'delete_item' ), $hash, $url );
+		self::$method::delete_item( $hash, $url );
 
 		/**
 		 * Call hook for further actions after cache has been flushed for a single page.
@@ -1543,7 +1533,7 @@ final class Cachify {
 			/* MEMCACHED */
 			Cachify_MEMCACHED::clear_cache();
 		} else {
-			call_user_func( array( self::$method, 'clear_cache' ) );
+			self::$method::clear_cache();
 		}
 
 		/**
@@ -1609,11 +1599,7 @@ final class Cachify {
 			 */
 			$data = apply_filters( 'cachify_modify_output', $data, self::$method, self::_cache_hash(), self::_cache_expires() );
 
-			call_user_func(
-				array(
-					self::$method,
-					'store_item',
-				),
+			self::$method::store_item(
 				self::_cache_hash(),
 				self::_minify_cache( $data ),
 				self::_cache_expires(),
@@ -1636,13 +1622,7 @@ final class Cachify {
 		}
 
 		/* Data present in cache */
-		$cache = call_user_func(
-			array(
-				self::$method,
-				'get_item',
-			),
-			self::_cache_hash()
-		);
+		$cache = self::$method::get_item( self::_cache_hash() );
 
 		/* No cache? */
 		if ( empty( $cache ) ) {
@@ -1651,14 +1631,7 @@ final class Cachify {
 		}
 
 		/* Process cache */
-		call_user_func(
-			array(
-				self::$method,
-				'print_cache',
-			),
-			self::_signature_details(),
-			$cache
-		);
+		self::$method::print_cache( self::_signature_details(), $cache );
 	}
 
 	/**
