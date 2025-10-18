@@ -20,7 +20,7 @@ final class Cachify {
 	 *
 	 * @since 2.0
 	 */
-	private static $options;
+	private static array $options;
 
 	/**
 	 * Caching method
@@ -29,7 +29,7 @@ final class Cachify {
 	 *
 	 * @since 2.0
 	 */
-	private static $method;
+	private static Cachify_Backend $method;
 
 	/**
 	 * Whether we are on a Nginx server or not.
@@ -38,7 +38,7 @@ final class Cachify {
 	 *
 	 * @since 2.2.5
 	 */
-	private static $is_nginx;
+	private static bool $is_nginx;
 
 	/**
 	 * Method settings
