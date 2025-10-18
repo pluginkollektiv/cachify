@@ -133,12 +133,12 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return integer Directory size
+	 * @return integer Cache size in bytes.
 	 */
-	public static function get_stats(): ?int {
+	public static function get_stats(): int {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
-			return null;
+			return 0;
 		}
 
 		/* Info */
@@ -146,15 +146,15 @@ final class Cachify_REDIS implements Cachify_Backend {
 
 		/* No stats? */
 		if ( empty( $data ) ) {
-			return null;
+			return 0;
 		}
 
 		/* Empty */
 		if ( empty( $data['used_memory_dataset'] ) ) {
-			return null;
+			return 0;
 		}
 
-		return $data['used_memory_dataset'];
+		return (int) $data['used_memory_dataset'];
 	}
 
 	/**

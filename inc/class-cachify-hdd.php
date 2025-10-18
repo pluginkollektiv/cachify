@@ -142,12 +142,12 @@ final class Cachify_HDD implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return int Directory size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0
 	 */
 	public static function get_stats(): int {
-		return self::_dir_size( CACHIFY_CACHE_DIR );
+		return (int) self::_dir_size( CACHIFY_CACHE_DIR );
 	}
 
 	/**

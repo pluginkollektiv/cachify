@@ -138,7 +138,7 @@ final class Cachify_DB implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return int Column size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0
 	 */

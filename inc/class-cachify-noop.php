@@ -104,7 +104,7 @@ final class Cachify_NOOP implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return int Column size
+	 * @return integer Cache size in bytes.
 	 */
 	public static function get_stats(): int {
 		return 0;

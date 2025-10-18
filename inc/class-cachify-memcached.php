@@ -154,14 +154,14 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return mixed Cache size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0.7
 	 */
-	public static function get_stats() {
+	public static function get_stats(): int {
 		/* Server connect */
 		if ( ! self::_connect_server() ) {
-			return null;
+			return 0;
 		}
 
 		/* Info */
@@ -169,7 +169,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 
 		/* No stats? */
 		if ( empty( $data ) ) {
-			return null;
+			return 0;
 		}
 
 		/* Get first key */
@@ -177,10 +177,10 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 
 		/* Empty */
 		if ( empty( $data['bytes'] ) ) {
-			return null;
+			return 0;
 		}
 
-		return $data['bytes'];
+		return (int) $data['bytes'];
 	}
 
 	/**

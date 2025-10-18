@@ -65,4 +65,11 @@ interface Cachify_Backend {
 	 * @param string $cache       Cached content.
 	 */
 	public static function print_cache( bool $sig_detail, $cache ): void;
+
+	/**
+	 * Get the cache size
+	 *
+	 * @return integer Cache size in bytes.
+	 */
+	public static function get_stats(): int;
 }
