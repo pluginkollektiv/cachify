@@ -1,20 +1,23 @@
 <?php
 /**
- * Plugin Name: Cachify
- * Description: Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or Redis.
- * Author:      pluginkollektiv
- * Author URI:  https://pluginkollektiv.org
- * Plugin URI:  https://cachify.pluginkollektiv.org
- * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Version:     2.4.2
- * Text Domain: cachify
+ * Plugin Name:       Cachify
+ * Plugin URI:        https://cachify.pluginkollektiv.org
+ * Description:       Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or Redis.
+ * Author:            pluginkollektiv
+ * Author URI:        https://pluginkollektiv.org
+ * Version:           2.4.2
+ * Requires at least: 5.0
+ * Requires PHP:      7.4
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       cachify
  *
  * @package Cachify
  */
 
 /*
 Copyright (C)  2011-2015 Sergej Müller
+Copyright (C)  2016-2025 pluginkollektiv
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -22,22 +22,22 @@
     "forum": "https://wordpress.org/support/plugin/cachify"
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "composer/installers": "^v2"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^v1.0",
     "matthiasmullie/minify": "^1.3",
-    "phpunit/phpunit": "^7|^9",
-    "squizlabs/php_codesniffer": "^3.11",
+    "phpunit/phpunit": "^9",
+    "squizlabs/php_codesniffer": "^3.13",
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "wp-coding-standards/wpcs": "^3.2",
     "yoast/phpunit-polyfills": "^4.0",
     "phpstan/extension-installer": "^1.4",
-    "phpstan/phpstan": "^1.12",
-    "szepeviktor/phpstan-wordpress": "^v1.3",
+    "phpstan/phpstan": "^2.1",
+    "szepeviktor/phpstan-wordpress": "^v2.0",
     "php-stubs/wp-cli-stubs": "^v2.12",
-    "php-stubs/woocommerce-stubs": "^10.0"
+    "php-stubs/woocommerce-stubs": "^10.6"
   },
   "scripts": {
     "post-install-cmd": [
@@ -78,7 +78,7 @@
       "php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html tests/coverage"
     ],
     "phpstan": [
-        "phpstan analyse --memory-limit=1G"
+        "phpstan analyse --memory-limit=2G"
     ]
   },
   "config": {

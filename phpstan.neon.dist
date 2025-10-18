@@ -14,3 +14,4 @@ parameters:
     ignoreErrors:
         - '/^Constant CACHIFY_BASE not found\.$/'
         - '/^Constant DOMAIN_CURRENT_SITE not found\.$/'
+    treatPhpDocTypesAsCertain: false
