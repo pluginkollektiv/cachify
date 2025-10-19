@@ -90,7 +90,7 @@ final class Cachify {
 	 */
 	public static function init(): void {
 		/* Set defaults */
-		self::_set_default_vars();
+		self::set_default_vars();
 
 		self::$is_nginx = $GLOBALS['is_nginx'];
 
@@ -192,19 +192,19 @@ final class Cachify {
 		/* Multisite & Network */
 		if ( is_multisite() && ! empty( $_GET['networkwide'] ) ) {
 			/* Blog IDs */
-			$ids = self::_get_blog_ids();
+			$ids = self::get_blog_ids();
 
 			/* Loop over blogs */
 			foreach ( $ids as $id ) {
 				switch_to_blog( $id );
-				self::_install_backend();
+				self::install_backend();
 			}
 
 			/* Switch back */
 			restore_current_blog();
 
 		} else {
-			self::_install_backend();
+			self::install_backend();
 		}
 	}
 
@@ -227,7 +227,7 @@ final class Cachify {
 		switch_to_blog( (int) $new_site->blog_id );
 
 		/* Install */
-		self::_install_backend();
+		self::install_backend();
 
 		/* Switch back */
 		restore_current_blog();
@@ -238,7 +238,7 @@ final class Cachify {
 	 *
 	 * @since 1.0
 	 */
-	private static function _install_backend(): void {
+	private static function install_backend(): void {
 		add_option(
 			'cachify',
 			array()
@@ -263,18 +263,18 @@ final class Cachify {
 			$old = $wpdb->blogid;
 
 			/* Blog IDs */
-			$ids = self::_get_blog_ids();
+			$ids = self::get_blog_ids();
 
 			/* Loop */
 			foreach ( $ids as $id ) {
 				switch_to_blog( $id );
-				self::_uninstall_backend();
+				self::uninstall_backend();
 			}
 
 			/* Switch back */
 			switch_to_blog( $old );
 		} else {
-			self::_uninstall_backend();
+			self::uninstall_backend();
 		}
 	}
 
@@ -297,7 +297,7 @@ final class Cachify {
 		switch_to_blog( (int) $old_site->blog_id );
 
 		/* Install */
-		self::_uninstall_backend();
+		self::uninstall_backend();
 
 		/* Switch back */
 		restore_current_blog();
@@ -308,7 +308,7 @@ final class Cachify {
 	 *
 	 * @since 1.0
 	 */
-	private static function _uninstall_backend(): void {
+	private static function uninstall_backend(): void {
 		/* Option */
 		delete_option( 'cachify' );
 
@@ -323,7 +323,7 @@ final class Cachify {
 	 *
 	 * @since 1.0
 	 */
-	private static function _get_blog_ids(): array {
+	private static function get_blog_ids(): array {
 		/* Global */
 		global $wpdb;
 
@@ -383,9 +383,9 @@ final class Cachify {
 	 *
 	 * @since 2.0
 	 */
-	private static function _set_default_vars(): void {
+	private static function set_default_vars(): void {
 		/* Options */
-		self::$options = self::_get_options();
+		self::$options = self::get_options();
 
 		if ( self::METHOD_APC === self::$options['use_apc'] ) {
 			/* APC */
@@ -462,7 +462,7 @@ final class Cachify {
 	 *
 	 * @since 2.0
 	 */
-	private static function _get_options(): array {
+	private static function get_options(): array {
 		return wp_parse_args(
 			get_option( 'cachify' ),
 			array(
@@ -850,7 +850,7 @@ final class Cachify {
 			$old = $GLOBALS['wpdb']->blogid;
 
 			/* Blog IDs */
-			$ids = self::_get_blog_ids();
+			$ids = self::get_blog_ids();
 
 			/* Loop over blogs */
 			foreach ( $ids as $id ) {
@@ -1198,7 +1198,7 @@ final class Cachify {
 			return;
 		}
 
-		$hash = self::_cache_hash( $url );
+		$hash = self::cache_hash( $url );
 		self::$method::delete_item( $hash, $url );
 
 		/**
@@ -1219,7 +1219,7 @@ final class Cachify {
 	 *
 	 * @since 2.0.0
 	 */
-	private static function _cache_expires(): int {
+	private static function cache_expires(): int {
 		return HOUR_IN_SECONDS * self::$options['cache_expires'];
 	}
 
@@ -1230,7 +1230,7 @@ final class Cachify {
 	 *
 	 * @since 2.3.0
 	 */
-	private static function _signature_details(): bool {
+	private static function signature_details(): bool {
 		return 1 === self::$options['sig_detail'];
 	}
 
@@ -1244,7 +1244,7 @@ final class Cachify {
 	 * @since 0.1
 	 * @since 2.0
 	 */
-	private static function _cache_hash( string $url = '' ): string {
+	private static function cache_hash( string $url = '' ): string {
 		$prefix = is_ssl() ? 'https-' : '';
 
 		if ( empty( $url ) ) {
@@ -1268,7 +1268,7 @@ final class Cachify {
 	 * @since 0.9.1
 	 * @since 1.0
 	 */
-	private static function _preg_split( string $input ): array {
+	private static function preg_split( string $input ): array {
 		return (array) preg_split( '/,/', $input, -1, PREG_SPLIT_NO_EMPTY );
 	}
 
@@ -1279,7 +1279,7 @@ final class Cachify {
 	 *
 	 * @since 0.6
 	 */
-	private static function _is_index(): bool {
+	private static function is_index(): bool {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		return basename( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) === 'index.php';
 	}
@@ -1291,7 +1291,7 @@ final class Cachify {
 	 *
 	 * @since 0.9.1
 	 */
-	private static function _is_mobile(): bool {
+	private static function is_mobile(): bool {
 		$templatedir = get_template_directory();
 		return ( strpos( $templatedir, 'wptouch' ) || strpos( $templatedir, 'carrington' ) || strpos( $templatedir, 'jetpack' ) || strpos( $templatedir, 'handheld' ) );
 	}
@@ -1303,7 +1303,7 @@ final class Cachify {
 	 *
 	 * @since 2.0.0
 	 */
-	private static function _is_logged_in(): bool {
+	private static function is_logged_in(): bool {
 		/* Logged in */
 		if ( is_user_logged_in() ) {
 			return true;
@@ -1364,7 +1364,7 @@ final class Cachify {
 	 *
 	 * @since 0.2
 	 */
-	private static function _skip_cache(): bool {
+	private static function skip_cache(): bool {
 
 		/* Plugin options */
 		$options = self::$options;
@@ -1378,12 +1378,12 @@ final class Cachify {
 		}
 
 		/* Only cache requests routed through main index.php (skip AJAX, WP-Cron, WP-CLI etc.) */
-		if ( ! self::_is_index() ) {
+		if ( ! self::is_index() ) {
 			return true;
 		}
 
 		/* Logged in */
-		if ( $options['only_guests'] && self::_is_logged_in() ) {
+		if ( $options['only_guests'] && self::is_logged_in() ) {
 			return true;
 		}
 
@@ -1403,13 +1403,13 @@ final class Cachify {
 		}
 
 		/* Mobile request */
-		if ( self::_is_mobile() ) {
+		if ( self::is_mobile() ) {
 			return true;
 		}
 
 		/* Post IDs */
 		if ( $options['without_ids'] && is_singular() ) {
-			$without_ids = array_map( 'intval', self::_preg_split( $options['without_ids'] ) );
+			$without_ids = array_map( 'intval', self::preg_split( $options['without_ids'] ) );
 			if ( in_array( $GLOBALS['wp_query']->get_queried_object_id(), $without_ids, true ) ) {
 				return true;
 			}
@@ -1417,7 +1417,7 @@ final class Cachify {
 
 		/* User Agents */
 		if ( $options['without_agents'] && isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-			$user_agent_strings = self::_preg_split( $options['without_agents'] );
+			$user_agent_strings = self::preg_split( $options['without_agents'] );
 			foreach ( $user_agent_strings as $user_agent_string ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				if ( strpos( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ), $user_agent_string ) !== false ) {
@@ -1452,7 +1452,7 @@ final class Cachify {
 	 *
 	 * @since 0.9.2
 	 */
-	private static function _minify_cache( string $data ): string {
+	private static function minify_cache( string $data ): string {
 		/* Disabled? */
 		if ( ! self::$options['compress_html'] ) {
 			return $data;
@@ -1581,8 +1581,8 @@ final class Cachify {
 			200 === http_response_code(),
 			$data,
 			self::$method,
-			self::_cache_hash(),
-			self::_cache_expires()
+			self::cache_hash(),
+			self::cache_expires()
 		);
 
 		/* Save? */
@@ -1597,13 +1597,13 @@ final class Cachify {
 			 *
 			 * @since 2.4.0
 			 */
-			$data = apply_filters( 'cachify_modify_output', $data, self::$method, self::_cache_hash(), self::_cache_expires() );
+			$data = apply_filters( 'cachify_modify_output', $data, self::$method, self::cache_hash(), self::cache_expires() );
 
 			self::$method::store_item(
-				self::_cache_hash(),
-				self::_minify_cache( $data ),
-				self::_cache_expires(),
-				self::_signature_details()
+				self::cache_hash(),
+				self::minify_cache( $data ),
+				self::cache_expires(),
+				self::signature_details()
 			);
 		}
 
@@ -1617,12 +1617,12 @@ final class Cachify {
 	 */
 	public static function manage_cache(): void {
 		/* No caching? */
-		if ( self::_skip_cache() ) {
+		if ( self::skip_cache() ) {
 			return;
 		}
 
 		/* Data present in cache */
-		$cache = self::$method::get_item( self::_cache_hash() );
+		$cache = self::$method::get_item( self::cache_hash() );
 
 		/* No cache? */
 		if ( empty( $cache ) ) {
@@ -1631,7 +1631,7 @@ final class Cachify {
 		}
 
 		/* Process cache */
-		self::$method::print_cache( self::_signature_details(), $cache );
+		self::$method::print_cache( self::signature_details(), $cache );
 	}
 
 	/**
@@ -1769,8 +1769,8 @@ final class Cachify {
 	 * @since 1.0
 	 */
 	public static function options_page(): void {
-		$options      = self::_get_options();
-		$cachify_tabs = self::_get_tabs( $options );
+		$options      = self::get_options();
+		$cachify_tabs = self::get_tabs( $options );
 		$current_tab  = isset( $_GET['cachify_tab'] ) && isset( $cachify_tabs[ $_GET['cachify_tab'] ] )
 			? sanitize_text_field( wp_unslash( $_GET['cachify_tab'] ) )
 			: 'settings';
@@ -1821,7 +1821,7 @@ final class Cachify {
 	 *
 	 * @since 2.3.0
 	 */
-	private static function _get_tabs( array $options ): array {
+	private static function get_tabs( array $options ): array {
 		/* Settings tab is always present */
 		$tabs = array(
 			'settings' => array(

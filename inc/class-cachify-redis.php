@@ -20,7 +20,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 *
 	 * @var Redis|null
 	 */
-	private static $_redis;
+	private static $redis;
 
 	/**
 	 * Availability check
@@ -56,14 +56,14 @@ final class Cachify_REDIS implements Cachify_Backend {
 		}
 
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Add item */
-		self::$_redis->set(
-			self::_file_path(),
-			$data . self::_cache_signature( $sig_detail ),
+		self::$redis->set(
+			self::file_path(),
+			$data . self::cache_signature( $sig_detail ),
 			$lifetime
 		);
 	}
@@ -76,13 +76,13 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 */
 	public static function get_item( string $hash ) {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return null;
 		}
 
 		/* Get item */
-		return self::$_redis->get(
-			self::_file_path()
+		return self::$redis->get(
+			self::file_path()
 		);
 	}
 
@@ -94,13 +94,13 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 */
 	public static function delete_item( string $hash, string $url ): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Delete */
-		self::$_redis->del(
-			self::_file_path( $url )
+		self::$redis->del(
+			self::file_path( $url )
 		);
 	}
 
@@ -111,12 +111,12 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 */
 	public static function clear_cache(): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Flush */
-		@self::$_redis->flushAll();
+		@self::$redis->flushAll();
 	}
 
 	/**
@@ -137,12 +137,12 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 */
 	public static function get_stats(): int {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return 0;
 		}
 
 		/* Info */
-		$data = self::$_redis->info( 'MEMORY' );
+		$data = self::$redis->info( 'MEMORY' );
 
 		/* No stats? */
 		if ( empty( $data ) ) {
@@ -163,7 +163,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param bool $detail Show details in signature.
 	 * @return string Signature string
 	 */
-	private static function _cache_signature( bool $detail ): string {
+	private static function cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
@@ -181,7 +181,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param string|null $path Request URI or permalink [optional].
 	 * @return string Path to cache file
 	 */
-	private static function _file_path( ?string $path = null ): string {
+	private static function file_path( ?string $path = null ): string {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -200,19 +200,19 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 *
 	 * @return boolean TRUE on success
 	 */
-	private static function _connect_server(): bool {
+	private static function connect_server(): bool {
 		/* Not enabled? */
 		if ( ! self::is_available() ) {
 			return false;
 		}
 
 		/* Have object and it thinks it's connected to a server */
-		if ( is_object( self::$_redis ) && self::$_redis->isConnected() ) {
+		if ( is_object( self::$redis ) && self::$redis->isConnected() ) {
 			return true;
 		}
 
 		/* Init */
-		self::$_redis = new Redis();
+		self::$redis = new Redis();
 
 		/**
 		 * Filter hook to adjust Redis connection parameters
@@ -232,9 +232,9 @@ final class Cachify_REDIS implements Cachify_Backend {
 
 		// Establish connection.
 		try {
-			self::$_redis->connect( ...$con );
+			self::$redis->connect( ...$con );
 
-			if ( ! self::$_redis->isConnected() ) {
+			if ( ! self::$redis->isConnected() ) {
 				return false;
 			}
 		} catch ( Exception $e ) {

@@ -22,13 +22,13 @@
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="5.1"/>
     <rule ref="WordPress">
-        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
-        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
         <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
     </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
-            <property name="text_domain" type="array" value="cachify"/>
+            <property name="text_domain" type="array">
+                <element value="cachify"/>
+            </property>
         </properties>
     </rule>
 

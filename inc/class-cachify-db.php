@@ -59,9 +59,9 @@ final class Cachify_DB implements Cachify_Backend {
 			array(
 				'data' => $data,
 				'meta' => array(
-					'queries' => self::_page_queries(),
-					'timer'   => self::_page_timer(),
-					'memory'  => self::_page_memory(),
+					'queries' => self::page_queries(),
+					'timer'   => self::page_timer(),
+					'memory'  => self::page_memory(),
 					'time'    => current_time( 'timestamp' ),
 				),
 			),
@@ -128,7 +128,7 @@ final class Cachify_DB implements Cachify_Backend {
 		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo self::_cache_signature( $sig_detail, $cache['meta'] );
+			echo self::cache_signature( $sig_detail, $cache['meta'] );
 		}
 
 		/* Quit */
@@ -165,7 +165,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 * @since 2.0
 	 * @since 2.3.0 added $detail parameter
 	 */
-	private static function _cache_signature( bool $detail, $meta ): string {
+	private static function cache_signature( bool $detail, $meta ): string {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
 			return '';
@@ -188,9 +188,9 @@ final class Cachify_DB implements Cachify_Backend {
 				),
 				sprintf(
 					'With Cachify: %d DB queries, %s seconds, %s',
-					self::_page_queries(),
-					self::_page_timer(),
-					self::_page_memory()
+					self::page_queries(),
+					self::page_timer(),
+					self::page_memory()
 				)
 			);
 		} else {
@@ -213,7 +213,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.1
 	 */
-	private static function _page_queries(): int {
+	private static function page_queries(): int {
 		return $GLOBALS['wpdb']->num_queries;
 	}
 
@@ -224,7 +224,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.1
 	 */
-	private static function _page_timer(): string {
+	private static function page_timer(): string {
 		return timer_stop( 0, 2 );
 	}
 
@@ -235,7 +235,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.7
 	 */
-	private static function _page_memory(): string {
+	private static function page_memory(): string {
 		return ( function_exists( 'memory_get_usage' ) ? size_format( memory_get_usage(), 2 ) : 0 );
 	}
 }
