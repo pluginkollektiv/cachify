@@ -62,9 +62,9 @@ jobs:
           php-version: '8.2'
           tools: composer
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: 24
       - name: Code style checks for PHP and CSS
         run: |
           composer install
