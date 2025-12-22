@@ -116,6 +116,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 		}
 
 		/* Delete all cache entries for this site */
+
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$host = wp_unslash( $_SERVER['HTTP_HOST'] );
 		$keys = self::$redis->keys( $host . '*' );
