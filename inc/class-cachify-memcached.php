@@ -13,14 +13,16 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Cachify_MEMCACHED implements Cachify_Backend {
 
+	const CACHE_METHOD_MEMCACHED = 'Memcached';
+
 	/**
 	 * Memcached-Object
 	 *
-	 * @var object
+	 * @var Memcached|null
 	 *
 	 * @since 2.0.7
 	 */
-	private static $_memcached;
+	private static $memcached = null;
 
 	/**
 	 * Availability check
@@ -29,8 +31,8 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function is_available() {
-		return class_exists( 'Memcached' )
+	public static function is_available(): bool {
+		return class_exists( Memcached::class )
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			&& isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( strtolower( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false;
 	}
@@ -42,8 +44,8 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.1.2
 	 */
-	public static function stringify_method() {
-		return 'Memcached';
+	public static function stringify_method(): string {
+		return self::CACHE_METHOD_MEMCACHED;
 	}
 
 	/**
@@ -57,7 +59,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.0.7
 	 * @since 2.3.0 added $sig_detail parameter
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -65,14 +67,14 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 		}
 
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Add item */
-		self::$_memcached->set(
-			self::_file_path(),
-			$data . self::_cache_signature( $sig_detail ),
+		self::$memcached->set(
+			self::file_path(),
+			$data . self::cache_signature( $sig_detail ),
 			$lifetime
 		);
 	}
@@ -86,15 +88,15 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return null;
 		}
 
 		/* Get item */
-		return self::$_memcached->get(
-			self::_file_path()
+		return self::$memcached->get(
+			self::file_path()
 		);
 	}
 
@@ -106,15 +108,15 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function delete_item( $hash, $url = '' ) {
+	public static function delete_item( string $hash, string $url = '' ): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Delete */
-		self::$_memcached->delete(
-			self::_file_path( $url )
+		self::$memcached->delete(
+			self::file_path( $url )
 		);
 	}
 
@@ -123,18 +125,18 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
-		if ( ! self::$_memcached instanceof Memcached ) {
+		if ( ! self::$memcached instanceof Memcached ) {
 			return;
 		}
 
 		/* Flush */
-		self::$_memcached->flush();
+		self::$memcached->flush();
 	}
 
 	/**
@@ -145,29 +147,29 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		// Not supported.
 	}
 
 	/**
 	 * Get the cache size
 	 *
-	 * @return mixed Cache size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0.7
 	 */
-	public static function get_stats() {
+	public static function get_stats(): int {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
-			return null;
+		if ( ! self::connect_server() ) {
+			return 0;
 		}
 
 		/* Info */
-		$data = self::$_memcached->getStats();
+		$data = self::$memcached->getStats();
 
 		/* No stats? */
 		if ( empty( $data ) ) {
-			return null;
+			return 0;
 		}
 
 		/* Get first key */
@@ -175,10 +177,10 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 
 		/* Empty */
 		if ( empty( $data['bytes'] ) ) {
-			return null;
+			return 0;
 		}
 
-		return $data['bytes'];
+		return (int) $data['bytes'];
 	}
 
 	/**
@@ -191,11 +193,11 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 * @since 2.0.7
 	 * @since 2.3.0 added $detail parameter
 	 */
-	private static function _cache_signature( $detail ) {
+	private static function cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
-			( $detail ? 'Memcached' : __( 'Generated', 'cachify' ) ),
+			( $detail ? self::CACHE_METHOD_MEMCACHED : __( 'Generated', 'cachify' ) ),
 			date_i18n(
 				'd.m.Y H:i:s',
 				current_time( 'timestamp' )
@@ -206,13 +208,13 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	/**
 	 * Path of cache file
 	 *
-	 * @param string $path Request URI or permalink [optional].
+	 * @param string|null $path Request URI or permalink [optional].
 	 *
 	 * @return string Path to cache file
 	 *
 	 * @since 2.0.7
 	 */
-	private static function _file_path( $path = null ) {
+	private static function file_path( ?string $path = null ): string {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -235,27 +237,27 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	private static function _connect_server() {
+	private static function connect_server(): bool {
 		/* Not enabled? */
 		if ( ! self::is_available() ) {
 			return false;
 		}
 
 		/* Already connected */
-		if ( is_object( self::$_memcached ) ) {
+		if ( ! is_null( self::$memcached ) ) {
 			return true;
 		}
 
 		/* Init */
-		self::$_memcached = new Memcached();
+		self::$memcached = new Memcached();
 
 		/* Set options */
 		if ( defined( 'HHVM_VERSION' ) ) {
-			self::$_memcached->setOption( Memcached::OPT_COMPRESSION, false );
-			self::$_memcached->setOption( Memcached::OPT_BUFFER_WRITES, true );
-			self::$_memcached->setOption( Memcached::OPT_BINARY_PROTOCOL, true );
+			self::$memcached->setOption( Memcached::OPT_COMPRESSION, false );
+			self::$memcached->setOption( Memcached::OPT_BUFFER_WRITES, true );
+			self::$memcached->setOption( Memcached::OPT_BINARY_PROTOCOL, true );
 		} else {
-			self::$_memcached->setOptions(
+			self::$memcached->setOptions(
 				array(
 					Memcached::OPT_COMPRESSION     => false,
 					Memcached::OPT_BUFFER_WRITES   => true,
@@ -265,7 +267,7 @@ final class Cachify_MEMCACHED implements Cachify_Backend {
 		}
 
 		/* Connect */
-		self::$_memcached->addServers(
+		self::$memcached->addServers(
 			(array) apply_filters(
 				'cachify_memcached_servers',
 				array(

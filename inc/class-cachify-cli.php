@@ -21,7 +21,7 @@ final class Cachify_CLI {
 	 *
 	 * @since 2.3.0
 	 */
-	public static function flush_cache( $args, $assoc_args ) {
+	public static function flush_cache( array $args, array $assoc_args ): void {
 		// Set default arguments.
 		$assoc_args = wp_parse_args( $assoc_args, array( 'all-methods' => false ) );
 
@@ -42,7 +42,7 @@ final class Cachify_CLI {
 	 *
 	 * @since 2.3.0
 	 */
-	public static function get_cache_size( $args, $assoc_args ) {
+	public static function get_cache_size( array $args, array $assoc_args ): void {
 		// Set default arguments.
 		$assoc_args = wp_parse_args( $assoc_args, array( 'raw' => false ) );
 
@@ -62,7 +62,7 @@ final class Cachify_CLI {
 	 *
 	 * @since 2.3.0
 	 */
-	public static function add_commands() {
+	public static function add_commands(): void {
 		// Add flush command.
 		WP_CLI::add_command(
 			'cachify flush',

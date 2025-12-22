@@ -20,7 +20,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		$option = get_option( 'permalink_structure' );
 		return ! empty( $option );
 	}
@@ -32,7 +32,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.4.0
 	 */
-	public static function is_gzip_enabled() {
+	public static function is_gzip_enabled(): bool {
 		if ( ! function_exists( 'gzencode' ) ) {
 			// GZip is not available on the system.
 			return false;
@@ -53,7 +53,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.1.2
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'HDD';
 	}
 
@@ -68,7 +68,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 * @since 2.0
 	 * @since 2.3.0 added $sig_details parameter
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -76,8 +76,8 @@ final class Cachify_HDD implements Cachify_Backend {
 		}
 
 		/* Store data */
-		self::_create_files(
-			$data . self::_cache_signature( $sig_detail )
+		self::create_files(
+			$data . self::cache_signature( $sig_detail )
 		);
 	}
 
@@ -89,9 +89,9 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		return is_readable(
-			self::_file_html()
+			self::file_html()
 		);
 	}
 
@@ -103,9 +103,9 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function delete_item( $hash, $url ) {
-		self::_clear_dir(
-			self::_file_path( $url )
+	public static function delete_item( string $hash, string $url ): void {
+		self::clear_dir(
+			self::file_path( $url )
 		);
 	}
 
@@ -114,8 +114,8 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function clear_cache() {
-		self::_clear_dir(
+	public static function clear_cache(): void {
+		self::clear_dir(
 			CACHIFY_CACHE_DIR,
 			true
 		);
@@ -129,8 +129,8 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
-		$filename = self::_file_html();
+	public static function print_cache( bool $sig_detail, $cache ): void {
+		$filename = self::file_html();
 		$size     = is_readable( $filename ) ? readfile( $filename ) : false;
 
 		if ( ! empty( $size ) ) {
@@ -142,12 +142,12 @@ final class Cachify_HDD implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return int Directory size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0
 	 */
-	public static function get_stats() {
-		return self::_dir_size( CACHIFY_CACHE_DIR );
+	public static function get_stats(): int {
+		return (int) self::dir_size( CACHIFY_CACHE_DIR );
 	}
 
 	/**
@@ -160,7 +160,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 * @since 2.0
 	 * @since 2.3.0 added $detail parameter
 	 */
-	private static function _cache_signature( $detail ) {
+	private static function cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
@@ -179,8 +179,8 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	private static function _create_files( $data ) {
-		$file_path = self::_file_path();
+	private static function create_files( string $data ): void {
+		$file_path = self::file_path();
 
 		/* Create directory */
 		if ( ! wp_mkdir_p( $file_path ) ) {
@@ -188,7 +188,7 @@ final class Cachify_HDD implements Cachify_Backend {
 			return;
 		}
 		/* Write to file */
-		self::_create_file( self::_file_html( $file_path ), $data );
+		self::create_file( self::file_html( $file_path ), $data );
 
 		/**
 		 * Filter that allows to enable/disable gzip file creation
@@ -196,7 +196,7 @@ final class Cachify_HDD implements Cachify_Backend {
 		 * @param bool $create_gzip_files Whether to create gzip files. Default is `true`
 		 */
 		if ( self::is_gzip_enabled() ) {
-			self::_create_file( self::_file_gzip( $file_path ), gzencode( $data, 9 ) );
+			self::create_file( self::file_gzip( $file_path ), gzencode( $data, 9 ) );
 		}
 	}
 
@@ -208,7 +208,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	private static function _create_file( $file, $data ) {
+	private static function create_file( string $file, string $data ): void {
 		/* Writable? */
 		$handle = @fopen( $file, 'wb' );
 		if ( ! $handle ) {
@@ -237,7 +237,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	private static function _clear_dir( $dir, $recursive = false ) {
+	private static function clear_dir( string $dir, bool $recursive = false ): void {
 		// Remove trailing slash.
 		$dir = untrailingslashit( $dir );
 
@@ -260,19 +260,19 @@ final class Cachify_HDD implements Cachify_Backend {
 			if ( is_dir( $object ) ) {
 				if ( $recursive ) {
 					// Recursively clear the directory.
-					self::_clear_dir( $object, $recursive );
-				} elseif ( self::_user_can_delete( $object ) && 0 === count( glob( trailingslashit( $object ) . '*' ) ) ) {
+					self::clear_dir( $object, $recursive );
+				} elseif ( self::user_can_delete( $object ) && 0 === count( glob( trailingslashit( $object ) . '*' ) ) ) {
 					// Delete the directory, if empty.
 					@rmdir( $object );
 				}
-			} elseif ( self::_user_can_delete( $object ) ) {
+			} elseif ( self::user_can_delete( $object ) ) {
 				// Delete the file.
 				unlink( $object );
 			}
 		}
 
 		// Remove directory, if empty.
-		if ( self::_user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
+		if ( self::user_can_delete( $dir ) && 0 === count( glob( trailingslashit( $dir ) . '*' ) ) ) {
 			@rmdir( $dir );
 		}
 
@@ -289,7 +289,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function _dir_size( $dir = '.' ) {
+	private static function dir_size( string $dir = '.' ) {
 		/* Is directory? */
 		if ( ! is_dir( $dir ) ) {
 			return false;
@@ -316,7 +316,7 @@ final class Cachify_HDD implements Cachify_Backend {
 
 			/* Directory or file */
 			if ( is_dir( $object ) ) {
-				$size += self::_dir_size( $object );
+				$size += self::dir_size( $object );
 			} else {
 				$size += filesize( $object );
 			}
@@ -328,13 +328,13 @@ final class Cachify_HDD implements Cachify_Backend {
 	/**
 	 * Path to cache file
 	 *
-	 * @param string $path Request URI or permalink [optional].
+	 * @param string|null $path Request URI or permalink [optional].
 	 *
 	 * @return string Path to cache file
 	 *
 	 * @since 2.0
 	 */
-	private static function _file_path( $path = null ) {
+	private static function file_path( ?string $path = null ): string {
 		$prefix = is_ssl() ? 'https-' : '';
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
@@ -366,8 +366,8 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	private static function _file_html( $file_path = '' ) {
-		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html';
+	private static function file_html( string $file_path = '' ): string {
+		return ( empty( $file_path ) ? self::file_path() : $file_path ) . 'index.html';
 	}
 
 	/**
@@ -379,8 +379,8 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	private static function _file_gzip( $file_path = '' ) {
-		return ( empty( $file_path ) ? self::_file_path() : $file_path ) . 'index.html.gz';
+	private static function file_gzip( string $file_path = '' ): string {
+		return ( empty( $file_path ) ? self::file_path() : $file_path ) . 'index.html.gz';
 	}
 
 	/**
@@ -390,7 +390,7 @@ final class Cachify_HDD implements Cachify_Backend {
 	 *
 	 * @return bool
 	 */
-	private static function _user_can_delete( $file ) {
+	private static function user_can_delete( string $file ): bool {
 		if ( ! is_file( $file ) && ! is_dir( $file ) ) {
 			return false;
 		}

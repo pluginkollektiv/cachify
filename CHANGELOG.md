@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.4.2
+
+* Fix: Missing dependencies shown in Query Monitor (#312) (#326)
+* Maintenance: Tested up to WordPress 6.8
+
 ## 2.4.1
 
 * Fix: validation of Redis context parameters array in server hook no longer fails (#315) (#317)

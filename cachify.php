@@ -7,7 +7,7 @@
  * Plugin URI:  https://cachify.pluginkollektiv.org
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Version:     2.4.1
+ * Version:     2.4.2
  * Text Domain: cachify
  *
  * @package Cachify
@@ -41,6 +41,7 @@ define( 'CACHIFY_FILE', __FILE__ );
 define( 'CACHIFY_DIR', __DIR__ );
 define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
+define( 'CACHIFY_VERSION', '2.4.2' );
 
 
 /* Hooks */
@@ -48,7 +49,7 @@ add_action(
 	'plugins_loaded',
 	array(
 		'Cachify',
-		'instance',
+		'init',
 	)
 );
 register_activation_hook(
@@ -90,7 +91,7 @@ spl_autoload_register( 'cachify_autoload' );
  *
  * @param string $class_name the class name.
  */
-function cachify_autoload( $class_name ) {
+function cachify_autoload( string $class_name ): void {
 	if ( in_array( $class_name, array( 'Cachify', 'Cachify_Backend', 'Cachify_CLI', 'Cachify_DB', 'Cachify_HDD', 'Cachify_MEMCACHED', 'Cachify_NOOP', 'Cachify_REDIS' ), true ) ) {
 		require_once sprintf(
 			'%s/inc/class-%s.php',

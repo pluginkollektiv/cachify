@@ -20,35 +20,35 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 *
 	 * @var Redis|null
 	 */
-	private static $_redis;
+	private static $redis;
 
 	/**
 	 * Availability check
 	 *
-	 * @return  boolean  true/false  TRUE when installed
+	 * @return boolean TRUE when installed
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		return class_exists( 'Redis' );
 	}
 
 	/**
 	 * Caching method as string
 	 *
-	 * @return  string  Caching method
+	 * @return string Caching method
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'Redis';
 	}
 
 	/**
 	 * Store item in cache
 	 *
-	 * @param   string  $hash        Hash  of the entry [ignored].
-	 * @param   string  $data        Content of the entry.
-	 * @param   integer $lifetime    Lifetime of the entry [ignored].
-	 * @param   bool    $sig_detail  Show details in signature.
+	 * @param string  $hash       Hash  of the entry [ignored].
+	 * @param string  $data       Content of the entry.
+	 * @param integer $lifetime   Lifetime of the entry [ignored].
+	 * @param bool    $sig_detail Show details in signature.
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -56,14 +56,14 @@ final class Cachify_REDIS implements Cachify_Backend {
 		}
 
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Add item */
-		self::$_redis->set(
-			self::_file_path(),
-			$data . self::_cache_signature( $sig_detail ),
+		self::$redis->set(
+			self::file_path(),
+			$data . self::cache_signature( $sig_detail ),
 			$lifetime
 		);
 	}
@@ -71,18 +71,18 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Read item from cache
 	 *
-	 * @param   string $hash  Hash of the entry.
-	 * @return  mixed         Content of the entry
+	 * @param string $hash Hash of the entry.
+	 * @return mixed Content of the entry
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return null;
 		}
 
 		/* Get item */
-		return self::$_redis->get(
-			self::_file_path()
+		return self::$redis->get(
+			self::file_path()
 		);
 	}
 
@@ -92,15 +92,15 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param   string $hash  Hash of the entry [ignored].
 	 * @param   string $url   URL of the entry.
 	 */
-	public static function delete_item( $hash, $url ) {
+	public static function delete_item( string $hash, string $url ): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Delete */
-		self::$_redis->del(
-			self::_file_path( $url )
+		self::$redis->del(
+			self::file_path( $url )
 		);
 	}
 
@@ -109,19 +109,19 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 *
 	 * @return void
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
+		if ( ! self::connect_server() ) {
 			return;
 		}
 
 		/* Delete all cache entries for this site */
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$host = wp_unslash( $_SERVER['HTTP_HOST'] );
-		$keys = self::$_redis->keys( $host . '*' );
+		$keys = self::$redis->keys( $host . '*' );
 
 		if ( $keys ) {
-			$prefix = self::$_redis->getOption( Redis::OPT_PREFIX );
+			$prefix = self::$redis->getOption( Redis::OPT_PREFIX );
 
 			// Strip the prefix from the keys, as phpredis' unlink() will add it again.
 			$stripped_keys = array_map(
@@ -130,7 +130,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 				},
 				$keys
 			);
-			self::$_redis->unlink( $stripped_keys );
+			self::$redis->unlink( $stripped_keys );
 		}
 	}
 
@@ -140,7 +140,7 @@ final class Cachify_REDIS implements Cachify_Backend {
 	 * @param bool   $sig_detail  Show details in signature.
 	 * @param string $cache       Cached content.
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		echo $cache;    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit;
 	}
@@ -148,37 +148,37 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return  integer  Directory size
+	 * @return integer Cache size in bytes.
 	 */
-	public static function get_stats() {
+	public static function get_stats(): int {
 		/* Server connect */
-		if ( ! self::_connect_server() ) {
-			return null;
+		if ( ! self::connect_server() ) {
+			return 0;
 		}
 
 		/* Info */
-		$data = self::$_redis->info( 'MEMORY' );
+		$data = self::$redis->info( 'MEMORY' );
 
 		/* No stats? */
 		if ( empty( $data ) ) {
-			return null;
+			return 0;
 		}
 
 		/* Empty */
 		if ( empty( $data['used_memory_dataset'] ) ) {
-			return null;
+			return 0;
 		}
 
-		return $data['used_memory_dataset'];
+		return (int) $data['used_memory_dataset'];
 	}
 
 	/**
 	 * Generate signature
 	 *
-	 * @param   bool $detail  Show details in signature.
-	 * @return  string        Signature string
+	 * @param bool $detail Show details in signature.
+	 * @return string Signature string
 	 */
-	private static function _cache_signature( $detail ) {
+	private static function cache_signature( bool $detail ): string {
 		return sprintf(
 			"\n\n<!-- %s\n%s @ %s -->",
 			'Cachify | https://cachify.pluginkollektiv.org',
@@ -193,10 +193,10 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Path of cache file
 	 *
-	 * @param   string $path  Request URI or permalink [optional].
-	 * @return  string        Path to cache file
+	 * @param string|null $path Request URI or permalink [optional].
+	 * @return string Path to cache file
 	 */
-	private static function _file_path( $path = null ) {
+	private static function file_path( ?string $path = null ): string {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$path_parts = wp_parse_url( $path ? $path : wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -213,21 +213,21 @@ final class Cachify_REDIS implements Cachify_Backend {
 	/**
 	 * Connect to Redis server
 	 *
-	 * @return  boolean  true/false  TRUE on success
+	 * @return boolean TRUE on success
 	 */
-	private static function _connect_server() {
+	private static function connect_server(): bool {
 		/* Not enabled? */
 		if ( ! self::is_available() ) {
 			return false;
 		}
 
 		/* Have object and it thinks it's connected to a server */
-		if ( is_object( self::$_redis ) && self::$_redis->isConnected() ) {
+		if ( is_object( self::$redis ) && self::$redis->isConnected() ) {
 			return true;
 		}
 
 		/* Init */
-		self::$_redis = new Redis();
+		self::$redis = new Redis();
 
 		/**
 		 * Filter hook to adjust Redis connection parameters
@@ -247,14 +247,14 @@ final class Cachify_REDIS implements Cachify_Backend {
 
 		// Establish connection.
 		try {
-			self::$_redis->connect( ...$con );
+			self::$redis->connect( ...$con );
 
-			if ( ! self::$_redis->isConnected() ) {
+			if ( ! self::$redis->isConnected() ) {
 				return false;
 			}
 
 			// Automatically prefix the Redis keys for all operations.
-			self::$_redis->setOption( Redis::OPT_PREFIX, 'cachify:' );
+			self::$redis->setOption( Redis::OPT_PREFIX, 'cachify:' );
 		} catch ( Exception $e ) {
 			return false;
 		}

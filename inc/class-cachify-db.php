@@ -20,7 +20,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.0.7
 	 */
-	public static function is_available() {
+	public static function is_available(): bool {
 		return true;
 	}
 
@@ -31,7 +31,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.1.2
 	 */
-	public static function stringify_method() {
+	public static function stringify_method(): string {
 		return 'DB';
 	}
 
@@ -45,7 +45,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function store_item( $hash, $data, $lifetime, $sig_detail ) {
+	public static function store_item( string $hash, string $data, int $lifetime, bool $sig_detail ): void {
 		/* Do not store empty data. */
 		if ( empty( $data ) ) {
 			trigger_error( __METHOD__ . ': Empty input.', E_USER_WARNING );
@@ -59,9 +59,9 @@ final class Cachify_DB implements Cachify_Backend {
 			array(
 				'data' => $data,
 				'meta' => array(
-					'queries' => self::_page_queries(),
-					'timer'   => self::_page_timer(),
-					'memory'  => self::_page_memory(),
+					'queries' => self::page_queries(),
+					'timer'   => self::page_timer(),
+					'memory'  => self::page_memory(),
 					'time'    => current_time( 'timestamp' ),
 				),
 			),
@@ -78,7 +78,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function get_item( $hash ) {
+	public static function get_item( string $hash ) {
 		return get_transient( $hash );
 	}
 
@@ -90,7 +90,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function delete_item( $hash, $url = '' ) {
+	public static function delete_item( string $hash, string $url = '' ): void {
 		delete_transient( $hash );
 	}
 
@@ -99,7 +99,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 2.0
 	 */
-	public static function clear_cache() {
+	public static function clear_cache(): void {
 		/* Init */
 		global $wpdb;
 
@@ -116,7 +116,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 * @since 2.0
 	 * @since 2.3.0 added $sig_detail parameter
 	 */
-	public static function print_cache( $sig_detail, $cache ) {
+	public static function print_cache( bool $sig_detail, $cache ): void {
 		/* No array? */
 		if ( ! is_array( $cache ) ) {
 			return;
@@ -128,7 +128,7 @@ final class Cachify_DB implements Cachify_Backend {
 		/* Signature - might contain runtime information, so it's generated at this point */
 		if ( isset( $cache['meta'] ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo self::_cache_signature( $sig_detail, $cache['meta'] );
+			echo self::cache_signature( $sig_detail, $cache['meta'] );
 		}
 
 		/* Quit */
@@ -138,11 +138,11 @@ final class Cachify_DB implements Cachify_Backend {
 	/**
 	 * Get the cache size
 	 *
-	 * @return int Column size
+	 * @return integer Cache size in bytes.
 	 *
 	 * @since 2.0
 	 */
-	public static function get_stats() {
+	public static function get_stats(): int {
 		/* Init */
 		global $wpdb;
 
@@ -158,14 +158,14 @@ final class Cachify_DB implements Cachify_Backend {
 	 * Generate signature
 	 *
 	 * @param bool  $detail Show details in signature.
-	 * @param array $meta   Content of metadata.
+	 * @param mixed $meta   Content of metadata.
 	 *
 	 * @return string Signature string
 	 *
 	 * @since 2.0
 	 * @since 2.3.0 added $detail parameter
 	 */
-	private static function _cache_signature( $detail, $meta ) {
+	private static function cache_signature( bool $detail, $meta ): string {
 		/* No array? */
 		if ( ! is_array( $meta ) ) {
 			return '';
@@ -188,9 +188,9 @@ final class Cachify_DB implements Cachify_Backend {
 				),
 				sprintf(
 					'With Cachify: %d DB queries, %s seconds, %s',
-					self::_page_queries(),
-					self::_page_timer(),
-					self::_page_memory()
+					self::page_queries(),
+					self::page_timer(),
+					self::page_memory()
 				)
 			);
 		} else {
@@ -213,7 +213,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.1
 	 */
-	private static function _page_queries() {
+	private static function page_queries(): int {
 		return $GLOBALS['wpdb']->num_queries;
 	}
 
@@ -224,7 +224,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.1
 	 */
-	private static function _page_timer() {
+	private static function page_timer(): string {
 		return timer_stop( 0, 2 );
 	}
 
@@ -235,7 +235,7 @@ final class Cachify_DB implements Cachify_Backend {
 	 *
 	 * @since 0.7
 	 */
-	private static function _page_memory() {
+	private static function page_memory(): string {
 		return ( function_exists( 'memory_get_usage' ) ? size_format( memory_get_usage(), 2 ) : 0 );
 	}
 }
