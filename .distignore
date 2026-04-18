@@ -10,7 +10,6 @@
 # Files
 /.distignore
 /.editorconfig
-/.eslintrc.json
 /.gitattributes
 /.gitignore
 /.phpunit.result.cache
@@ -18,6 +17,7 @@
 /.stylelintrc.json
 /composer.json
 /composer.lock
+/eslint.config.mjs
 /package.json
 /package-lock.json
 /phpcs.xml
