@@ -447,7 +447,7 @@ final class Cachify {
 					sprintf(
 						/* translators: Link to Cachify settings page inserted at placeholder */
 						__( 'Please check your server configuration and visit the <a href="%s">settings page</a> to chose a different method.', 'cachify' ),
-						add_query_arg( array( 'page' => 'cachify' ), admin_url( 'options-general.php' ) )
+						esc_url( add_query_arg( array( 'page' => 'cachify' ), admin_url( 'options-general.php' ) ) )
 					),
 					array( 'a' => array( 'href' => array() ) )
 				)
@@ -546,12 +546,12 @@ final class Cachify {
 			array(
 				sprintf(
 					'<a href="%s">%s</a>',
-					add_query_arg(
+					esc_url( add_query_arg(
 						array(
 							'page' => 'cachify',
 						),
 						admin_url( 'options-general.php' )
-					),
+					) ),
 					esc_html__( 'Settings', 'cachify' )
 				),
 			)
@@ -616,12 +616,12 @@ final class Cachify {
             <svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
                 <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s" />
             </svg> %s</a>',
-			add_query_arg(
+			esc_url( add_query_arg(
 				array(
 					'page' => 'cachify',
 				),
 				admin_url( 'options-general.php' )
-			),
+			) ),
 			sprintf(
 				/* translators: 1: "Caching method label"; 2: Actual method. */
 				esc_html__( '%1$s: %2$s', 'cachify' ),
@@ -629,9 +629,9 @@ final class Cachify {
 				esc_attr( strtolower( $method ) )
 			),
 			esc_attr( $method ),
-			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_url( plugins_url( 'images/symbols.svg', CACHIFY_FILE ) ),
 			esc_attr( strtolower( $method ) ),
-			plugins_url( 'images/symbols.svg', CACHIFY_FILE ),
+			esc_url( plugins_url( 'images/symbols.svg', CACHIFY_FILE ) ),
 			esc_attr( strtolower( $method ) ),
 			$cachesize
 		);
