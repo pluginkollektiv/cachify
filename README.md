@@ -44,6 +44,8 @@ Smart, efficient cache solution for WordPress. Use DB, HDD, Redis or Memcached f
 * Memcached in Nginx (optional)
 * Redis (optional, via the phpredis module)
 
+## Responsible Disclosure ##
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/a791e805-1ecc-4754-87ff-f8cdcc37e05a)
 
 ## Frequently Asked Questions ##
 Please have a look [in the FAQ pages](https://cachify.pluginkollektiv.org/documentation/faq/).
