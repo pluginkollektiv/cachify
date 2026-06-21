@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 final class Cachify_NOOP implements Cachify_Backend {
 
 	/**
-	 * Name of the unavailable caching method, i.e. the reason why we chose no-op.
+	 * Name of the unavailable caching method, i.e. the reason why we choose no-op.
 	 *
 	 * @var string
 	 */

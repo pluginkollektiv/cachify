@@ -446,7 +446,7 @@ final class Cachify {
 				wp_kses(
 					sprintf(
 						/* translators: Link to Cachify settings page inserted at placeholder */
-						__( 'Please check your server configuration and visit the <a href="%s">settings page</a> to chose a different method.', 'cachify' ),
+						__( 'Please check your server configuration and visit the <a href="%s">settings page</a> to choose a different method.', 'cachify' ),
 						esc_url( add_query_arg( array( 'page' => 'cachify' ), admin_url( 'options-general.php' ) ) )
 					),
 					array( 'a' => array( 'href' => array() ) )
