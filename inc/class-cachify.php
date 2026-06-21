@@ -546,12 +546,12 @@ final class Cachify {
 			array(
 				sprintf(
 					'<a href="%s">%s</a>',
-					esc_url( add_query_arg(
-						array(
-							'page' => 'cachify',
-						),
-						admin_url( 'options-general.php' )
-					) ),
+					esc_url(
+						add_query_arg(
+							array( 'page' => 'cachify' ),
+							admin_url( 'options-general.php' )
+						)
+					),
 					esc_html__( 'Settings', 'cachify' )
 				),
 			)
@@ -616,12 +616,12 @@ final class Cachify {
             <svg class="cachify-icon cachify-icon--%s" aria-hidden="true" role="img">
                 <use href="%s#cachify-icon-%s" xlink:href="%s#cachify-icon-%s" />
             </svg> %s</a>',
-			esc_url( add_query_arg(
-				array(
-					'page' => 'cachify',
-				),
-				admin_url( 'options-general.php' )
-			) ),
+			esc_url(
+				add_query_arg(
+					array( 'page' => 'cachify' ),
+					admin_url( 'options-general.php' )
+				)
+			),
 			sprintf(
 				/* translators: 1: "Caching method label"; 2: Actual method. */
 				esc_html__( '%1$s: %2$s', 'cachify' ),
