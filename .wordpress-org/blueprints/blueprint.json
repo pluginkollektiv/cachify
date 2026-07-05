@@ -1,0 +1,30 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"preferredVersions": {
+		"php": "8.4",
+		"wp": "latest"
+	},
+	"phpExtensionBundles": [
+		"kitchen-sink"
+	],
+	"features": {
+		"networking": true
+	},
+	"landingPage": "/wp-admin/options-general.php?page=cachify",
+	"login": {
+		"username": "admin",
+		"password": "password"
+	},
+	"steps": [
+		{
+			"step": "installPlugin",
+			"pluginZipFile": {
+				"resource": "wordpress.org/plugins",
+				"slug": "cachify"
+			},
+			"options": {
+				"activate": true
+			}
+		}
+	]
+}
