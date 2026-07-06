@@ -7,24 +7,10 @@
 	"phpExtensionBundles": [
 		"kitchen-sink"
 	],
-	"features": {
-		"networking": true
-	},
+    "plugins": ["cachify"],
 	"landingPage": "/wp-admin/options-general.php?page=cachify",
-	"login": {
+  "login": {
 		"username": "admin",
 		"password": "password"
-	},
-	"steps": [
-		{
-			"step": "installPlugin",
-			"pluginZipFile": {
-				"resource": "wordpress.org/plugins",
-				"slug": "cachify"
-			},
-			"options": {
-				"activate": true
-			}
-		}
-	]
+	}
 }
