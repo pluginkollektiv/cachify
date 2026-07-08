@@ -73,17 +73,6 @@ final class Cachify {
 	const REST_ROUTE_FLUSH = 'flush';
 
 	/**
-	 * Pseudo constructor
-	 *
-	 * @since 2.0.5
-	 * @deprecated Use {@link init()} instead, construction is not required.
-	 */
-	public static function instance(): self {
-		self::init();
-		return new self();
-	}
-
-	/**
 	 * Initialize the plugin.
 	 *
 	 * @since 2.5.0 Logic extracted from constructor as a replacement for "instance()" without return value.
@@ -916,20 +905,6 @@ final class Cachify {
 	}
 
 	/**
-	 * Remove page from cache or flush on comment edit
-	 *
-	 * @param int $id Comment ID.
-	 *
-	 * @since 0.1.0
-	 * @since 2.1.2
-	 *
-	 * @deprecated 2.4.0 Use comment_edit($id, $comment) instead.
-	 */
-	public static function edit_comment( int $id ) {
-		self::comment_edit( $id, array( 'comment_approved' => 1 ) );
-	}
-
-	/**
 	 * Remove page from cache or flush on comment edit.
 	 *
 	 * @param integer $id      Comment ID.
@@ -992,22 +967,6 @@ final class Cachify {
 	}
 
 	/**
-	 * Remove page from cache or flush on comment edit
-	 *
-	 * @param string     $new_status New status.
-	 * @param string     $old_status Old status.
-	 * @param WP_Comment $comment    The comment.
-	 *
-	 * @since 0.1
-	 * @since 2.1.2
-	 *
-	 * @deprecated 2.4.0 Use comment_status($new_status, $old_status, $comment) instead.
-	 */
-	public static function touch_comment( string $new_status, string $old_status, WP_Comment $comment ): void {
-		self::comment_status( $new_status, $old_status, $comment );
-	}
-
-	/**
 	 * Remove page from cache or flush on comment edit.
 	 *
 	 * @param string     $new_status New status.
@@ -1025,63 +984,6 @@ final class Cachify {
 			} else {
 				self::remove_page_cache_by_post_id( (int) $comment->comment_post_ID );
 			}
-		}
-	}
-
-	/**
-	 * Generate publish hook for custom post types
-	 *
-	 * @since 2.0.3
-	 * @since 2.1.7  Make the function public
-	 *
-	 * @deprecated no longer used since 2.4
-	 */
-	public static function register_publish_hooks(): void {
-		/* Available post types */
-		$post_types = get_post_types(
-			array(
-				'public' => true,
-			)
-		);
-
-		/* Empty data? */
-		if ( empty( $post_types ) ) {
-			return;
-		}
-
-		/* Loop the post types */
-		foreach ( $post_types as $post_type ) {
-			add_action( 'publish_' . $post_type, array( __CLASS__, 'publish_post_types' ), 10, 2 );
-			add_action( 'publish_future_' . $post_type, array( __CLASS__, 'flush_total_cache' ) );
-		}
-	}
-
-	/**
-	 * Removes the post type cache on post updates
-	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 *
-	 * @since 2.0.3
-	 *
-	 * @deprecated no longer used since 2.4
-	 */
-	public static function publish_post_types( int $post_id, WP_Post $post ): void {
-		/* Post status check */
-		if ( ! in_array( $post->post_status, array( 'publish', 'future' ), true ) ) {
-			return;
-		}
-
-		/* Check user role */
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			return;
-		}
-
-		/* Remove cache OR flush */
-		if ( 1 !== self::$options['reset_on_post'] ) {
-			self::remove_page_cache_by_post_id( $post_id );
-		} else {
-			self::flush_total_cache();
 		}
 	}
 
@@ -1672,17 +1574,6 @@ final class Cachify {
 		if ( version_compare( $wp_version, '5.3', '<' ) ) {
 			wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #82878c; }' );
 		}
-	}
-
-	/**
-	 * Fixing some admin dashboard styles
-	 *
-	 * @since 2.3.0
-	 *
-	 * @deprecated included in dashboard.css since 2.4
-	 */
-	public static function admin_dashboard_dark_mode_styles(): void {
-		wp_add_inline_style( 'cachify-dashboard', '#dashboard_right_now .cachify-icon use { fill: #bbc8d4; }' );
 	}
 
 	/**
