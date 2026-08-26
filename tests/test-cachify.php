@@ -110,6 +110,9 @@ class Test_Cachify extends WP_UnitTestCase {
 	 * Test hook for robots.txt customization.
 	 */
 	public function test_robots_txt() {
+		// Filter must run after SEO plugins rewriting the output at priority 10.
+		self::assertEquals( 11, has_filter( 'robots_txt', array( 'Cachify', 'robots_txt' ) ) );
+
 		// Initial robots.txt content.
 		$robots_txt = "User-agent: *\nDisallow: /wordpress/wp-admin/\nAllow: /wordpress/wp-admin/admin-ajax.php\n";
 
@@ -153,11 +156,12 @@ class Test_Cachify extends WP_UnitTestCase {
 				'change_robots_txt' => 0,
 			)
 		);
+		Cachify::init();
 
 		self::assertEquals(
-			$robots_txt . "\nUser-agent: *\nDisallow: */cache/cachify/\n",
+			$robots_txt,
 			Cachify::robots_txt( $robots_txt ),
-			'robots.txt should have been modified using HDD cache'
+			'robots.txt should not be modified when the option is disabled'
 		);
 	}
 
