@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.5.0
+
+* New: Add `--network` flag to `wp cachify flush` (#205)
+
 ## 2.4.2
 
 * Fix: Missing dependencies shown in Query Monitor (#312) (#326)
