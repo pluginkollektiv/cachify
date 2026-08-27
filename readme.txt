@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      6.8
 * Requires PHP:      7.4
-* Stable tag:        2.4.2
+* Stable tag:        2.5.0
 * License:           GPLv2 or later
 * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,9 @@ Allow: /`
 A complete documentation is available in the [online handbook](https://cachify.pluginkollektiv.org/documentation/).
 
 ## Changelog ##
+
+### 2.5.0 ###
+* New: `wp cachify flush --network` flushes cache for every site in a multisite network (#205)
 
 ### 2.4.2 ###
 

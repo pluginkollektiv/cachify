@@ -5,7 +5,7 @@
  * Description:       Easy to use WordPress caching plugin. Serving static blog pages from database, disk, Memcached or Redis.
  * Author:            pluginkollektiv
  * Author URI:        https://pluginkollektiv.org
- * Version:           2.4.2
+ * Version:           2.5.0
  * Requires at least: 5.0
  * Requires PHP:      7.4
  * License:           GPLv2 or later
@@ -44,7 +44,7 @@ define( 'CACHIFY_FILE', __FILE__ );
 define( 'CACHIFY_DIR', __DIR__ );
 define( 'CACHIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'CACHIFY_CACHE_DIR', WP_CONTENT_DIR . '/cache/cachify' );
-define( 'CACHIFY_VERSION', '2.4.2' );
+define( 'CACHIFY_VERSION', '2.5.0' );
 
 
 /* Hooks */

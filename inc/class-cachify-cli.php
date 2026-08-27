@@ -20,10 +20,70 @@ final class Cachify_CLI {
 	 * @param array $assoc_args the CLI arguments as associative array.
 	 *
 	 * @since 2.3.0
+	 * @since 2.5.0 Added the network argument.
 	 */
 	public static function flush_cache( array $args, array $assoc_args ): void {
 		// Set default arguments.
-		$assoc_args = wp_parse_args( $assoc_args, array( 'all-methods' => false ) );
+		$assoc_args = wp_parse_args(
+			$assoc_args,
+			array(
+				'all-methods' => false,
+				'network'    => false,
+			)
+		);
+
+		if ( $assoc_args['network'] ) {
+			if ( ! is_multisite() ) {
+				WP_CLI::error( 'The --network flag requires a multisite installation.' );
+			}
+
+			$flushed               = 0;
+			$original_host         = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			$original_request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+			$original_server_name  = isset( $_SERVER['SERVER_NAME'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) ) : $original_host;
+
+			try {
+				foreach (
+					get_sites(
+						array(
+							'fields' => 'ids',
+							'number' => 0,
+						)
+					)
+					as $site_id
+				) {
+					switch_to_blog( (int) $site_id );
+					try {
+						$site         = get_site( (int) $site_id );
+						$site_host    = ( $site && ! empty( $site->domain ) ) ? $site->domain : $original_host;
+						$site_request = '/' . ltrim( ( $site && ! empty( $site->path ) ) ? $site->path : '/', '/' );
+
+						$_SERVER['HTTP_HOST']   = $site_host;
+						$_SERVER['REQUEST_URI']  = $site_request;
+						$_SERVER['SERVER_NAME']  = $site_host;
+
+						Cachify::init();
+						Cachify::flush_total_cache( $assoc_args['all-methods'] );
+						++$flushed;
+					} finally {
+						restore_current_blog();
+						$_SERVER['HTTP_HOST']  = $original_host;
+						$_SERVER['REQUEST_URI'] = $original_request_uri;
+						$_SERVER['SERVER_NAME'] = $original_server_name;
+					}
+				}
+			} finally {
+				Cachify::init();
+			}
+
+			if ( $assoc_args['all-methods'] ) {
+				WP_CLI::success( sprintf( 'All Cachify caches flushed on %d sites', $flushed ) );
+			} else {
+				WP_CLI::success( sprintf( 'Cachify cache flushed on %d sites', $flushed ) );
+			}
+
+			return;
+		}
 
 		Cachify::flush_total_cache( $assoc_args['all-methods'] );
 
@@ -77,6 +137,12 @@ final class Cachify_CLI {
 						'type'        => 'flag',
 						'name'        => 'all-methods',
 						'description' => 'Flush all caching methods',
+						'optional'    => true,
+					),
+					array(
+						'type'        => 'flag',
+						'name'        => 'network',
+						'description' => 'Flush cache for every site in the network',
 						'optional'    => true,
 					),
 				),
