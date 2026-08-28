@@ -8,6 +8,18 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
+$admin_path   = wp_parse_url( admin_url(), PHP_URL_PATH );
+$content_path = wp_parse_url( content_url(), PHP_URL_PATH );
+$admin_path   = untrailingslashit( '/' . ltrim( (string) $admin_path, '/' ) );
+$content_path = untrailingslashit( '/' . ltrim( (string) $content_path, '/' ) );
+$cache_path       = $content_path . '/cache/cachify';
+$cache_url_path   = $content_path . '/cache';
+
+$admin_path_regex = preg_quote( $admin_path, '/' );
+$cache_path_regex = preg_quote( $cache_url_path, '/' );
+$cookie_pattern   = Cachify::get_bypass_cookie_pattern();
+$request_uri_rule = '!^(' . $admin_path_regex . '|' . $cache_path_regex . ')/.*';
+
 $htaccess = '# BEGIN CACHIFY
 <IfModule mod_rewrite.c>
   RewriteEngine on
@@ -43,10 +55,10 @@ $htaccess .= '
   RewriteCond %{HTTP_ACCEPT} .*text/html.*
   RewriteCond %{REQUEST_METHOD} GET
   RewriteCond %{QUERY_STRING} ^$
-  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
-  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond %{REQUEST_URI} ' . $request_uri_rule . '
+  RewriteCond %{HTTP_COOKIE} !' . $cookie_pattern . '
   RewriteCond ' . WP_CONTENT_DIR . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
-  RewriteRule ^(.*) ' . wp_make_link_relative( content_url() ) . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+  RewriteRule ^(.*) ' . untrailingslashit( $content_path ) . '/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
 </IfModule>
 # END CACHIFY';
 

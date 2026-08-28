@@ -7,6 +7,17 @@
 
 /* Quit */
 defined( 'ABSPATH' ) || exit;
+
+$admin_path   = wp_parse_url( admin_url(), PHP_URL_PATH );
+$content_path = wp_parse_url( content_url(), PHP_URL_PATH );
+$admin_path   = untrailingslashit( '/' . ltrim( (string) $admin_path, '/' ) );
+$content_path = untrailingslashit( '/' . ltrim( (string) $content_path, '/' ) );
+$cache_path       = $content_path . '/cache/cachify';
+$cache_url_path   = $content_path . '/cache';
+
+$admin_path_regex = preg_quote( $admin_path, '/' );
+$cache_path_regex = preg_quote( $cache_url_path, '/' );
+$cookie_pattern   = Cachify::get_bypass_cookie_pattern();
 ?>
 
 <h2><?php esc_html_e( 'nginx HDD setup', 'cachify' ); ?></h2>
@@ -32,16 +43,16 @@ location / {
   if ( $request_method = POST ) {
 	return 405;
   }
-  if ( $request_uri ~ /wp-admin/ ) {
+  if ( $request_uri ~ <?php echo esc_html( $admin_path_regex ); ?>/ ) {
 	return 405;
   }
-  if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
+  if ( $http_cookie ~ <?php echo esc_html( $cookie_pattern ); ?> ) {
 	return 405;
   }
 
   error_page 405 = @nocache;
 
-  try_files /wp-content/cache/cachify/https-${host}${uri}index.html /wp-content/cache/cachify/${host}${uri}index.html @nocache;
+  try_files <?php echo esc_html( $cache_path ); ?>/https-${host}${uri}index.html <?php echo esc_html( $cache_path ); ?>/${host}${uri}index.html @nocache;
 }
 
 ## NOCACHE LOCATION
@@ -50,7 +61,7 @@ location @nocache {
 }
 
 ## PROTECT CACHE
-location ~ /wp-content/cache {
+location ~ <?php echo esc_html( $cache_path_regex ); ?> {
   internal;
 }
 </textarea>

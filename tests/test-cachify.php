@@ -185,6 +185,50 @@ class Test_Cachify extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test bypass cookie pattern.
+	 */
+	public function test_bypass_cookie_pattern() {
+		$pattern = Cachify::get_bypass_cookie_pattern();
+
+		self::assertStringContainsString( preg_quote( PASS_COOKIE, '/' ), $pattern );
+		self::assertStringContainsString( preg_quote( LOGGED_IN_COOKIE, '/' ), $pattern );
+		self::assertStringContainsString( 'comment_author_', $pattern );
+
+		add_filter(
+			'cachify_bypass_cookie_names',
+			function ( $cookie_names ) {
+				$cookie_names[] = 'my.cookie_';
+				return $cookie_names;
+			}
+		);
+
+		self::assertStringContainsString( 'my\\.cookie_', Cachify::get_bypass_cookie_pattern() );
+		remove_all_filters( 'cachify_bypass_cookie_names' );
+
+		add_filter( 'cachify_bypass_cookie_names', '__return_empty_array' );
+
+		self::assertSame( '(?!)', Cachify::get_bypass_cookie_pattern() );
+		remove_all_filters( 'cachify_bypass_cookie_names' );
+	}
+
+	/**
+	 * Test cookie detection for cache bypass.
+	 */
+	public function test_is_logged_in_with_bypass_cookie() {
+		$method = new ReflectionMethod( Cachify::class, 'is_logged_in' );
+		$method->setAccessible( true );
+
+		$_COOKIE = array( LOGGED_IN_COOKIE => 'value' );
+		self::assertTrue( $method->invoke( null ) );
+
+		$_COOKIE = array( 'unrelated_cookie' => 'value' );
+		self::assertFalse( $method->invoke( null ) );
+
+		$_COOKIE = array();
+		self::assertFalse( $method->invoke( null ) );
+	}
+
+	/**
 	 * Test call of hooks after remove cache by URL.
 	 */
 	public function test_removed_by_url_hook() {
