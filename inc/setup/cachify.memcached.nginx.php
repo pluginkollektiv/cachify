@@ -7,6 +7,8 @@
 
 /* Quit */
 defined( 'ABSPATH' ) || exit;
+
+$cookie_pattern = Cachify::get_bypass_cookie_pattern();
 ?>
 
 <h2><?php esc_html_e( 'nginx Memcached setup', 'cachify' ); ?></h2>
@@ -34,7 +36,7 @@ location / {
   if ( $request_uri ~ "/wp-" ) {
 	return 405;
   }
-  if ( $http_cookie ~ (wp-postpass|wordpress_logged_in|comment_author)_ ) {
+  if ( $http_cookie ~ <?php echo esc_html( $cookie_pattern ); ?> ) {
 	return 405;
   }
 

@@ -1297,6 +1297,53 @@ final class Cachify {
 	}
 
 	/**
+	 * Get cookie names that bypass the cache.
+	 *
+	 * @return array Cookie names and prefixes.
+	 *
+	 * @since 2.5.0
+	 */
+	public static function get_bypass_cookie_names(): array {
+		$cookie_names = array(
+			defined( 'PASS_COOKIE' ) ? PASS_COOKIE : 'wp-postpass_',
+			defined( 'LOGGED_IN_COOKIE' ) ? LOGGED_IN_COOKIE : 'wordpress_logged_in_',
+			'comment_author_',
+		);
+
+		/**
+		 * Filters cookie names that bypass the cache.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $cookie_names Cookie names and prefixes.
+		 */
+		return (array) apply_filters( 'cachify_bypass_cookie_names', $cookie_names );
+	}
+
+	/**
+	 * Get regular expression for cookies that bypass the cache.
+	 *
+	 * @return string Regular expression.
+	 *
+	 * @since 2.5.0
+	 */
+	public static function get_bypass_cookie_pattern(): string {
+		$patterns = array();
+
+		foreach ( self::get_bypass_cookie_names() as $cookie_name ) {
+			if ( is_string( $cookie_name ) && '' !== $cookie_name ) {
+				$patterns[] = preg_quote( $cookie_name, '/' );
+			}
+		}
+
+		if ( empty( $patterns ) ) {
+			return '(?!)';
+		}
+
+		return '(?:' . implode( '|', array_unique( $patterns ) ) . ')';
+	}
+
+	/**
 	 * Check if user is logged in or marked
 	 *
 	 * @return bool TRUE on "marked" users
@@ -1316,7 +1363,7 @@ final class Cachify {
 
 		/* Loop */
 		foreach ( $_COOKIE as $k => $v ) {
-			if ( preg_match( '/^(wp-postpass|wordpress_logged_in|comment_author)_/', $k ) ) {
+			if ( preg_match( '/^' . self::get_bypass_cookie_pattern() . '/', $k ) ) {
 				return true;
 			}
 		}
